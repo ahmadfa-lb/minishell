@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42beirut.com    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 03:54:06 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 03:54:07 by afarachi         ###   ########.fr       */
+/*   Created: 2024/07/30 04:44:32 by afarachi          #+#    #+#             */
+/*   Updated: 2024/07/30 04:44:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 
 char	*find_path(char **envp)
