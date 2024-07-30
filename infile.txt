@@ -1,5 +1,0 @@
-line1
-line2
-line3
-search_term line4
-search_term line5
