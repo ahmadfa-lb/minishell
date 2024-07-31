@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:44:22 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 05:08:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/07/31 06:11:10 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 # include <unistd.h>
 # include <fcntl.h>
-#include <stdlib.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include "../libft/inc/libft.h"
+# include <ctype.h>
+# include <string.h>
 
 typedef enum e_token_type {
     TOKEN_WORD,
@@ -34,5 +38,6 @@ typedef struct s_token
 	char			*value;
 	struct	s_token	*next;
 }	t_list_tokens;
+
 
 #endif
