@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:05:14 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 15:11:42 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/07 09:35:02 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		ft_isprint(int c);
 size_t	ft_strlen(const char *s);
 int		ft_strlen1(const char *s);
 void	*ft_memset(void *s, int c, size_t n);
+int		ft_strcmp(char *s1, char *s2);
 void	ft_bzero(void *s, size_t n);
 char	*ft_strstr(char *haystack, char *needle);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

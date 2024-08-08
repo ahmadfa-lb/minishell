@@ -1,2 +1,0 @@
-# minishell
-# commit test

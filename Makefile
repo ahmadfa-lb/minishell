@@ -1,77 +1,55 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/30 04:43:58 by afarachi          #+#    #+#              #
-#    Updated: 2024/07/31 06:09:36 by afarachi         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+# Compiler and flags
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g
+LDFLAGS = -lreadline
 
-NAME			=	so_long
+# Directories
+SRC_DIR = src
+OBJ_DIR = obj
+INCLUDE_DIR = includes
+LIBFT_DIR = libft
+LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
-MANDATORY_DIR	=	mandatory/
-BONUS_DIR 		=	bonus/
-GNL_DIR			=	libft/get_next_line/
-LIBFTPATH 		=	libft
-LIBFT 			= 	libft/libft.a
+# Source files and object files
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-SRCS			=	${MANDATORY_DIR}map_validation1.c \
-					${MANDATORY_DIR}free.c \
-					${MANDATORY_DIR}keys_management.c \
-					${MANDATORY_DIR}maps.c \
-					${MANDATORY_DIR}so_long.c \
-					${MANDATORY_DIR}utils.c \
-					${MANDATORY_DIR}game.c \
-					${MANDATORY_DIR}movements_AWDS.c \
-					${MANDATORY_DIR}map_validation2.c \
-    				${GNL_DIR}get_next_line.c \
-    				${GNL_DIR}get_next_line_utils.c
+# Executable
+TARGET = minishell
 
-SRCS_BONUS 		=   ${BONUS_DIR}enemy_bonus.c \
-					${BONUS_DIR}enemy_movements_bonus.c \
-					${BONUS_DIR}free_bonus.c \
-					${BONUS_DIR}game_bonus.c \
-					${BONUS_DIR}keys_management_bonus.c \
-					${BONUS_DIR}map_validation1_bonus.c \
-					${BONUS_DIR}map_validation2_bonus.c \
-					${BONUS_DIR}maps_bonus.c \
-					${BONUS_DIR}movements_AWDS_bonus.c \
-					${BONUS_DIR}so_long_bonus.c \
-					${BONUS_DIR}utils_bonus.c
+# Targets
+all: $(LIBFT_LIB) $(TARGET)
 
-OBJS 			=	$(SRCS:.c=.o)
-OBJS_BONUS		=	$(SRCS_BONUS:.c=.o)
+# Link the executable
+$(TARGET): $(OBJS) $(LIBFT_LIB)
+	@echo "Linking..."
+	@$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBFT_LIB)
+	@echo "Compilation completed."
 
-CC 				=	cc
-CFLAGS 			=	-Wall -Wextra -Werror
-MLXFLAGS		=	-L ./mlx_linux/ -lmlx -Ilmlx -lXext -lX11
+# Compile source files into object files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@echo -n "Compiling $<... "; \
+	$(CC) $(CFLAGS) -c $< -o $@; \
+	echo "done."
 
+# Compile libft
+$(LIBFT_LIB):
+	@echo "Compiling libft..."
+	@$(MAKE) -C $(LIBFT_DIR)
+	@echo "Libft compilation completed."
 
-all: $(NAME)
-
-$(NAME): $(OBJS)
-	make -C $(LIBFTPATH)
-	$(CC) $(SRCS) $(LIBFT) $(MLXFLAGS) $(CFLAGS) -o $(NAME)
-
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
-
-bonus: 		$(OBJS_BONUS)
-			make -C $(LIBFTPATH)	
-			$(CC) $(SRCS_BONUS) $(LIBFT) $(MLXFLAGS) $(CFLAGS) -o $(NAME)
-
+# Clean up build artifacts
 clean:
-	make -C $(LIBFTPATH) clean
-	rm -f $(OBJS)
-	rm -f ${OBJS_BONUS}
+	@echo "Cleaning up..."
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean
+	@echo "Clean completed."
 
-fclean:	clean
-	make -C $(LIBFTPATH) fclean
-	rm -f $(NAME)
+fclean: clean
+	@rm -f $(TARGET)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
-re:	fclean all
+re: fclean all
 
-.PHONY:	all clean fclean re bonus
+.PHONY: all clean fclean re
