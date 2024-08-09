@@ -6,14 +6,14 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/09 03:06:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/09 16:43:13 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../../libft/inc/libft.h"
+# include "libft/inc/libft.h"
 
 /* Standard Input/Output functions */
 # include <stdio.h>
@@ -92,14 +92,32 @@ void				handlesignal(t_data *data);
 
 
 
+//tokenization_helpers.c
+int					ft_isspace(char c);
+void				ft_skip_whitespace(char **input);
+char 				*ft_strcpy(char *dest, const char *src);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
+char				*ft_strcat(char *dest, const char *src);
+size_t				ft_strnlen(const char *str, size_t n); 
+char				*ft_strndup(const char *s, size_t n);
 
-int					ft_iswhitespace(char c);
-void				*ft_skip_spaces(char *str);
-// char				*strndup(const char *s, size_t n);
-t_list_tokens		*add_token(t_list_tokens **tokens, t_tokens_type type, char *value);
+//cmd_to_tokens.c
+char				*find_quoted_string(char **input, char quote);
 char				*collect_word(char **input);
-void tokenize(char *input, t_list_tokens **tokens);
+char				*concatenate_quoted_substrings(char *input);
+t_list_tokens		*create_token(t_tokens_type type, char *value);
+void				append_token(t_list_tokens **tokens,
+					t_list_tokens *new_token);
+t_list_tokens		*add_token(t_list_tokens **tokens,
+					t_tokens_type type, char *value);
+void				tokenize(char *input, t_list_tokens **tokens);
 void				free_tokens(t_list_tokens *tokens);
+void				handle_quoted_input(char *string, char *new_string,
+					void (*copy_or_count)(char *, int *, char), int *count);
+void				count_length(char *new_string, int *count, char c);
+void				copy_char(char *new_string, int *count, char c);
+bool				remove_quotes_from_string(char **string);
+bool				remove_quotes_from_tokens(t_list_tokens *tokens);
 
 #endif
 

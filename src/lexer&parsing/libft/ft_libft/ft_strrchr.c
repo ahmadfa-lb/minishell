@@ -1,14 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_parsing.c                                    :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/08 06:23:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/09 04:30:16 by afarachi         ###   ########.fr       */
+/*   Created: 2024/06/11 11:29:51 by afarachi          #+#    #+#             */
+/*   Updated: 2024/07/30 14:46:11 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../inc/libft.h"
 
+char	*ft_strrchr(const char *s, int c)
+{
+	char			*str;
+	size_t			i;
+	unsigned char	chr;
+
+	chr = c;
+	i = ft_strlen(s);
+	str = (char *)s + i;
+	if (c == '\0')
+		return (str++);
+	while (str >= s)
+	{	
+		if (*str == chr)
+			return (str);
+		str--;
+	}
+	str = NULL;
+	return (str);
+}
