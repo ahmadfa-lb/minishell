@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/12 12:47:05 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/12 23:05:15 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <ctype.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "libft/libft.h"
+#include "libft/inc/libft.h"
 
 char *my_getenv(char *name, char **env)
 {
@@ -81,7 +81,12 @@ char *remove_char(char *str, char char_to_remove)
     int i = 0;
     while (i < len)
     {
-        if (str[i] != char_to_remove)
+        if (str[i] != '\\' && str[i + 1] != char_to_remove)
+        {
+            *ptr++ = str[i++];
+            *ptr++ = str[i++];
+        }
+        else if (str[i] != char_to_remove)
             *ptr++ = str[i];
         i++;
     }
@@ -98,7 +103,11 @@ char *handle_dollar_signe(char *input, char **envp)
 
     while (input[i])
     {
-        if (input[i] == '$')
+        if (input[i] == '\\' && input[i + 1] == '$')
+        {
+            i++;
+        }
+        else if (input[i] == '$')
         {
             i++;
             start = i;
@@ -115,25 +124,25 @@ char *handle_dollar_signe(char *input, char **envp)
     return remove_char(input, '$');
 }
 // for test
-// int main(int argc, char **argv, char **envp)
-// {
-//     char *input;
+int main(int argc, char **argv, char **envp)
+{
+    char *input;
 
-//     while (1)
-//     {
-//         input = readline("minishell>>> ");
-//         if (!input)
-//         {
-//             break;
-//         }
-//         if (*input)
-//         {
-//             add_history(input);
-//             input = handle_dollar_signe(input, envp); // Update input after processing
-//             printf("%s\n", input);
-//         }
-//         free(input);
-//     }
+    while (1)
+    {
+        input = readline("minishell>>> ");
+        if (!input)
+        {
+            break;
+        }
+        if (*input)
+        {
+            add_history(input);
+            input = handle_dollar_signe(input, envp); // Update input after processing
+            printf("%s\n", input);
+        }
+        free(input);
+    }
 
-//     return 0;
-// }
+    return 0;
+}
