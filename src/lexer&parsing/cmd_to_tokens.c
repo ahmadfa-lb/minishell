@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_to_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/09 16:42:21 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/12 11:19:47 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ char *collect_word(char **input)
     return (word);    							// Return the collected word
 }
 
-
-
 char *concatenate_quoted_substrings(char *input) // Function to concatenate quoted substrings from input
 {
     char *result;                              // Pointer for the final concatenated string
@@ -113,7 +111,6 @@ char *concatenate_quoted_substrings(char *input) // Function to concatenate quot
             *res_ptr++ = *input;               // Copy the character to the result and move to the next position
         input++;                               // Move to the next character in the input
     }
-
     *res_ptr = '\0';                           // Null-terminate the result string
     return (result);                             // Return the concatenated result
 }
@@ -322,6 +319,11 @@ int main(void) {
         if (!input) {
             break; // Exit loop on EOF (Ctrl+D)
         }
+        if (input)
+        {
+            add_history(input);
+        }
+        
 
         // Tokenize the input
         tokenize(input, &tokens);
