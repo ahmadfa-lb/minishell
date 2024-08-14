@@ -1,7 +1,17 @@
-# Compiler and flags
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-LDFLAGS = -lreadline
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
+#    Updated: 2024/08/14 13:51:53 by afarachi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# Executable
+NAME = minishell
 
 # Directories
 SRC_DIR = src
@@ -10,25 +20,46 @@ INCLUDE_DIR = includes
 LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
-# Source files and object files
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+# Compiler and flags
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g -I$(INCLUDE_DIR)
+LDFLAGS = -lreadline
 
-# Executable
-TARGET = minishell
+# Source files and object files
+SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
+	   $(SRC_DIR)/lexer/tokenization_utils.c \
+	   $(SRC_DIR)/lexer/tokenization_utils1.c \
+	   $(SRC_DIR)/lexer/tokenization_helpers.c
+
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+# COLORS
+Y = "\033[33m"
+R = "\033[31m"
+G = "\033[32m"
+B = "\033[34m"
+X = "\033[0m"
+UP = "\033[A"
+CUT = "\033[K"
 
 # Targets
-all: $(LIBFT_LIB) $(TARGET)
+all: $(NAME)
+	@printf "\n"
+	@echo $(G)"        _       _       _         _ _ "$(X)
+	@echo $(G)" _____ |_| ___ |_| ___ | |_  ___ | | |"$(X)
+	@echo $(G)"|     || ||   || ||_ - |   || -_|| | |"$(X)
+	@echo $(G)"|_|_|_||_||_|_||_| ___||_|_||___ |_|_|"$(X)
+	@printf "\n\n"
 
 # Link the executable
-$(TARGET): $(OBJS) $(LIBFT_LIB)
+$(NAME): $(OBJS) $(LIBFT_LIB)
 	@echo "Linking..."
-	@$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBFT_LIB)
+	@$(CC) -o $@ $(OBJS) $(LIBFT_LIB) $(LDFLAGS)
 	@echo "Compilation completed."
 
-# Compile source files into object files
+# Rule to compile .c files to .o files in the obj/ directory
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)  # Create the necessary directories
 	@echo -n "Compiling $<... "; \
 	$(CC) $(CFLAGS) -c $< -o $@; \
 	echo "done."
@@ -42,12 +73,12 @@ $(LIBFT_LIB):
 # Clean up build artifacts
 clean:
 	@echo "Cleaning up..."
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)  # Remove all .o files and the obj directory
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@echo "Clean completed."
 
 fclean: clean
-	@rm -f $(TARGET)
+	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all

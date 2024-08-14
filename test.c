@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:10:44 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/14 15:22:08 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/14 10:13:51 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,8 @@
 #include <ctype.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "libft/libft.h"
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_ERROR
-} t_tokens_type;
+#include "libft/inc/libft.h"
 
-typedef enum e_quote_type
-{
-	DOUBLE_QUOTE,
-	SINGLE_QUOTE,
-	NO_QUOTE
-} t_quote_type;
-
-typedef struct s_token
-{
-	t_tokens_type type;
-	t_quote_type quote_type;
-	char *value;
-	struct s_token *next;
-} t_list_tokens;
 
 // Helper function to append a token to the list
 static void append_token(t_list_tokens **tokens, t_list_tokens *new_token)
@@ -74,6 +50,18 @@ static char *strjoin_and_free(char *s1, char *s2)
 	free(s1);
 	free(s2);
 	return result;
+}
+
+int ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
+}
+
+void ft_skip_whitespace(char **input)
+{
+    while (ft_isspace(**input))
+        (*input)++;
 }
 
 char *ft_strncpy(char *dest, const char *src, size_t n)
