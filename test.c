@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:10:44 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/13 13:13:00 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:22:08 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 #include <ctype.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "libft/inc/libft.h"
-
+#include "libft/libft.h"
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -59,23 +58,7 @@ static void append_token(t_list_tokens **tokens, t_list_tokens *new_token)
 	}
 	last->next = new_token;
 }
-// Check is the char is a delimiter
-int is_delimiter(char c)
-{
-	if (c == '"' || c == '\'')
-	{
-		return (1);
-	}
-	if (c == '|')
-	{
-		return (1);
-	}
-	if (c == '>' || c == '<')
-	{
-		return (1);
-	}
-	return (0);
-}
+
 // Function to join two strings and free the old ones
 static char *strjoin_and_free(char *s1, char *s2)
 {
@@ -91,6 +74,67 @@ static char *strjoin_and_free(char *s1, char *s2)
 	free(s1);
 	free(s2);
 	return result;
+}
+
+char *ft_strncpy(char *dest, const char *src, size_t n)
+{
+	size_t i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (src[i] != '\0')
+			dest[i] = src[i];
+		else
+			dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}
+
+char *ft_strcpy(char *dest, const char *src)
+{
+	char *dest_ptr;
+
+	dest_ptr = dest;
+	while (*src)
+		*dest_ptr++ = *src++;
+	*dest_ptr = '\0';
+	return (dest);
+}
+
+char *ft_strcat(char *dest, const char *src)
+{
+	char *dest_ptr;
+
+	dest_ptr = dest;
+	while (*dest_ptr)
+		dest_ptr++;
+	while (*src)
+		*dest_ptr++ = *src++;
+	*dest_ptr = '\0';
+	return (dest);
+}
+
+size_t ft_strnlen(const char *str, size_t n)
+{
+	size_t length;
+
+	length = 0;
+	while (length < n && str[length] != '\0')
+		length++;
+	return (length);
+}
+
+char *ft_strndup(const char *s, size_t n)
+{
+	size_t len = ft_strnlen(s, n);
+	char *new_str = malloc(len + 1);
+	if (!new_str)
+		return NULL;
+	ft_strncpy(new_str, s, len);
+	new_str[len] = '\0';
+	return new_str;
 }
 
 // Function to process quoted strings
@@ -111,152 +155,116 @@ static char *process_quoted_string(char **input, char quote_type)
 	}
 
 	end = *input;
-	if (**input == quote_type)
-	{
-		(*input)++; // Skip closing quote
-	}
+	// if (**input == quote_type)
+	// {
+	// 	(*input)++; // Skip closing quote
+	// }
 
 	len = end - start;
 	result = malloc(len + 1);
 	if (!result)
 		return NULL;
-	strncpy(result, start, len);
+	ft_strncpy(result, start, len);
 	result[len] = '\0';
 
 	return result;
 }
 
-void handle_pipe(char **current, t_list_tokens **tokens, t_list_tokens **last_token, char **last_valid_position)
-{
-	t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
-	if (!new_token)
-		return;
-
-	new_token->type = TOKEN_PIPE;
-	new_token->value = strdup("|");
-	new_token->quote_type = NO_QUOTE; // No quotes around pipes
-	new_token->next = NULL;
-
-	append_token(tokens, new_token);
-	*last_token = new_token;
-	(*current)++;
-	*last_valid_position = *current;
-}
-
-void handle_redirection(char **current, t_list_tokens **tokens, t_list_tokens **last_token, char **last_valid_position)
-{
-	char redirect_char = **current;
-	char *redirect_str = (redirect_char == '<') ? "<" : ">";
-	size_t len = 1;
-	if (*(*current + 1) == redirect_char)
-	{
-		redirect_str = (redirect_char == '<') ? "<<" : ">>";
-		len++;
-		(*current)++;
-	}
-
-	t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
-	if (!new_token)
-		return;
-
-	new_token->type = (redirect_char == '<') ? TOKEN_REDIRECT_IN : (len == 2) ? TOKEN_HEREDOC
-																			  : TOKEN_REDIRECT_OUT;
-	new_token->value = strndup(redirect_str, len);
-	new_token->quote_type = NO_QUOTE; // No quotes around redirections
-	new_token->next = NULL;
-
-	append_token(tokens, new_token);
-	*last_token = new_token;
-	(*current)++;
-	*last_valid_position = *current;
-}
-
+// Tokenize the input string into tokens
 void tokenize(char *input, t_list_tokens **tokens)
 {
 	char *current = input;
 	char *start;
 	t_list_tokens *last_token = NULL;
-	int in_quote = 0; // Flag to check if we are inside a quote
 	char quote_type = NO_QUOTE;
-	char *last_valid_position = input; // Track the last valid position
 
 	while (*current)
 	{
+		// Skip whitespace
+		while (ft_isspace(*current))
+			current++;
+
 		// Handle pipes
 		if (*current == '|')
 		{
-			handle_pipe(&current, tokens, &last_token, &last_valid_position);
+			t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
+			if (!new_token)
+				return;
+
+			new_token->type = TOKEN_PIPE;
+			new_token->value = ft_strdup("|");
+			new_token->quote_type = NO_QUOTE;
+			new_token->next = NULL;
+
+			append_token(tokens, new_token);
+			last_token = new_token;
+			current++;
 			continue;
 		}
 
 		// Handle redirections
 		if (*current == '<' || *current == '>')
 		{
-			handle_redirection(&current, tokens, &last_token, &last_valid_position);
+			char redirect_char = *current;
+			size_t len = 1;
+			if (*(current + 1) == redirect_char)
+			{
+				len++;
+				current++;
+			}
+
+			t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
+			if (!new_token)
+				return;
+
+			new_token->type = (redirect_char == '<') ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT;
+			if (len == 2)
+				new_token->type = (redirect_char == '<') ? TOKEN_HEREDOC : TOKEN_APPEND;
+
+			new_token->value = ft_strndup(current - len + 1, len);
+			new_token->quote_type = NO_QUOTE;
+			new_token->next = NULL;
+
+			append_token(tokens, new_token);
+			last_token = new_token;
+			current++;
 			continue;
 		}
 
 		// Handle quoted strings
 		if (*current == '"' || *current == '\'')
 		{
-			in_quote = 1;
 			quote_type = *current;
-			if (in_quote)
+			char *quoted_string = process_quoted_string(&current, quote_type);
+			if (!quoted_string)
+				return;
+
+			t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
+			if (!new_token)
 			{
-				// Close existing quote
-				if (quote_type == *current)
-				{
-					char quote = *current;
-					char *quoted_string = process_quoted_string(&current, quote);
-					if (!quoted_string)
-						return;
-
-					t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
-					if (!new_token)
-					{
-						free(quoted_string);
-						return;
-					}
-
-					new_token->type = TOKEN_WORD;
-					new_token->value = quoted_string;
-					new_token->quote_type = (quote == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE;
-					new_token->next = NULL;
-
-					append_token(tokens, new_token);
-					last_token = new_token;
-					in_quote = 0;
-					last_valid_position = current;
-					continue;
-				}
+				free(quoted_string);
+				return;
 			}
+
+			new_token->type = TOKEN_WORD;
+			new_token->value = quoted_string;
+			new_token->quote_type = (quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE;
+			new_token->next = NULL;
+
+			append_token(tokens, new_token);
+			last_token = new_token;
+			current++;
+			continue;
 		}
 
-		if (in_quote)
-		{
-			// Create token for remaining input after the last valid position
-			if (last_valid_position < current)
-			{
-				t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
-				if (!new_token)
-					return;
-
-				new_token->type = TOKEN_WORD;
-				new_token->value = strndup(last_valid_position, current - last_valid_position);
-				new_token->quote_type = NO_QUOTE; // Unclosed quote implies no specific quote type
-				new_token->next = NULL;
-
-				append_token(tokens, new_token);
-				last_token = new_token;
-			}
-		}
-
-		// Handle words (non-quoted strings)
+		// Handle unquoted words
 		start = current;
-		while (*current && !isspace(*current) && !is_delimiter(*current))
+		while (*current && !ft_isspace(*current) && *current != '|' &&
+			   *current != '<' && *current != '>' && *current != '"' && *current != '\'')
 		{
 			current++;
 		}
+
 		if (current > start)
 		{
 			t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
@@ -264,24 +272,21 @@ void tokenize(char *input, t_list_tokens **tokens)
 				return;
 
 			new_token->type = TOKEN_WORD;
-			new_token->value = strndup(start, current - start);
-			new_token->quote_type = NO_QUOTE; // No quotes around words
+			new_token->value = ft_strndup(start, current - start);
+			new_token->quote_type = NO_QUOTE;
 			new_token->next = NULL;
 
-			if (last_token && last_token->type == TOKEN_WORD)
-			{
-				last_token->value = strjoin_and_free(last_token->value, new_token->value);
-				free(new_token);
-			}
-			else
-			{
-				append_token(tokens, new_token);
-				last_token = new_token;
-			}
-			last_valid_position = current;
+			// if (last_token && last_token->type == TOKEN_WORD)
+			// {
+			// 	last_token->value = strjoin_and_free(last_token->value, new_token->value);
+			// 	free(new_token);
+			// }
+			// else
+			// {
+			append_token(tokens, new_token);
+			last_token = new_token;
+			// }
 		}
-
-		current++;
 	}
 }
 
