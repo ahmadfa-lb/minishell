@@ -3,61 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   handle_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/14 13:12:39 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/15 23:13:14 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char *my_getenv(char *name, char **env)
+char *my_getenv_from_copy(char *name, t_env *copy_envp)
 {
-    int i;
-    int j;
-    char *sub;
+    t_env *current = copy_envp;
 
-    i = 0;
-    while (env[i])
+    // Traverse the linked list to find the matching key
+    while (current)
     {
-        j = 0;
-        while (env[i][j] && env[i][j] != '=')
-            j++;
-        sub = ft_substr(env[i], 0, j);
-        if (ft_strcmp(sub, name) == 0)
+        if (ft_strcmp(current->key, name) == 0)
         {
-            free(sub);
-            return (env[i] + j + 1);
+            // Found the matching key, concatenate and return the values
+            return concatenate_value_list(current->value_head);
         }
-        free(sub);
-        i++;
+        current = current->next;
     }
+
+    // Return NULL if the key is not found
     return (NULL);
 }
 
 void replace_envp(char **input, char *old, char *new)
 {
+    if (!new) // If new is NULL, don't replace
+        return;
+
     char *pos = ft_strnstr(*input, old, ft_strlen(*input));
-    if (!pos || !new)
+    if (!pos)
         return;
 
     int old_len = ft_strlen(old);
     int new_len = ft_strlen(new);
-    int diff = new_len - old_len;
     int input_len = ft_strlen(*input);
 
-    char *new_input = malloc(input_len + diff + 1);
+    char *new_input = malloc(input_len - old_len + new_len + 1);
     if (!new_input)
         return;
 
-    ft_strlcpy(new_input, *input, pos - *input + 1);            // Copy part before `old`
-    ft_strlcat(new_input, new, input_len + diff + 1);           // Append `new`
-    ft_strlcat(new_input, pos + old_len, input_len + diff + 1); // Append part after `old`
+    // Copy part before `old`
+    ft_strlcpy(new_input, *input, pos - *input + 1);
+
+    // Append `new`
+    ft_strlcat(new_input, new, (pos - *input) + new_len + 1);
+
+    // Append part after `old`
+    ft_strlcat(new_input, pos + old_len, input_len - old_len + new_len + 1);
 
     free(*input);
     *input = new_input;
 }
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -67,29 +69,36 @@ char *remove_char(char *str, char char_to_remove)
 {
     if (!str)
         return NULL;
+
     int len = strlen(str);
     char *result = malloc(len + 1);
     if (!result)
         return NULL;
+
     char *ptr = result;
     int i = 0;
     while (i < len)
     {
-        if (str[i] != '\\' && str[i + 1] != char_to_remove)
+        if (str[i] == '\\' && str[i + 1] == char_to_remove)
         {
-            *ptr++ = str[i++];
-            *ptr++ = str[i++];
+            i++;
+            *ptr++ = str[i++]; // Copy the escaped character
         }
         else if (str[i] != char_to_remove)
-            *ptr++ = str[i];
-        i++;
+        {
+            *ptr++ = str[i++];
+        }
+        else
+        {
+            i++;
+        }
     }
     *ptr = '\0';
     return result;
 }
 
 // Function to parse and replace environment variables
-char *handle_dollar_signe(char *input, char **envp)
+char *handle_dollar_signe(char *input, t_env *envp_head)
 {
     int i = 0;
     int start, end;
@@ -99,7 +108,7 @@ char *handle_dollar_signe(char *input, char **envp)
     {
         if (input[i] == '\\' && input[i + 1] == '$')
         {
-            i++;
+            i += 2;
         }
         else if (input[i] == '$')
         {
@@ -109,7 +118,9 @@ char *handle_dollar_signe(char *input, char **envp)
                 i++;
             end = i;
             sub_env = ft_substr(input, start, end - start);
-            replace_envp(&input, sub_env, my_getenv(sub_env, envp));
+            char *env_value = my_getenv_from_copy(sub_env, envp_head);
+            if (env_value)
+                replace_envp(&input, sub_env, env_value);
             free(sub_env);
         }
         else
@@ -117,10 +128,15 @@ char *handle_dollar_signe(char *input, char **envp)
     }
     return remove_char(input, '$');
 }
+
 // for test
 int main(int argc, char **argv, char **envp)
 {
+    t_env *copy_envp = NULL;
     char *input;
+
+    // Initialize the copy_envp linked list from envp
+    init_copy_envp(&copy_envp, envp);
 
     while (1)
     {
@@ -132,11 +148,15 @@ int main(int argc, char **argv, char **envp)
         if (*input)
         {
             add_history(input);
-            input = handle_dollar_signe(input, envp); // Update input after processing
+            // Update input after processing using the refactored function
+            input = handle_dollar_signe(input, copy_envp);
             printf("%s\n", input);
         }
         free(input);
     }
+
+    // Free the linked list and clean up
+    free_list(copy_envp);
 
     return 0;
 }
