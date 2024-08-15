@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/14 13:28:58 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/15 07:34:22 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	handle_pipe_token(char **current, t_list_tokens **tokens)
 	new_token->value = ft_strdup("|");
 	new_token->quote_type = NO_QUOTE;
 	new_token->next = NULL;
+	new_token->space = 1;
 	append_token(tokens, new_token);
 	(*current)++;
 }
@@ -54,6 +55,7 @@ static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 	new_token->value = ft_strndup(*current - len + 1, len);
 	new_token->quote_type = NO_QUOTE;
 	new_token->next = NULL;
+	new_token->space = 1;
 	append_token(tokens, new_token);
 	(*current)++;
 }
@@ -64,9 +66,10 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 	char			quote_type;
 	char			*quoted_string;
 	t_list_tokens	*new_token;
+	bool space = 1;
 
 	quote_type = **current;
-	quoted_string = process_quoted_string(current, quote_type);
+	quoted_string = process_quoted_string(current, quote_type, &space);
 	if (!quoted_string)
         return;
 	new_token = malloc(sizeof(t_list_tokens));
@@ -79,6 +82,7 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 	new_token->value = quoted_string;
 	new_token->quote_type = (quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE;
 	new_token->next = NULL;
+	new_token->space = space;
 	append_token(tokens, new_token);
 	(*current)++;
 }
@@ -104,6 +108,10 @@ static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 		new_token->value = ft_strndup(start, *current - start);
 		new_token->quote_type = NO_QUOTE;
 		new_token->next = NULL;
+		
+		new_token->space = 1;
+		if (*(*current) && (*(*current) == '\'' || *(*current) == '"'))
+			new_token->space = 0;
 		append_token(tokens, new_token);
 	}
 }
@@ -154,14 +162,16 @@ int main(void)
 		add_history(input);
 
 		tokenize(input, &tokens);
-
+		concate_nodes(&tokens);
 		t_list_tokens *current_token = tokens;
+		
 		while (current_token)
 		{
-			printf("Token: %s, Value: %s, quote_type: %s\n",
+			printf("Token: %s, Value: %s, quote_type: %s\n ,space: %d\n",
 				   token_type_to_string(current_token->type),
 				   current_token->value,
-				   quote_type_to_string(current_token->quote_type));
+				   quote_type_to_string(current_token->quote_type),
+				   current_token->space);
 			current_token = current_token->next;
 		}
 
