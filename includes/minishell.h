@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/15 07:12:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/16 11:07:11 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,15 @@ size_t	ft_strnlen(const char *str, size_t n);
 char	*ft_strndup(const char *s, size_t n);
 
 
+void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
+void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
+void concate_nodes(t_list_tokens **list_token);
+
+
+
+
+//parser
+//list_tokens_concatenation.c
 void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
 void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
 void concate_nodes(t_list_tokens **list_token);

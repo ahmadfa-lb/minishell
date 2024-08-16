@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/08 14:42:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/16 12:52:25 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,41 @@
 // 	return (0);
 // }
 
-int main(int argc, char **argv, char **env)
+// Test the lexer
+int main(void)
 {
-	
+	char *input;
+	t_list_tokens *tokens = NULL;
+
+	while ((input = readline("minishell> ")) != NULL)
+	{
+		if (*input == '\0')
+		{
+			free(input);
+			continue;
+		}
+
+		add_history(input);
+
+		tokenize(input, &tokens);
+		concate_nodes(&tokens);
+		t_list_tokens *current_token = tokens;
+		
+		while (current_token)
+		{
+			printf("Token: %s, Value: %s, quote_type: %s\n ,space: %d\n",
+				   token_type_to_string(current_token->type),
+				   current_token->value,
+				   quote_type_to_string(current_token->quote_type),
+				   current_token->space);
+			current_token = current_token->next;
+		}
+
+		free_tokens(tokens);
+		tokens = NULL;
+		free(input);
+	}
+
+	printf("\nExiting minishell...\n");
+	return 0;
 }

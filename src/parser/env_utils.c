@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/15 21:42:32 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/16 12:06:52 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ void add_value_node(t_value **value_head, char *value)
 
     new_value = new_value_node(value);
     if (!*value_head)
-    {
         *value_head = new_value;
-    }
     else
     {
         temp = *value_head;
