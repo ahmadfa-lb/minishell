@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/14 23:11:30 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/19 03:07:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@
 //     return (result);                             // Return the concatenated result
 // }
 
-// t_list_tokens *create_token(t_tokens_type type, char *value) // Function to create a new token
+// t_list_tokens *create_token_node(t_tokens_type type, char *value) // Function to create a new token
 // {
 //     t_list_tokens *new_token;                                // Pointer for the new token
 
@@ -149,7 +149,7 @@
 // {
 //     t_list_tokens *new_token;                                  // Pointer for the new token
 
-//     new_token = create_token(type, value);                     // Create a new token with the given type and value
+//     new_token = create_token_node(type, value);                     // Create a new token with the given type and value
 //     if (!new_token)                                            // Check if token creation was successful
 //         return NULL;                                           // Return NULL if creation failed
 

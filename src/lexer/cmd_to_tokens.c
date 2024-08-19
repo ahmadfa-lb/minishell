@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/19 03:02:47 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/19 03:07:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	handle_pipe_token(char **current, t_list_tokens **tokens)
 {
 	t_list_tokens *new_token;
 
-	new_token = create_token(TOKEN_PIPE, NO_QUOTE, "|", true);
+	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, "|", true);
 	if (!new_token)
 		return;
 
@@ -42,7 +42,7 @@ static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 		len++;
 		(*current)++;
 	}
-	new_token = create_token(
+	new_token = create_token_node(
 		(len == 2) ? (redirect_char == '<' ? TOKEN_HEREDOC : TOKEN_APPEND) : 
 		             (redirect_char == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT),
 		NO_QUOTE,
@@ -69,7 +69,7 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 	if (!quoted_string)
 		return;
 
-	new_token = create_token(
+	new_token = create_token_node(
 		TOKEN_WORD,
 		(quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE,
 		quoted_string,
@@ -103,7 +103,7 @@ static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 	if (*current > start)
 	{
 		space = !(*(*current) && (*(*current) == '\'' || *(*current) == '"'));
-		new_token = create_token(TOKEN_WORD, NO_QUOTE,value = ft_strndup(start, *current - start), space);
+		new_token = create_token_node(TOKEN_WORD, NO_QUOTE,value = ft_strndup(start, *current - start), space);
 		if (!new_token)
 			return;	
 		append_token(tokens, new_token);

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 08:15:13 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/19 02:48:00 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/19 03:08:51 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,20 @@ void	free_tokens(t_list_tokens *tokens)
 	}
 }
 
-t_list_tokens *create_token(t_tokens_type type, t_quote_type quote_type, char *value, bool space)
+t_list_tokens	*create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space)
 {
-    t_list_tokens *new_token;
+	t_list_tokens	*new_token;
 
-    new_token = malloc(sizeof(t_list_tokens));
-    if (!new_token)
-        return NULL;
-
-    new_token->type = type;
-    new_token->quote_type = quote_type;
-    new_token->value = ft_strdup(value);
-    new_token->space = space;
-    new_token->next = NULL;
-
-    return new_token;
+	new_token = malloc(sizeof(t_list_tokens));
+	if (!new_token)
+	    return NULL;
+	new_token->type = type;
+	new_token->quote_type = quote_type;
+	new_token->value = ft_strdup(value);
+	new_token->space = space;
+	new_token->next = NULL;
+	return (new_token);
 }
-
 
 // Convert token type to string
 const char *token_type_to_string(t_tokens_type type)

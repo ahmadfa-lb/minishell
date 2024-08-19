@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/19 02:15:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/19 03:08:41 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char	*process_quoted_string(char **input, char quote_type, bool *space);
 void	free_tokens(t_list_tokens *tokens);
 const char *token_type_to_string(t_tokens_type type);
 const char *quote_type_to_string(t_quote_type quote_type);
-t_list_tokens *create_token(t_tokens_type type, t_quote_type quote_type, char *value, bool space);
+t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space);
 //tokenization_utils.c
 int	ft_isspace(char c);
 void	ft_skip_whitespace(char **input);
