@@ -6,11 +6,11 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 08:15:13 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/16 11:04:30 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/19 02:48:00 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 // Helper function to append a token to the list
 void append_token(t_list_tokens **tokens, t_list_tokens *new_token)
@@ -61,6 +61,8 @@ char	*process_quoted_string(char **input, char quote_type, bool *space)
 	(void)space;
 	 if (*(*input + 1) && !ft_isspace(*(*input + 1)) && *(*input + 1) != '>' && *(*input + 1) != '<' && *(*input + 1) != '|')
 	 	*space = false;
+	// start = result;
+	// free(result);
 	return (result);
 }
 
@@ -75,6 +77,24 @@ void	free_tokens(t_list_tokens *tokens)
 		tokens = next;
 	}
 }
+
+t_list_tokens *create_token(t_tokens_type type, t_quote_type quote_type, char *value, bool space)
+{
+    t_list_tokens *new_token;
+
+    new_token = malloc(sizeof(t_list_tokens));
+    if (!new_token)
+        return NULL;
+
+    new_token->type = type;
+    new_token->quote_type = quote_type;
+    new_token->value = ft_strdup(value);
+    new_token->space = space;
+    new_token->next = NULL;
+
+    return new_token;
+}
+
 
 // Convert token type to string
 const char *token_type_to_string(t_tokens_type type)

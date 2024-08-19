@@ -6,11 +6,11 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/16 12:06:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/17 03:10:07 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 typedef struct s_value
 {
@@ -23,7 +23,7 @@ typedef struct s_env
     char *key;
     t_value *value_head;
     struct s_env *next;
-} t_env;
+}t_env;
 
 t_value *new_value_node(char *value)
 {
@@ -196,6 +196,36 @@ void print_list(t_env *env_head)
     }
 }
 
+char *concatenate_value_list(t_value *head)
+{
+    size_t total_length;
+    t_value *current;
+
+    total_length = 0;
+    current = head;
+    // Calculate the total length needed
+    while (current != NULL) {
+        total_length += ft_strlen(current->value);
+        current = current->next;
+    }
+    
+    // Allocate memory for the concatenated string
+    char *result = (char *)malloc(total_length + 1); // +1 for the null terminator
+    if (result == NULL) {
+        return NULL; // Handle memory allocation failure
+    }
+    
+    // Reset current to the head and concatenate strings
+    current = head;
+    result[0] = '\0'; // Initialize the result string
+    
+    while (current != NULL) {
+        ft_strcopy(result, current->value);
+        current = current->next;
+    }
+    
+    return result;
+}
 // int count_envp_elements(char **envp)
 // {
 // 	int count = 0;

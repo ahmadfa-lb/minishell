@@ -1,42 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 15:09:18 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/19 02:53:40 by afarachi         ###   ########.fr       */
+/*   Created: 2024/06/11 14:22:12 by afarachi          #+#    #+#             */
+/*   Updated: 2024/08/17 02:44:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
-char	*ft_strjoin(char *s1, char const *s2)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	size_t	len1;
-	size_t	len2;
-	size_t	i;
-	size_t	j;
-	char	*result;
+	void	*alloc;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	if (!s1 || !s2)
+	if (nmemb == SIZE_MAX || size == SIZE_MAX)
 		return (NULL);
-	result = (char *)malloc(len1 + len2 + 1);
-	if (!result)
+	if (nmemb != 0 && size != 0 && size > SIZE_MAX / nmemb)
 		return (NULL);
-	i = -1;
-	while (s1[++i])
-		result[i] = s1[i];
-	j = 0;
-	while (s2[j])
-	{
-		result[i + j] = s2[j];
-		j++;
-	}
-	result[i + j] = '\0';
-	free(s1);
-	return (result);
+	alloc = malloc(nmemb * size);
+	if (!alloc)
+		return (NULL);
+	ft_bzero(alloc, nmemb * size);
+	return (alloc);
 }

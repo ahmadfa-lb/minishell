@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/16 13:05:20 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/19 02:15:04 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,18 @@ typedef struct s_data
 	char			*user_input;
 }					t_data;
 
+typedef struct s_value
+{
+    char *value;
+    struct s_value *next;
+} t_value;
+
+typedef struct s_env
+{
+    char *key;
+    t_value *value_head;
+    struct s_env *next;
+} t_env;
 // extern int			signal_number;
 // void				art(void);
 // char				*get_path(char *cmd, char **env);
@@ -112,6 +124,7 @@ char	*process_quoted_string(char **input, char quote_type, bool *space);
 void	free_tokens(t_list_tokens *tokens);
 const char *token_type_to_string(t_tokens_type type);
 const char *quote_type_to_string(t_quote_type quote_type);
+t_list_tokens *create_token(t_tokens_type type, t_quote_type quote_type, char *value, bool space);
 //tokenization_utils.c
 int	ft_isspace(char c);
 void	ft_skip_whitespace(char **input);
