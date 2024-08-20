@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/20 05:00:49 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 06:19:38 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,31 @@
 // }
 
 
-t_list_tokens *expand_dollar_sign(t_list_tokens *lexer_list, t_envp_node *envp_list) {
-    t_list_tokens *current = lexer_list;
+// t_list_tokens *expand_dollar_sign(t_list_tokens *lexer_list, t_envp_node *envp_list) {
+//     t_list_tokens *current = lexer_list;
 
-    while (current) {
-        // Check if the token value starts with '$'
-        if (current->value && current->value[0] == '$') {
-            char *env_value = get_env(envp_list, current->value + 1); // Skip the '$' character
+//     while (current) {
+//         // Check if the token value starts with '$'
+//         if (current->value && current->value[0] == '$') {
+//             char *env_value = get_env(envp_list, current->value + 1); // Skip the '$' character
 
-            if (env_value) {
-                // Replace the current token value with the environment variable's value
-                free(current->value);
-                current->value = strdup(env_value);
-            } else {
-                // If the environment variable doesn't exist, replace it with an empty string
-                free(current->value);
-                current->value = strdup("");
-            }
-        }
+//             if (env_value) {
+//                 // Replace the current token value with the environment variable's value
+//                 free(current->value);
+//                 current->value = strdup(env_value);
+//             } else {
+//                 // If the environment variable doesn't exist, replace it with an empty string
+//                 free(current->value);
+//                 current->value = strdup("");
+//             }
+//         }
 
-        // Move to the next token
-        current = current->next;
-    }
+//         // Move to the next token
+//         current = current->next;
+//     }
 
-    return lexer_list;
-}
+//     return lexer_list;
+// }
 
 // int main(int argc, char **argv, char **envp) {
 //     // Initialize envp list
