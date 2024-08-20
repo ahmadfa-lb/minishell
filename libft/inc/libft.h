@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:05:14 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 04:25:51 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:59:10 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <stdint.h>
+// # include "../libft/inc/get_next_line.h"
 
 typedef struct s_list
 {
