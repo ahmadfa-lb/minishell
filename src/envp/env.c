@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 06:20:28 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:32:47 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_envp_node	*copy_envp_to_list(char **envp)
 	t_envp_node	*new_node;
 	char		*key;
 	char		*value;
-		
+
 	head = NULL;
 	current = NULL;
 	while (*envp)

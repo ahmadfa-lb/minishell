@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/20 04:53:02 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 16:50:21 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,18 +93,25 @@ typedef struct s_data
 	char			*user_input;
 }					t_data;
 
-typedef struct s_value
-{
-    char *value;
-    struct s_value *next;
-} t_value;
+// typedef struct s_value
+// {
+//     char *value;
+//     struct s_value *next;
+// } t_value;
 
+// typedef struct s_env
+// {
+//     char *key;
+//     t_value *value_head;
+//     struct s_env *next;
+// } t_env;
 typedef struct s_env
 {
-    char *key;
-    t_value *value_head;
-    struct s_env *next;
+	char *key;
+	char *value;
+	struct s_env *next;
 } t_env;
+
 // extern int			signal_number;
 // void				art(void);
 // char				*get_path(char *cmd, char **env);

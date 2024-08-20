@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ssss.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 08:12:45 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 16:36:35 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*read_pid_line(int fd)
 {
@@ -40,9 +40,4 @@ pid_t	ft_get_pid()
 		return ((pid_t)atoi(line + 4));//we should use ft_atoi() instead atoi()
 	else
 		return (-1);
-}
-
-int main() {
-    printf("The PID of this process is %d\n", ft_get_pid());
-    return 0;
 }
