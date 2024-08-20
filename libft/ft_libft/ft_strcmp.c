@@ -6,13 +6,13 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:14:47 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/07 09:34:08 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 04:24:52 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, const char *s2)
 {
 	unsigned int	i;
 

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/16 12:52:25 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 05:00:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,58 @@
 // 	(void)ac;
 // 	(void)av;
 // 	return (0);
+// }
+
+
+t_list_tokens *expand_dollar_sign(t_list_tokens *lexer_list, t_envp_node *envp_list) {
+    t_list_tokens *current = lexer_list;
+
+    while (current) {
+        // Check if the token value starts with '$'
+        if (current->value && current->value[0] == '$') {
+            char *env_value = get_env(envp_list, current->value + 1); // Skip the '$' character
+
+            if (env_value) {
+                // Replace the current token value with the environment variable's value
+                free(current->value);
+                current->value = strdup(env_value);
+            } else {
+                // If the environment variable doesn't exist, replace it with an empty string
+                free(current->value);
+                current->value = strdup("");
+            }
+        }
+
+        // Move to the next token
+        current = current->next;
+    }
+
+    return lexer_list;
+}
+
+// int main(int argc, char **argv, char **envp) {
+//     // Initialize envp list
+//     t_envp_node *envp_list = copy_envp_to_list(envp);
+
+//     // Sample lexer output (you would replace this with actual lexer processing)
+//     t_list_tokens *lexer_list = create_lexer_list_from_input("ls -l $HOME");
+
+//     // Before expansion
+//     printf("Before expansion:\n");
+//     print_lexer_list(lexer_list); // You can write a helper function to print the list
+
+//     // Parse and expand $ sign
+//     lexer_list = expand_dollar_sign(lexer_list, envp_list);
+
+//     // After expansion
+//     printf("\nAfter expansion:\n");
+//     print_lexer_list(lexer_list);
+
+//     // Cleanup
+//     free_envp_list(envp_list);
+//     free_lexer_list(lexer_list);
+
+//     return 0;
 // }
 
 // Test the lexer

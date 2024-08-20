@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_tokens_concatenation.c.c                      :+:      :+:    :+:   */
+/*   list_tokens_concatenation.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 06:23:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/16 11:40:50 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 04:18:11 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del)
 {
@@ -62,10 +62,10 @@ void concate_nodes(t_list_tokens **list_token)
 	{
 		if (tmp->space == 0)
 		{
-			ft_token_join(&tmp, &del);//utiles
+			ft_token_join(&tmp, &del);
 			if (tmp->next->space == 1)
 				tmp = tmp->next->next;
-			ft_free_node(list_token, del);//utiles
+			ft_free_node(list_token, del);
 		}
 		else
 			tmp = tmp->next;

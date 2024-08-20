@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/19 03:08:41 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 04:53:02 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@
 # define FAILURE 1
 
 
+typedef struct s_envp_node
+{
+    char *key;
+    char *value;
+    struct s_envp_node *next;
+} t_envp_node;
 
 typedef enum e_token_type
 {
@@ -74,7 +80,7 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-    t_list_tokens   *tokens_list;
+    
 	int				running;
 	pid_t			pid;
 }					t_cmd;
