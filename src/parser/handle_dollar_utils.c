@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:36:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 10:41:09 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 04:39:36 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,26 @@ pid_t	ft_getpid()
 	line = read_pid_line(fd);
 	close(fd);
 	if (line != NULL)
-		return ((pid_t)atoi(line + 4));//we should use ft_atoi() instead atoi()
+		return ((pid_t)ft_atoi(line + 4));
 	else
 		return (-1);
+}
+
+char *handle_double_dollar(char *input)
+{
+    char *pos;
+    char pid_str[12];
+    pid_t pid;
+
+    // Get the current process ID
+    pid = ft_getpid();
+    sprintf(pid_str, "%d", pid);
+
+    // Replace occurrences of $$ with the PID
+    while ((pos = ft_strnstr(input, "$$", ft_strlen(input))) != NULL)
+    {
+        replace_envp(&input, "$$", pid_str);
+    }
+
+    return input;
 }

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/20 10:40:35 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 04:58:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,39 +31,10 @@
 //     }
 // }
 
-// void free_tab(char **tab)
-// {
-//     int i;
-
-//     i = 0;
-//     while (tab[i])
-//     {
-//         free(tab[i]);
-//         i++;
-//     }
-//     free(tab);
-// }
 
 
-// free functions
-void free_envp_list(t_env *env_head)
-{
-    t_env *current_env;
-    t_env *next_env;
 
-    current_env = env_head;
-    while (current_env)
-    {
-        next_env = current_env->next;
-        // Free the key
-        free(current_env->key);
-        // Free the value list associated with this env node
-        free(current_env->value);
-        // Free the env node itself
-        free(current_env);
-        current_env = next_env;
-    }
-}
+
 
 
 // // for testing
@@ -110,24 +81,6 @@ void free_envp_list(t_env *env_head)
 // 	return (length);
 // }
 
-char *my_getenv_from_copy(char *name, t_env *copy_envp)
-{
-    t_env *current = copy_envp;
-
-    // Traverse the linked list to find the matching key
-    while (current)
-    {
-        if (ft_strcmp(current->key, name) == 0)
-        {
-            // Found the matching key, concatenate and return the values
-            return current->value;
-        }
-        current = current->next;
-    }
-
-    // Return NULL if the key is not found
-    return (NULL);
-}
 
 void replace_envp(char **input, char *old, char *new)
 {
@@ -160,26 +113,6 @@ void replace_envp(char **input, char *old, char *new)
 }
 
 
-
-char *handle_double_dollar(char *input)
-{
-    char *pos;
-    char pid_str[12];
-    pid_t pid;
-
-    // Get the current process ID
-    pid = ft_getpid();
-    sprintf(pid_str, "%d", pid);
-
-    // Replace occurrences of $$ with the PID
-    while ((pos = ft_strnstr(input, "$$", ft_strlen(input))) != NULL)
-    {
-        replace_envp(&input, "$$", pid_str);
-    }
-
-    return input;
-}
-
 // Function to remove all occurrences of a specific character from a string
 char *remove_char(char *str, char char_to_remove)
 {
@@ -201,30 +134,26 @@ char *remove_char(char *str, char char_to_remove)
             *ptr++ = str[i++]; // Copy the escaped character
         }
         else if (str[i] != char_to_remove)
-        {
             *ptr++ = str[i++];
-        }
         else if (str[i] == char_to_remove && str[i + 1] == '\0')
-        {
             *ptr++ = str[i++];
-        }
         else
-        {
             i++;
-        }
     }
     *ptr = '\0';
     return result;
 }
 
 // Function to parse and replace environment variables
-char *handle_dollar_signe(char *input, t_env *envp_head)
+char	*handle_dollar_signe(char *input, t_env *envp_head)
 {
-    int i = 0;
-    int start, end;
-    char *sub_env;
+    int		i;
+    int		start;
+    int		end;
+    char	*sub_env;
     input = handle_double_dollar(input);
 
+    i = 0;
     while (input[i])
     {
         if (input[i] == '$' && ft_isdigit(input[i + 1]))
@@ -242,7 +171,7 @@ char *handle_dollar_signe(char *input, t_env *envp_head)
                 i++;
             end = i;
             sub_env = ft_substr(input, start, end - start);
-            char *env_value = my_getenv_from_copy(sub_env, envp_head);
+            char *env_value = get_env(envp_head, sub_env);
             if (env_value)
                 replace_envp(&input, sub_env, env_value);
             else
@@ -255,38 +184,3 @@ char *handle_dollar_signe(char *input, t_env *envp_head)
     return remove_char(input, '$');
 }
 
-// // for test
-// int main(int argc, char **argv, char **envp)
-// {
-//     t_env *copy_envp = NULL;
-//     char *input;
-//     if (argc > 1)
-//     {
-//         printf("a%s", argv[1]);
-//     }
-
-//     // Initialize the copy_envp linked list from envp
-//     init_copy_envp(&copy_envp, envp);
-
-//     while (1)
-//     {
-//         input = readline("minishell>>> ");
-//         if (!input)
-//         {
-//             break;
-//         }
-//         if (*input)
-//         {
-//             add_history(input);
-//             // Update input after processing using the refactored function
-//             input = handle_dollar_signe(input, copy_envp);
-//             printf("%s\n", input);
-//         }
-//         free(input);
-//     }
-
-//     // Free the linked list and clean up
-//     free_list(copy_envp);
-
-//     return 0;
-// }
