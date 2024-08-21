@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/20 16:50:21 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/21 04:35:28 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@
 # define FAILURE 1
 
 
-typedef struct s_envp_node
+typedef struct s_env
 {
     char *key;
     char *value;
-    struct s_envp_node *next;
-} t_envp_node;
+    struct s_env *next;
+} t_env;
 
 typedef enum e_token_type
 {
@@ -105,12 +105,12 @@ typedef struct s_data
 //     t_value *value_head;
 //     struct s_env *next;
 // } t_env;
-typedef struct s_env
-{
-	char *key;
-	char *value;
-	struct s_env *next;
-} t_env;
+// typedef struct s_env
+// {
+// 	char *key;
+// 	char *value;
+// 	struct s_env *next;
+// } t_env;
 
 // extern int			signal_number;
 // void				art(void);
@@ -124,7 +124,7 @@ typedef struct s_env
 // void				handlesignal(t_data *data);
 
 
-
+//lexer
 //cmd_to_token.c
 //static void	handle_pipe_token(char **current, t_list_tokens **tokens);
 //static void	handle_redirection_token(char **current, t_list_tokens **tokens);
@@ -147,14 +147,33 @@ char	*ft_strcat(char *dest, const char *src);
 //tokenization_utils1.c
 size_t	ft_strnlen(const char *str, size_t n);
 char	*ft_strndup(const char *s, size_t n);
+int ft_is_delimiter(char c);
 
-
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 //parser
 //list_tokens_concatenation.c
 void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
 void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
 void concate_nodes(t_list_tokens **list_token);
+//handle_dollar.c
+
+//handle_dollar_utils.c
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//envp
+//env.c
+t_env	*create_envp_node(char *key, char *value);
+void	split_envp(char *envp_str, char **key, char **value);
+t_env	*create_envp_list_node(char *envp_str);
+void	add_node_to_envp_list(t_env **head, t_env **current, t_env *new_node);
+t_env	*init_copy_envp_to_list(char **envp);
+//env_utils.c
+void	free_envp_list(t_env *head);
+char	*get_env(t_env *head, const char *key);
+int	set_env(t_env **head, const char *key, const char *value);
+int	unset_env(t_env **head, const char *key);
+
 
 #endif
 

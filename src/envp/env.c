@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 13:32:47 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/21 04:33:41 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_envp_node	*create_envp_node(char *key, char *value)
+t_env	*create_envp_node(char *key, char *value)
 {
-	t_envp_node	*new_node;
+	t_env	*new_node;
 
-	new_node = (t_envp_node *)malloc(sizeof(t_envp_node));
+	new_node = (t_env *)malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
 	new_node->key = ft_strdup(key);
@@ -30,7 +30,8 @@ void	split_envp(char *envp_str, char **key, char **value)
 	char	*equal_sign;
 
 	equal_sign = ft_strchr(envp_str, '=');
-	if (equal_sign) {
+	if (equal_sign)
+	{
 		*key = ft_strndup(envp_str, equal_sign - envp_str);
 		*value = ft_strdup(equal_sign + 1);
 	}
@@ -41,39 +42,42 @@ void	split_envp(char *envp_str, char **key, char **value)
 	}
 }
 
-t_envp_node	*copy_envp_to_list(char **envp)
+t_env	*create_envp_list_node(char *envp_str)
 {
-	t_envp_node	*head;
-	t_envp_node	*current;
-	t_envp_node	*new_node;
-	char		*key;
-	char		*value;
+	char	*key;
+	char	*value;
+	t_env	*new_node;
+
+	split_envp(envp_str, &key, &value);
+	new_node = create_envp_node(key, value);
+	free(key);
+	free(value);
+	return (new_node);
+}
+
+void	add_node_to_envp_list(t_env **head, t_env **current, t_env *new_node)
+{
+	if (!*head)
+		*head = new_node;
+	else
+		(*current)->next = new_node;
+	*current = new_node;
+}
+
+t_env	*init_copy_envp_to_list(char **envp)
+{
+	t_env	*head;
+	t_env	*current;
+	t_env	*new_node;
 
 	head = NULL;
 	current = NULL;
 	while (*envp)
 	{
-		split_envp(*envp, &key, &value);
-		new_node = create_envp_node(key, value);
-		free(key);
-		free(value);
+		new_node = create_envp_list_node(*envp);
 		if (!new_node)
-		{
-			while (head) 
-			{
-		    	current = head->next;
-		    	free(head->key);
-		    	free(head->value);
-		    	free(head);
-		    	head = current;
-			}
-			return (NULL);
-		}
-		if (!head)
-			head = new_node;
-		else
-			current->next = new_node;
-		current = new_node;
+			free_envp_list(head);
+		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
 	return (head);

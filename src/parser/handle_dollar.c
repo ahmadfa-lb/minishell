@@ -3,106 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   handle_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/20 16:49:46 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/20 10:40:35 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <limits.h>
-#include "./ft_libft/libft.h"
-#include <stdint.h>
-#include <fcntl.h>
+// void append_node(t_env **head, char *key, char *value)
+// {
+//     t_env *new_node;
+//     t_env *current;
 
-typedef struct s_env
-{
-    char *key;
-    char *value;
-    struct s_env *next;
-} t_env;
+//     new_node = create_node(key, value);
+//     if (!new_node)
+//         return;
+//     if (*head == NULL)
+//         *head = new_node;
+//     else
+//     {
+//         current = *head;
+//         while (current->next)
+//             current = current->next;
+//         current->next = new_node;
+//     }
+// }
 
-char *ft_strcopy(char *dest, const char *src)
-{
-    size_t i;
+// void free_tab(char **tab)
+// {
+//     int i;
 
-    i = 0;
-    while (src[i])
-    {
-        if (src[i] != '\0')
-            dest[i] = src[i];
-        else
-            dest[i] = '\0';
-        i++;
-    }
-    return (dest);
-}
+//     i = 0;
+//     while (tab[i])
+//     {
+//         free(tab[i]);
+//         i++;
+//     }
+//     free(tab);
+// }
 
-int ft_isspace(char c)
-{
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-}
 
-t_env *create_node(char *key, char *value)
-{
-    t_env *res;
-    int i;
-
-    res = malloc(sizeof(t_env));
-    i = 0;
-    if (!res)
-    {
-        perror("Failed to allocate memory for new node");
-        return (NULL);
-    }
-    res->key = ft_strdup(key);
-    res->value = ft_strdup(value); // Initialize value_head to NULL
-    res->next = NULL;
-    return (res);
-}
-
-void append_node(t_env **head, char *key, char *value)
-{
-    t_env *new_node;
-    t_env *current;
-
-    new_node = create_node(key, value);
-    if (!new_node)
-        return;
-    if (*head == NULL)
-        *head = new_node;
-    else
-    {
-        current = *head;
-        while (current->next)
-            current = current->next;
-        current->next = new_node;
-    }
-}
-
-void free_tab(char **tab)
-{
-    int i;
-
-    i = 0;
-    while (tab[i])
-    {
-        free(tab[i]);
-        i++;
-    }
-    free(tab);
-}
 // free functions
-void free_list(t_env *env_head)
+void free_envp_list(t_env *env_head)
 {
     t_env *current_env;
     t_env *next_env;
@@ -121,47 +65,28 @@ void free_list(t_env *env_head)
     }
 }
 
-void init_copy_envp(t_env **head, char **envp)
-{
-    char **copy_env;
-    int i;
 
-    i = 0;
-    while (envp[i] != NULL)
-    {
-        copy_env = ft_split(envp[i], '=');
-        if (copy_env)
-        {
-            if (copy_env[0] && copy_env[1])
-                append_node(head, copy_env[0], copy_env[1]);
-            else if (copy_env[0] && !copy_env[1])
-                append_node(head, copy_env[0], ft_strdup(""));
-            free_tab(copy_env);
-        }
-        i++;
-    }
-}
-// for testing
+// // for testing
 
-void print_list(t_env *env_head)
-{
-    t_env *current_env;
-    char *current_value;
+// void print_list(t_env *env_head)
+// {
+//     t_env *current_env;
+//     char *current_value;
 
-    current_env = env_head;
-    while (current_env)
-    {
-        // Print the key
-        printf("Key: %s\n", current_env->key);
-        // Print the values
-        current_value = current_env->value;
-        printf("Values: ");
-        printf("%s", current_value);
-        printf("\n\n"); // Print a newline between entries
-        // Move to the next env node
-        current_env = current_env->next;
-    }
-}
+//     current_env = env_head;
+//     while (current_env)
+//     {
+//         // Print the key
+//         printf("Key: %s\n", current_env->key);
+//         // Print the values
+//         current_value = current_env->value;
+//         printf("Values: ");
+//         printf("%s", current_value);
+//         printf("\n\n"); // Print a newline between entries
+//         // Move to the next env node
+//         current_env = current_env->next;
+//     }
+// }
 
 // int count_envp_elements(char **envp)
 // {
@@ -234,54 +159,7 @@ void replace_envp(char **input, char *old, char *new)
     *input = new_input;
 }
 
-pid_t ft_getpid(void)
-{
-    int fd;
-    char buffer[256];
-    ssize_t bytesRead;
-    pid_t pid = -1;
 
-    // Open the /proc/self/status file
-    fd = open("/proc/self/status", O_RDONLY);
-    if (fd == -1)
-    {
-        return -1; // Error opening file
-    }
-
-    // Read the file content
-    bytesRead = read(fd, buffer, sizeof(buffer) - 1);
-    if (bytesRead == -1)
-    {
-        close(fd);
-        return -1; // Error reading file
-    }
-
-    // Null-terminate the buffer to make it a proper string
-    buffer[bytesRead] = '\0';
-
-    // Look for the line starting with "Pid:"
-    char *line = buffer;
-    while (line)
-    {
-        if (strncmp(line, "Pid:", 4) == 0)
-        {
-            // Extract the PID from the line
-            pid = (pid_t)strtol(line + 5, NULL, 10);
-            break;
-        }
-        // Move to the next line
-        line = strchr(line, '\n');
-        if (line)
-        {
-            line++; // Move past the newline character
-        }
-    }
-
-    // Close the file
-    close(fd);
-
-    return pid;
-}
 
 char *handle_double_dollar(char *input)
 {
@@ -301,10 +179,6 @@ char *handle_double_dollar(char *input)
 
     return input;
 }
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 // Function to remove all occurrences of a specific character from a string
 char *remove_char(char *str, char char_to_remove)
@@ -342,22 +216,7 @@ char *remove_char(char *str, char char_to_remove)
     *ptr = '\0';
     return result;
 }
-int ft_is_delimiter(char c)
-{
-    if (c == '$')
-    {
-        return 1;
-    }
-    if (c == '|' || c == '>' || c == '<')
-    {
-        return 1;
-    }
-    if (c == '\'' || c == '"')
-    {
-        return 1;
-    }
-    return 0;
-}
+
 // Function to parse and replace environment variables
 char *handle_dollar_signe(char *input, t_env *envp_head)
 {
@@ -396,38 +255,38 @@ char *handle_dollar_signe(char *input, t_env *envp_head)
     return remove_char(input, '$');
 }
 
-// for test
-int main(int argc, char **argv, char **envp)
-{
-    t_env *copy_envp = NULL;
-    char *input;
-    if (argc > 1)
-    {
-        printf("a%s", argv[1]);
-    }
+// // for test
+// int main(int argc, char **argv, char **envp)
+// {
+//     t_env *copy_envp = NULL;
+//     char *input;
+//     if (argc > 1)
+//     {
+//         printf("a%s", argv[1]);
+//     }
 
-    // Initialize the copy_envp linked list from envp
-    init_copy_envp(&copy_envp, envp);
+//     // Initialize the copy_envp linked list from envp
+//     init_copy_envp(&copy_envp, envp);
 
-    while (1)
-    {
-        input = readline("minishell>>> ");
-        if (!input)
-        {
-            break;
-        }
-        if (*input)
-        {
-            add_history(input);
-            // Update input after processing using the refactored function
-            input = handle_dollar_signe(input, copy_envp);
-            printf("%s\n", input);
-        }
-        free(input);
-    }
+//     while (1)
+//     {
+//         input = readline("minishell>>> ");
+//         if (!input)
+//         {
+//             break;
+//         }
+//         if (*input)
+//         {
+//             add_history(input);
+//             // Update input after processing using the refactored function
+//             input = handle_dollar_signe(input, copy_envp);
+//             printf("%s\n", input);
+//         }
+//         free(input);
+//     }
 
-    // Free the linked list and clean up
-    free_list(copy_envp);
+//     // Free the linked list and clean up
+//     free_list(copy_envp);
 
-    return 0;
-}
+//     return 0;
+// }

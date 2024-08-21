@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/19 02:10:36 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/20 10:22:46 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,20 @@ char	*ft_strndup(const char *s, size_t n)
 	ft_strncpy(new_str, s, len);       
 	new_str[len] = '\0';        
 	return (new_str);
+}
+int ft_is_delimiter(char c)
+{
+    if (c == '$')
+    {
+        return 1;
+    }
+    if (c == '|' || c == '>' || c == '<')
+    {
+        return 1;
+    }
+    if (c == '\'' || c == '"')
+    {
+        return 1;
+    }
+    return 0;
 }
