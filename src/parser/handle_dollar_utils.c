@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:36:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/21 04:39:36 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:46:51 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,36 @@ pid_t	ft_getpid()
 		return (-1);
 }
 
-char *handle_double_dollar(char *input)
+ssize_t read_status_file(char *buffer, size_t size)
 {
-    char *pos;
-    char pid_str[12];
-    pid_t pid;
-
-    // Get the current process ID
-    pid = ft_getpid();
-    sprintf(pid_str, "%d", pid);
-
-    // Replace occurrences of $$ with the PID
-    while ((pos = ft_strnstr(input, "$$", ft_strlen(input))) != NULL)
+    int fd = open("/proc/self/status", O_RDONLY);
+    ssize_t bytesRead = -1;
+    if (fd != -1)
     {
-        replace_envp(&input, "$$", pid_str);
+        bytesRead = read(fd, buffer, size - 1);
+        close(fd);
     }
+    return (bytesRead);
+}
 
-    return input;
+pid_t ft_getuid()
+{
+    char buffer[256];
+    ssize_t bytesRead;
+    char *uid_line;
+    pid_t uid = -1;
+
+    bytesRead = read_status_file(buffer, sizeof(buffer));
+    if (bytesRead > 0)
+    {
+        buffer[bytesRead] = '\0';
+        uid_line = ft_strstr(buffer, "Uid:");
+        if (uid_line)
+        {
+            uid_line = ft_strchr(uid_line, '\t');
+            if (uid_line)
+                uid = ft_atoi(uid_line + 1);
+        }
+    }
+    return (uid);
 }

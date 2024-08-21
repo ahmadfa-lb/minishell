@@ -6,33 +6,11 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/21 04:32:19 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:45:27 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// int count_envp_elements(char **envp)
-// {
-// 	int count = 0;
-// 	while (envp[count] != NULL)
-// 	{
-// 		count++;
-// 	}
-// 	return (count);
-// }
-
-// int list_length(t_env *head)
-// {
-// 	int length = 0;
-// 	t_env *current = head;
-// 	while (current)
-// 	{
-// 		length++;
-// 		current = current->next;
-// 	}
-// 	return (length);
-// }
 
 void	free_envp_list(t_env *head)
 {

@@ -2,6 +2,155 @@
 #include "includes/minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
+
+ssize_t read_status_file(char *buffer, size_t size)
+{
+    int fd = open("/proc/self/status", O_RDONLY);
+    ssize_t bytesRead = -1;
+    if (fd != -1)
+    {
+        bytesRead = read(fd, buffer, size - 1);
+        close(fd);
+    }
+    return (bytesRead);
+}
+
+pid_t ft_getuid()
+{
+    char buffer[256];
+    ssize_t bytesRead;
+    char *uid_line;
+    pid_t uid = -1;
+
+    bytesRead = read_status_file(buffer, sizeof(buffer));
+    if (bytesRead > 0)
+    {
+        buffer[bytesRead] = '\0';
+        uid_line = ft_strstr(buffer, "Uid:");
+        if (uid_line)
+        {
+            uid_line = ft_strchr(uid_line, '\t');
+            if (uid_line)
+                uid = ft_atoi(uid_line + 1);
+        }
+    }
+    return (uid);
+}
+
+int	get_int_length(int n)
+{
+	int		length;
+	bool	is_negative;
+
+	length = 0;
+	is_negative = n < 0;
+	if (n == 0)
+		return (1);
+	if (is_negative)
+		n = -n;
+	while (n > 0)
+	{
+		n /= 10;
+		length++;
+	}
+	if (is_negative)
+		return (length + 1);
+	else
+		return (length);
+}
+
+char	*ft_strcpy(char *dest, const char *src)
+{
+	char	*original_dest;
+	int		i;
+
+	original_dest = dest;
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src [i];
+		i++;
+	}
+	original_dest[i] = '\0';
+	return (original_dest);
+}
+
+char	*handle_int_min(void)
+{
+	char	*min_str;
+
+	min_str = (char *)malloc(12 * sizeof(char));
+	if (min_str == NULL)
+		return (NULL);
+	ft_strcpy(min_str, "-2147483648");
+	return (min_str);
+}
+
+void	convert_number_to_string(int n, char *str, int length, bool is_negative)
+{
+	int	index;
+
+	index = length - 1;
+	if (n == 0)
+		str[index] = '0';
+	else
+	{
+		while (n > 0)
+		{
+			str[index--] = '0' + (n % 10);
+			n /= 10;
+		}
+	}
+	if (is_negative)
+		str[0] = '-';
+	str[length] = '\0';
+}
+
+char	*ft_itoa(int n)
+{
+	int		length;
+	bool	is_negative;
+	char	*str;
+
+	length = get_int_length(n);
+	is_negative = n < 0;
+	if (n == INT_MIN)
+		return (handle_int_min());
+	str = (char *)malloc((length + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	if (is_negative)
+	{
+		str[0] = '-';
+		n = -n;
+	}
+	convert_number_to_string(n, str, length, is_negative);
+	return (str);
+}
+
+char	*ft_strstr(char *haystack, char *needle)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	if (needle[0] == '\0')
+		return (haystack);
+	while (haystack[i] != '\0')
+	{
+		j = 0;
+		while (haystack[i + j] == needle[j] && haystack[i + j] != '\0')
+		{
+			if (needle[j + 1] == '\0')
+				return (&haystack[i]);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 size_t	check_len(size_t s_len, unsigned int start, size_t len)
 {
 	size_t	mlen;
@@ -422,7 +571,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 	t_env	*head;
 	t_env	*current;
 	t_env	*new_node;
+	char *UID;
+	pid_t uid;
 
+	uid = ft_getuid();
+	UID = ft_itoa((int)uid);
 	head = NULL;
 	current = NULL;
 	while (*envp)
@@ -433,6 +586,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
+	if (set_env(&head, "UID", UID) != 0)
+    {
+        free_envp_list(head);
+        return NULL;
+    }
 	return (head);
 }
 
@@ -467,33 +625,28 @@ pid_t	ft_getpid()
 }
 
 
-
-void replace_envp(char **input, char *old, char *new)
+void replace_dollar_dollar(char **input, char *old, char *new)
 {
-    if (!new) // If new is NULL, don't replace
-        return;
+	char *new_input;
+	char *pos;
+	int old_len;
+	int new_len;
+	int input_len;
 
-    char *pos = ft_strnstr(*input, old, ft_strlen(*input));
+    if (!new)
+        return;
+    pos = ft_strnstr(*input, old, ft_strlen(*input));
     if (!pos)
         return;
-
-    int old_len = ft_strlen(old);
-    int new_len = ft_strlen(new);
-    int input_len = ft_strlen(*input);
-
-    char *new_input = malloc(input_len - old_len + new_len + 1);
+    old_len = ft_strlen(old);
+    new_len = ft_strlen(new);
+    input_len = ft_strlen(*input);
+    new_input = malloc(input_len - old_len + new_len + 1);
     if (!new_input)
         return;
-
-    // Copy part before `old`
     ft_strlcpy(new_input, *input, pos - *input + 1);
-
-    // Append `new`
     ft_strlcat(new_input, new, (pos - *input) + new_len + 1);
-
-    // Append part after `old`
     ft_strlcat(new_input, pos + old_len, input_len - old_len + new_len + 1);
-
     free(*input);
     *input = new_input;
 }
@@ -501,51 +654,75 @@ void replace_envp(char **input, char *old, char *new)
 char *handle_double_dollar(char *input)
 {
     char *pos;
-    char pid_str[12];
+    char *pid_str;
     pid_t pid;
 
-    // Get the current process ID
     pid = ft_getpid();
-    sprintf(pid_str, "%d", pid);
-
-    // Replace occurrences of $$ with the PID
+    pid_str = ft_itoa(pid);
     while ((pos = ft_strnstr(input, "$$", ft_strlen(input))) != NULL)
-    {
-        replace_envp(&input, "$$", pid_str);
-    }
-
+        replace_dollar_dollar(&input, "$$", pid_str);
+    free(pid_str);
     return input;
 }
 // Function to remove all occurrences of a specific character from a string
-char *remove_char(char *str, char char_to_remove)
-{
-    if (!str)
-        return NULL;
+// char *remove_char(char *str, char char_to_remove)
+// {
+// 	int len;
+// 	char *result;
+// 	char *ptr;
+// 	int i;
 
-    int len = strlen(str);
-    char *result = malloc(len + 1);
-    if (!result)
-        return NULL;
+//     if (!str)
+//         return NULL;
+//     len = strlen(str);
+//     result = malloc(len + 1);
+//     if (!result)
+//         return NULL;
+//     ptr = result;
+//     i = 0;
+//     while (i < len)
+//     {
+//         if (ft_isspace(str[i + 1]) && str[i] == char_to_remove)
+//         {
+//             *ptr++ = str[i++];
+//             *ptr++ = str[i++];
+//         }
+//         else if (str[i] != char_to_remove)
+//             *ptr++ = str[i++];
+//         else if (str[i] == char_to_remove && str[i + 1] == '\0')
+//             *ptr++ = str[i++];
+//         else
+//             i++;
+//     }
+//     *ptr = '\0';
+//     return result;
+// }
 
-    char *ptr = result;
-    int i = 0;
-    while (i < len)
-    {
-        if (ft_isspace(str[i + 1]) && str[i] == char_to_remove)
-        {
-            *ptr++ = str[i++];
-            *ptr++ = str[i++]; // Copy the escaped character
-        }
-        else if (str[i] != char_to_remove)
-            *ptr++ = str[i++];
-        else if (str[i] == char_to_remove && str[i + 1] == '\0')
-            *ptr++ = str[i++];
-        else
-            i++;
-    }
-    *ptr = '\0';
-    return result;
-}
+// char *remove_char(char *str, char char_to_remove)
+// {
+//     int len;
+//     char *result;
+//     char *ptr;
+//     int i;
+
+//     if (!str)
+//         return NULL;
+    
+//     result = malloc(strlen(str) + 1);
+//     if (!result)
+//         return NULL;
+
+//     ptr = result;
+//     for (i = 0; str[i]; i++)
+//     {
+//         if (str[i] != char_to_remove || (ft_isspace(str[i + 1]) || str[i + 1] == '\0'))
+//             *ptr++ = str[i];
+//     }
+    
+//     *ptr = '\0';
+//     return result;
+// }
+
 
 char	*ft_strjoin(char *s1, char const *s2)
 {
@@ -576,35 +753,38 @@ char	*ft_strjoin(char *s1, char const *s2)
 	return (result);
 }
 
-char *strjoin_free(char *s1, const char *s2)
-{
-    char *joined = ft_strjoin(s1, s2);  // Join the two strings
-    //free(s1);  // Free the old string
-    return joined;
-}
+// char *strjoin_free(char *s1, const char *s2)
+// {
+//     char *joined = ft_strjoin(s1, s2);  // Join the two strings
+//     //free(s1);  // Free the old string
+//     return joined;
+// }
+
+
 
 // Function to parse and replace environment variables
-char *handle_dollar_signe(char *input, t_env *envp_head)
+char *handle_dollar_sign(char *input, t_env *envp_head)
 {
-    int i = 0;
-    int start, end;
-    char *sub_env;
-    char *result = strdup("");  // Start with an empty string to build the result
-
-    input = handle_double_dollar(input);  // Handle $$ case first
-
+    int		i;
+    int		start;
+	int		end;
+    char	*sub_env;
+    char	*result;
+	char	*env_value;
+	char	tmp[2];
+	
+	i = 0;
+	result = strdup("");
+    input = handle_double_dollar(input);
     while (input[i])
     {
         if (input[i] == '$')
         {
-            // Handle $ followed by a digit
             if (ft_isdigit(input[i + 1]))
             {
                 i += 2;  // Skip the $ and digit
                 continue;
             }
-
-            // Handle $ followed by a valid variable name
             i++;
             start = i;
             while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
@@ -614,33 +794,77 @@ char *handle_dollar_signe(char *input, t_env *envp_head)
             if (start != end)  // If a valid variable name was found
             {
                 sub_env = ft_substr(input, start, end - start);
-                char *env_value = get_env(envp_head, sub_env);
+                env_value = get_env(envp_head, sub_env);
                 if (env_value)
-                {
-                    result = strjoin_free(result, env_value);  // Append the env value to result
-                }
+                    result = ft_strjoin(result, env_value);  // Append the env value to result
                 free(sub_env);
             }
             else
-            {
-                // No valid variable name; just append the original "$"
-                result = strjoin_free(result, "$");
-            }
+                result = ft_strjoin(result, "$");
         }
         else
         {
-            // Append the current character to the result
-            char tmp[2] = {input[i], '\0'};
-            result = strjoin_free(result, tmp);
+            tmp[0] = input[i];
+            tmp[1] = '\0';
+            result = ft_strjoin(result, tmp);
             i++;
         }
     }
-
-    // Instead of freeing input here, we return the result
-    // free(input);  // Comment out to avoid double-free
-
-    return result;
+    return (result);
 }
+
+// void handle_normal_variable(char *input, int *i, char **result, t_env *env)
+// {
+// 	int start;
+// 	int end;
+// 	char *sub_env;
+// 	char *env_value;
+
+// 	(*i)++;
+// 	start = *i;
+// 	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+// 		(*i)++;
+// 	end = *i;
+// 	if (start != end)
+// 	{
+// 		sub_env = ft_substr(input, start, end - start);
+//         env_value = get_env(env, sub_env);
+//         if (env_value)
+//             *result = ft_strjoin(*result, env_value);  // Append the env value to result
+//         free(sub_env);
+// 	}
+// 	else
+//         *result = ft_strjoin(*result, "$");
+// }
+
+// char	*handle_dollar_sign(char *input, t_env *env)
+// {
+// 	int		i;
+// 	char	*result;
+// 	char	tmp[2];
+
+// 	i = 0;
+// 	result = ft_strdup("");
+// 	input = handle_double_dollar(input);
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '$')
+// 		{
+// 			if (ft_isdigit(input[i + 1]))
+// 				i += 2;
+// 			else
+// 				handle_normal_variable(input, &i, &result, env);
+// 		}
+// 		else
+// 		{
+// 			ft_strlcpy(tmp, input + 1, 2);
+// 			result = ft_strjoin(result, tmp);
+// 			i++;
+// 		}
+		
+// 	}
+// 	return (result);
+// }
 
 
 
@@ -665,7 +889,7 @@ int main(int argc, char **argv, char **envp)
         }
 
         // Process the input string
-        char *processed_input = handle_dollar_signe(input, envp_list);
+        char *processed_input = handle_dollar_sign(input, envp_list);
 
         // Print the final output
         printf("Processed Input: %s\n", processed_input);

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/21 04:33:41 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:44:55 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 	t_env	*head;
 	t_env	*current;
 	t_env	*new_node;
+	char *UID;
+	pid_t uid;
 
+	uid = ft_getuid();
+	UID = ft_itoa((int)uid);
 	head = NULL;
 	current = NULL;
 	while (*envp)
@@ -80,5 +84,10 @@ t_env	*init_copy_envp_to_list(char **envp)
 		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
+	if (set_env(&head, "UID", UID) != 0)
+    {
+        free_envp_list(head);
+        return NULL;
+    }
 	return (head);
 }

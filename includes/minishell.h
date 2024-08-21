@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/21 04:35:28 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:50:09 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,14 @@ void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
 void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
 void concate_nodes(t_list_tokens **list_token);
 //handle_dollar.c
-
+void replace_dollar_dollar(char **input, char *old, char *new);
+char *handle_double_dollar(char *input);
+char *handle_dollar_sign(char *input, t_env *envp_head);
 //handle_dollar_utils.c
-
+char	*read_pid_line(int fd);
+pid_t	ft_getpid();
+ssize_t read_status_file(char *buffer, size_t size);
+pid_t ft_getuid();
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //envp
 //env.c
@@ -171,8 +176,8 @@ t_env	*init_copy_envp_to_list(char **envp);
 //env_utils.c
 void	free_envp_list(t_env *head);
 char	*get_env(t_env *head, const char *key);
-int	set_env(t_env **head, const char *key, const char *value);
-int	unset_env(t_env **head, const char *key);
+int		set_env(t_env **head, const char *key, const char *value);
+int		unset_env(t_env **head, const char *key);
 
 
 #endif
