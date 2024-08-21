@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/17 03:07:34 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:00:56 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ char	*ft_strncpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strcpy(char *dest, const char *src)
-{
-	char	*dest_ptr;
+// char	*ft_strcpy(char *dest, const char *src)
+// {
+// 	char	*dest_ptr;
 
-	dest_ptr = dest;
-	while (*src)
-		*dest_ptr++ = *src++;
-	*dest_ptr = '\0';
-	return (dest);
-}
+// 	dest_ptr = dest;
+// 	while (*src)
+// 		*dest_ptr++ = *src++;
+// 	*dest_ptr = '\0';
+// 	return (dest);
+// }
 
 char	*ft_strcat(char *dest, const char *src)
 {

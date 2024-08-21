@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/21 13:50:09 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:00:01 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, ch
 int	ft_isspace(char c);
 void	ft_skip_whitespace(char **input);
 char	*ft_strncpy(char *dest, const char *src, size_t n) ;
-char	*ft_strcpy(char *dest, const char *src);
+// char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strcat(char *dest, const char *src);
 //tokenization_utils1.c
 size_t	ft_strnlen(const char *str, size_t n);
@@ -157,9 +157,10 @@ void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
 void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
 void concate_nodes(t_list_tokens **list_token);
 //handle_dollar.c
-void replace_dollar_dollar(char **input, char *old, char *new);
-char *handle_double_dollar(char *input);
-char *handle_dollar_sign(char *input, t_env *envp_head);
+void	handle_normal_variable(char *input, int *i, char **result, t_env *env);
+char	*handle_two_dollar(char *input, int *i);
+char	*handle_dollar_sign(char *input, t_env *env);
+t_list_tokens	*dollar_expansion(t_list_tokens *tokens_list, t_env *env);
 //handle_dollar_utils.c
 char	*read_pid_line(int fd);
 pid_t	ft_getpid();
