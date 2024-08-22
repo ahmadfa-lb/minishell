@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/22 13:40:54 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:07:20 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char	*handle_dollar_sign(char *input, t_env *env)
 			result = ft_strjoin(result, tmp);
 			i++;
 		}
+	free(input);
 	return (result);
 }
 

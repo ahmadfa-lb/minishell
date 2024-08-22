@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 15:19:05 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:50:05 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,28 +121,24 @@ static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 	t_list_tokens	*new_token; 
 	char			*start;
 	char			*value;
+	char			*val_dup;
 	bool			space;
 
 	start = *current;
 	while (**current && !ft_isspace(**current) && **current != '|' &&
 		 **current != '<' && **current != '>' && **current != '"' && **current != '\'')
-	{
 		(*current)++;
-	}
 	if (*current > start)
 	{
 		space = !(*(*current) && (*(*current) == '\'' || *(*current) == '"'));
 		value = ft_strndup(start, *current - start);
 		if (!value) // Check if memory allocation failed
 			return;
-		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, ft_strdup(value), space);
+		val_dup = ft_strdup(value);
+		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, val_dup, space);
 		if (!new_token)
-		{
-			free(value); // Free the value if token creation fails
-			return;
-		}
-		append_token(tokens, new_token);
-		free(value);
+			return (free(value), (void)0);
+		(append_token(tokens, new_token), free(value));
 	}
 }
 

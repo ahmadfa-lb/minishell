@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/22 15:10:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:10:56 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,13 @@ int main(int argc, char **argv, char **envp)
                    current_token->space);
             current_token = current_token->next;
         }
-         t_list_tokens *next;
-        while (tokens)
-        {
-            next = tokens->next;
-            if (tokens->value)
-                free(tokens->value); // Free the value string
-            free(tokens); // Free the token structure
-            tokens= next;
-        }
+        free_tokens(tokens);
+        tokens = NULL;
         free(input);
     }
 
     free_envp_list(envp_list);
-    free_tokens(tokens);
+    // free_tokens(tokens);
     printf("\nExiting minishell...\n");
     return 0;
 }
