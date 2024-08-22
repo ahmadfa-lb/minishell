@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/21 15:09:41 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:40:54 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,21 @@ void handle_normal_variable(char *input, int *i, char **result, t_env *env)
 		sub_env = ft_substr(input, start, end - start);
         env_value = get_env(env, sub_env);
         if (env_value)
-            *result = ft_strjoin(*result, env_value);  // Append the env value to result
+            *result = ft_strjoin(*result, env_value);
         free(sub_env);
 	}
 	else
         *result = ft_strjoin(*result, "$");
 }
-char	*handle_two_dollar(char *input, int *i)
+
+void	handle_two_dollar(char **result, int *i)
 {
-	char	*result;
 	char	*num_str;
 
-	result = ft_substr(input, 0, *i);
 	num_str = ft_itoa(getpid());
-	result = ft_strjoin(result, num_str);
-	result = ft_strjoin(result, (input) + (*i) + 2);
-	*i += ft_strlen(num_str);
+	*result = ft_strjoin(*result, num_str);
+	*i += 2;
 	free(num_str);
-	return (result);
 }
 char	*handle_dollar_sign(char *input, t_env *env)
 {
@@ -57,11 +54,12 @@ char	*handle_dollar_sign(char *input, t_env *env)
 	i = 0;
 	result = ft_strdup("");
 	while (i < ft_strlen1(input) && input[i])
-	{
 		if (input[i] == '$')
 		{
+			// if (input[i + 1] == '?')
+				// handle_exit..
 			if (input[i + 1] == '$')
-				result = handle_two_dollar(input, &i);
+				handle_two_dollar(&result, &i);
 			else if (ft_isdigit(input[i + 1]))
 				i += 2;
 			else
@@ -73,7 +71,6 @@ char	*handle_dollar_sign(char *input, t_env *env)
 			result = ft_strjoin(result, tmp);
 			i++;
 		}
-	}
 	return (result);
 }
 

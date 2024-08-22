@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/21 15:00:01 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:37:50 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-    
+	t_list_tokens	*tokens;
+    t_list_tokens	*list_redirectors;
 	int				running;
 	pid_t			pid;
 }					t_cmd;
@@ -158,7 +159,7 @@ void ft_free_node(t_list_tokens **tokens, t_list_tokens *del);
 void concate_nodes(t_list_tokens **list_token);
 //handle_dollar.c
 void	handle_normal_variable(char *input, int *i, char **result, t_env *env);
-char	*handle_two_dollar(char *input, int *i);
+void	handle_two_dollar(char **result, int *i);
 char	*handle_dollar_sign(char *input, t_env *env);
 t_list_tokens	*dollar_expansion(t_list_tokens *tokens_list, t_env *env);
 //handle_dollar_utils.c
