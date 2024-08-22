@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 16:50:05 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/22 18:11:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 		free(quoted_string);
 		return;
 	}
-	free(quoted_string);
+	//free(quoted_string);
 	append_token(tokens, new_token);
 	(*current)++;
 }
