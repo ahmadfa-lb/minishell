@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_to_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 18:11:49 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:47:24 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 // Helper function to handle pipe tokens
 static void	handle_pipe_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens *new_token;
+	t_list_tokens	*new_token;
 
 	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, "|", true);
 	if (!new_token)
 		return;
-
 	append_token(tokens, new_token);
 	(*current)++;
 }
@@ -34,7 +33,7 @@ static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 	t_list_tokens	*new_token;
     char			redirect_char;
 	size_t			len;
-	
+
 	len = 1;
 	redirect_char = **current;
 	if (*(*current + 1) == redirect_char)

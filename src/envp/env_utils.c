@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/21 13:45:27 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:35:56 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	free_envp_list(t_env *head)
 {
-	t_env *current;
-	
+	t_env	*current;
+
 	while (head)
 	{
 		current = head->next;
@@ -25,26 +25,28 @@ void	free_envp_list(t_env *head)
 		head = current;
 	}
 }
+
 char	*get_env(t_env *head, const char *key)
 {
 	while (head)
 	{
-		if (ft_strcmp(head->key, key) == 0) 
-			return head->value;
+		if (ft_strcmp(head->key, key) == 0)
+			return (head->value);
 		head = head->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
 int	set_env(t_env **head, const char *key, const char *value)
 {
-	t_env *current;
-	t_env *new_node;
+	t_env	*current;
+	t_env	*new_node;
 
 	current = *head;
 	while (current)
 	{
-		if (ft_strcmp(current->key, key) == 0) {
+		if (ft_strcmp(current->key, key) == 0)
+		{
 			free(current->value);
 			current->value = ft_strdup(value);
 			return (0);
@@ -61,8 +63,8 @@ int	set_env(t_env **head, const char *key, const char *value)
 
 int	unset_env(t_env **head, const char *key)
 {
-	t_env *current;
-	t_env *previous;
+	t_env	*current;
+	t_env	*previous;
 
 	current = *head;
 	previous = NULL;
@@ -70,7 +72,7 @@ int	unset_env(t_env **head, const char *key)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 		{
-			if (previous) 
+			if (previous)
 				previous->next = current->next;
 			else
 				*head = current->next;

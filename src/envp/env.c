@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 13:52:46 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:39:01 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 	t_env	*head;
 	t_env	*current;
 	t_env	*new_node;
-	char *UID;
- 	pid_t uid;
+	char	*uid_char;
+	pid_t	uid;
 
 	uid = ft_getuid();
- 	UID = ft_itoa((int)uid);
+	uid_char = ft_itoa((int)uid);
 	head = NULL;
 	current = NULL;
 	while (*envp)
@@ -102,12 +102,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
-	if (set_env(&head, "UID", UID) != 0)
-    {
-        free_envp_list(head);
-        return NULL;
-    }
-	// add_uid_to_envp_list(head);
-	free(UID);
+	if (set_env(&head, "UID", uid_char) != 0)
+	{
+		free_envp_list(head);
+		return (NULL);
+	}
+	free(uid_char);
 	return (head);
 }
