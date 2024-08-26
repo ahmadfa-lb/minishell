@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/22 17:07:20 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:14:29 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ t_list_tokens	*dollar_expansion(t_list_tokens *tokens_list, t_env *env)
 	current_token = tokens_list;
 	while (current_token)
 	{
-		if (current_token->value && ft_strchr(current_token->value, '$'))
+		if (current_token->value && ft_strchr(current_token->value, '$') &&
+		 current_token->quote_type != SINGLE_QUOTE)
 			current_token->value = handle_dollar_sign(current_token->value, env);
 		current_token = current_token->next;
 	}

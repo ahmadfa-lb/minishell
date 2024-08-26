@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_to_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 18:11:49 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:12:54 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,30 @@
 #include "../../includes/minishell.h"
 
 // Helper function to handle pipe tokens
-static void	handle_pipe_token(char **current, t_list_tokens **tokens)
+static void handle_pipe_token(char **current, t_list_tokens **tokens)
 {
 	t_list_tokens *new_token;
+	char *pipe;
 
-	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, "|", true);
+	pipe = ft_strdup("|");
+	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, pipe, true);
 	if (!new_token)
+	{
+		free(pipe);
 		return;
+	}
 
 	append_token(tokens, new_token);
 	(*current)++;
 }
 
 // Helper function to handle redirection tokens
-static void	handle_redirection_token(char **current, t_list_tokens **tokens)
+static void handle_redirection_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens	*new_token;
-    char			redirect_char;
-	size_t			len;
-	
+	t_list_tokens *new_token;
+	char redirect_char;
+	size_t len;
+
 	len = 1;
 	redirect_char = **current;
 	if (*(*current + 1) == redirect_char)
@@ -43,12 +48,10 @@ static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 		(*current)++;
 	}
 	new_token = create_token_node(
-		(len == 2) ? (redirect_char == '<' ? TOKEN_HEREDOC : TOKEN_APPEND) : 
-		             (redirect_char == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT),
+		(len == 2) ? (redirect_char == '<' ? TOKEN_HEREDOC : TOKEN_APPEND) : (redirect_char == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT),
 		NO_QUOTE,
 		ft_strndup(*current - len + 1, len),
-		true
-	);
+		true);
 	if (!new_token)
 		return;
 
@@ -57,12 +60,12 @@ static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 }
 
 // Helper function to handle quoted string tokens
-static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
+static void handle_quoted_string_token(char **current, t_list_tokens **tokens)
 {
-	char			quote_type;
-	char			*quoted_string;
-	t_list_tokens	*new_token;
-	bool 			space;
+	char quote_type;
+	char *quoted_string;
+	t_list_tokens *new_token;
+	bool space;
 
 	quote_type = **current;
 	quoted_string = process_quoted_string(current, quote_type, &space);
@@ -73,14 +76,13 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 		TOKEN_WORD,
 		(quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE,
 		quoted_string,
-		space
-	);
+		space);
 	if (!new_token)
 	{
 		free(quoted_string);
 		return;
 	}
-	//free(quoted_string);
+	// free(quoted_string);
 	append_token(tokens, new_token);
 	(*current)++;
 }
@@ -88,7 +90,7 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 // Helper function to handle unquoted word tokens
 // static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 // {
-// 	t_list_tokens	*new_token; 
+// 	t_list_tokens	*new_token;
 // 	char			*start;
 // 	char			*value;
 // 	bool			space;
@@ -116,17 +118,17 @@ static void	handle_quoted_string_token(char **current, t_list_tokens **tokens)
 // 	}
 // }
 
-static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
+static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens	*new_token; 
-	char			*start;
-	char			*value;
-	char			*val_dup;
-	bool			space;
+	t_list_tokens *new_token;
+	char *start;
+	char *value;
+	char *val_dup;
+	bool space;
 
 	start = *current;
 	while (**current && !ft_isspace(**current) && **current != '|' &&
-		 **current != '<' && **current != '>' && **current != '"' && **current != '\'')
+		   **current != '<' && **current != '>' && **current != '"' && **current != '\'')
 		(*current)++;
 	if (*current > start)
 	{
@@ -142,9 +144,8 @@ static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 	}
 }
 
-
 // Tokenize the input string into tokens
-void	tokenize(char *input, t_list_tokens **tokens)
+void tokenize(char *input, t_list_tokens **tokens)
 {
 	char *current;
 
@@ -171,4 +172,3 @@ void	tokenize(char *input, t_list_tokens **tokens)
 		handle_unquoted_word_token(&current, tokens);
 	}
 }
-
