@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/26 06:32:34 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:04:14 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,14 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	t_list_tokens	*tokens;
+	t_list_tokens	*tokens_list;
     t_list_tokens	*list_redirectors;
-	int				running;
-	pid_t			pid;
+	// int				running;
+	// pid_t			pid;
+	struct s_cmd	*next;
 }					t_cmd;
+
+
 
 typedef struct s_data
 {
