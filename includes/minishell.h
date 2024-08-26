@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/22 16:53:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/26 06:32:34 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,24 +94,7 @@ typedef struct s_data
 	char			*user_input;
 }					t_data;
 
-// typedef struct s_value
-// {
-//     char *value;
-//     struct s_value *next;
-// } t_value;
 
-// typedef struct s_env
-// {
-//     char *key;
-//     t_value *value_head;
-//     struct s_env *next;
-// } t_env;
-// typedef struct s_env
-// {
-// 	char *key;
-// 	char *value;
-// 	struct s_env *next;
-// } t_env;
 
 // extern int			signal_number;
 // void				art(void);
@@ -139,6 +122,7 @@ void	free_tokens(t_list_tokens *tokens);
 const char *token_type_to_string(t_tokens_type type);
 const char *quote_type_to_string(t_quote_type quote_type);
 t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space);
+
 //tokenization_utils.c
 int	ft_isspace(char c);
 void	ft_skip_whitespace(char **input);
@@ -167,6 +151,12 @@ char	*read_pid_line(int fd);
 pid_t	ft_getpid();
 ssize_t read_status_file(char *buffer, size_t size);
 pid_t ft_getuid();
+//handle_redirectors.c
+
+
+//handle_redirectors_helpers.c
+t_list_tokens *remove_token(t_list_tokens **tokens_list, t_list_tokens *token);
+
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //envp
 //env.c
