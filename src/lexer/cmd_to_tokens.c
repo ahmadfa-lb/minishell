@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_to_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/26 11:12:54 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/27 03:59:04 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 08:15:13 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/26 06:43:59 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/27 04:56:11 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void append_token(t_list_tokens **tokens, t_list_tokens *new_token)
 {
 	t_list_tokens *last = *tokens;
-	if (!last)
+	if (!*tokens)
 	{
 		*tokens = new_token;
 		return;
@@ -117,7 +117,7 @@ t_list_tokens	*create_token_node(t_tokens_type type, t_quote_type quote_type, ch
 	    return NULL;
 	new_token->type = type;
 	new_token->quote_type = quote_type;
-	new_token->value = value;
+	new_token->value = ft_strdup(value);
 	new_token->space = space;
 	new_token->next = NULL;
 	return (new_token);

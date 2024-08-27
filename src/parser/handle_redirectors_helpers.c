@@ -6,35 +6,85 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:17:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/26 06:32:49 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:45:16 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int is_redirector(int type) {
-    return (type == '<' || type == '<<' || type == '>' || type == '>>');
+int is_redirector(int type)
+{
+    return (type == TOKEN_REDIRECT_IN || 
+            type == TOKEN_HEREDOC || 
+            type == TOKEN_REDIRECT_OUT || 
+            type == TOKEN_APPEND);
 }
 
-t_list_tokens *remove_token(t_list_tokens **tokens_list, t_list_tokens *token)
+
+// Remove a token from the token list
+t_list_tokens	*remove_token(t_list_tokens **tokens_list, t_list_tokens *token)
 {
-    t_list_tokens *current = *tokens_list;
+	t_list_tokens *current;
 
-    if (current == token) {
-        *tokens_list = token->next;
-        free(token->value);
-        free(token);
-        return *tokens_list;
+	current = *tokens_list;
+	if (current == token)
+	{
+		*tokens_list = token->next;
+		free(token->value);
+		free(token);
+		return (*tokens_list);
+	}
+	while (current && current->next != token)
+		current = current->next;
+	if (current && current->next == token)
+	{
+		current->next = token->next;
+		free(token->value);
+		free(token);
+	}
+	return (current ? current->next : NULL);
+}
+
+// Append a command node to the command list
+void append_cmd_node(t_cmd **cmd_list, t_cmd *new_node, t_list_tokens *head, t_list_tokens *last) {
+    if (!*cmd_list)
+    {
+        (*cmd_list) = new_node;
+        append_cmd_tokens(cmd_list, head, last);
+        return ;
     }
-
-    while (current && current->next != token)
-        current = current->next;
-
-    if (current && current->next == token) {
-        current->next = token->next;
-        free(token->value);
-        free(token);
+    t_cmd *curr = *cmd_list;
+    while (curr->next) 
+    {
+        curr = curr->next;
     }
+    curr->next = new_node;
+    append_cmd_tokens(&(curr->next), head, last);
+}
 
-    return current ? current->next : NULL;
+void append_cmd_tokens(t_cmd **cmd_list, t_list_tokens *head, t_list_tokens *last)
+{
+    if (head == last)
+    {
+        (*cmd_list)->tokens_list = create_token_node(head->type, head->quote_type, ft_strdup(head->value), head->space);
+        return ;
+    }
+    while (head != last->next)
+    {
+        t_list_tokens *new_node =  create_token_node(head->type, head->quote_type, ft_strdup(head->value), head->space);
+        append_token(&(*cmd_list)->tokens_list, new_node);
+        head = head->next;
+    }
+}
+
+// Create a new command node
+t_cmd *create_cmd_node() {
+    t_cmd *new_cmd = malloc(sizeof(t_cmd));
+    if (!new_cmd) return NULL; // Handle malloc failure
+
+    new_cmd->tokens_list = NULL;
+    new_cmd->list_redirectors = NULL;
+    new_cmd->prev = NULL;
+    new_cmd->next = NULL;
+    return new_cmd;
 }

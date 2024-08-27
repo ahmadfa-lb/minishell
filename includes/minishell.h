@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/26 14:04:14 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/27 06:26:02 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_cmd
 	// int				running;
 	// pid_t			pid;
 	struct s_cmd	*next;
+	struct s_cmd    *prev;
 }					t_cmd;
 
 
@@ -92,7 +93,7 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_cmd			*cmd;
-    char            **env;
+    t_env           *env;
 	int				status;	
 	char			*user_input;
 }					t_data;
@@ -155,11 +156,17 @@ pid_t	ft_getpid();
 ssize_t read_status_file(char *buffer, size_t size);
 pid_t ft_getuid();
 //handle_redirectors.c
-
+void free_parser_list(t_cmd *parser_list);
+void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list);
+void	parse_all_redirections(t_cmd *cmd_list);
 
 //handle_redirectors_helpers.c
-t_list_tokens *remove_token(t_list_tokens **tokens_list, t_list_tokens *token);
-
+int is_redirector(int type);
+t_list_tokens	*remove_token(t_list_tokens **tokens_list, t_list_tokens *token);
+void append_cmd_node(t_cmd **cmd_list, t_cmd *new_node, t_list_tokens *head, t_list_tokens *last);
+t_cmd *create_cmd_node();
+t_list_tokens *get_last(t_list_tokens *head);
+void append_cmd_tokens(t_cmd **cmd_list, t_list_tokens *head, t_list_tokens *last);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //envp
 //env.c

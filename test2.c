@@ -1189,7 +1189,7 @@ static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 	t_list_tokens *new_token;
 	char *start;
 	char *value;
-	char *val_dup;
+	// char *val_dup;
 	bool space;
 
 	start = *current;
@@ -1202,8 +1202,8 @@ static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 		value = ft_strndup(start, *current - start);
 		if (!value) // Check if memory allocation failed
 			return;
-		val_dup = ft_strdup(value);
-		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, val_dup, space);
+		// val_dup = ft_strdup(value);
+		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, value, space);
 		if (!new_token)
 			return (free(value), (void)0);
 		(append_token(tokens, new_token), free(value));
@@ -1254,12 +1254,7 @@ void tokenize(char *input, t_list_tokens **tokens)
 // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
 // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
 
-int is_redirector(int type) {
-    return (type == TOKEN_REDIRECT_IN || 
-            type == TOKEN_HEREDOC || 
-            type == TOKEN_REDIRECT_OUT || 
-            type == TOKEN_APPEND);
-}
+
 
 // Create a new token node
 t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space) {
@@ -1273,29 +1268,7 @@ t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, ch
     return new_token;
 }
 
-// Remove a token from the token list
-t_list_tokens	*remove_token(t_list_tokens **tokens_list, t_list_tokens *token)
-{
-	t_list_tokens *current;
 
-	current = *tokens_list;
-	if (current == token)
-	{
-		*tokens_list = token->next;
-		free(token->value);
-		free(token);
-		return (*tokens_list);
-	}
-	while (current && current->next != token)
-		current = current->next;
-	if (current && current->next == token)
-	{
-		current->next = token->next;
-		free(token->value);
-		free(token);
-	}
-	return (current ? current->next : NULL);
-}
 
 // Append a token to the end of the token list
 void append_token(t_list_tokens **tokens, t_list_tokens *new_token) {
@@ -1310,114 +1283,15 @@ void append_token(t_list_tokens **tokens, t_list_tokens *new_token) {
     last->next = new_token;
 }
 
-// Append a command node to the command list
-void append_cmd_node(t_cmd **cmd_list, t_cmd *new_cmd) {
-    t_cmd *last = *cmd_list;
-    if (!last) {
-        *cmd_list = new_cmd;
-        return;
-    }
-    while (last->next) {
-        last = last->next;
-    }
-    last->next = new_cmd;  // Append the new command
-}
-
-// Create a new command node
-t_cmd *create_cmd_node(t_list_tokens *tokens_list) {
-    t_cmd *new_cmd = malloc(sizeof(t_cmd));
-    if (!new_cmd) return NULL; // Handle malloc failure
-    new_cmd->tokens_list = tokens_list;
-    new_cmd->list_redirectors = NULL;
-    new_cmd->next = NULL;
-    return new_cmd;
-}
-
-
-void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list)
-{
-    t_list_tokens	*current_token;
-    t_list_tokens	*command_start;
-    t_list_tokens	*previous_token;
-	t_list_tokens	*next_command;
-	t_cmd			*new_cmd;
-
-	current_token = tokens_list;
-	command_start = tokens_list;
-	previous_token = NULL;
-    while (current_token)
-	{
-        if (current_token->type == TOKEN_PIPE)
-		{
-            // Temporarily break the link at the pipe
-            next_command = current_token->next;
-            // If there's a previous token, it should point to NULL to end the current command
-            if (previous_token) {
-                previous_token->next = NULL;
-            }
-            // Create a new command node for the current command
-            new_cmd = create_cmd_node(command_start);
-            append_cmd_node(cmd_list, new_cmd);
-            // Move to the next command after the pipe
-            command_start = next_command;
-            current_token = next_command->next;
-        } else
-		{
-            previous_token = current_token;
-            current_token = current_token->next;
-        }
-    }
-    // Add the last command as a command node if there is one
-    if (command_start)
-	{
-        t_cmd *new_cmd = create_cmd_node(command_start);
-        append_cmd_node(cmd_list, new_cmd);
-    }
-}
 
 
 
 
-// Parse all redirections for each command in the command list
-void	parse_all_redirections(t_cmd *cmd_list)
-{
-    t_cmd			*current_cmd;
-	t_list_tokens	*token;
-	t_list_tokens	*file_token;
-	t_list_tokens	*redir_node;
-	t_list_tokens	*file_node;
-	
-	current_cmd = cmd_list;
-    while (current_cmd)
-	{
-        token = current_cmd->tokens_list;
-        while (token)
-		{
-            if (is_redirector(token->type)) {
-                file_token = token->next;
-                if (!file_token)
-				{
-                    printf("Syntax error: expected a file after redirector.\n");
-                    break;
-                }
-                // Create new nodes for the redirector and its associated file
-				redir_node = create_token_node(token->type, NO_QUOTE, token->value, false);
-				file_node = create_token_node(file_token->type, file_token->quote_type, file_token->value, file_token->space);
-            
-	            // Append them to the redirectors list in the current command node
-	            append_token(&(current_cmd->list_redirectors), redir_node);
-	            append_token(&(current_cmd->list_redirectors), file_node);
 
-	            // Remove the redirector and its associated file from the tokens list
-	            token = remove_token(&(current_cmd->tokens_list), token);     // Remove redirector
-	            token = remove_token(&(current_cmd->tokens_list), file_token); // Remove associated file
-	        } else 
-	            token = token->next;
-	    }
-	    // Move to the next command node
-	    current_cmd = current_cmd->next;
-	}
-}
+
+
+
+
 
 // Function to print the token list
 void print_tokens_list(t_list_tokens *tokens_list) {
@@ -1446,40 +1320,7 @@ void print_cmd_list(t_cmd *cmd_list) {
     }
 }
 
-void free_parser_list(t_cmd *parser_list) {
-    t_cmd *current;
-    t_cmd *next;
 
-    current = parser_list;
-    while (current != NULL) {
-        next = current->next;
-
-        // Free the tokens list
-        t_list_tokens *token_current = current->tokens_list;
-        t_list_tokens *token_next;
-        while (token_current != NULL) {
-            token_next = token_current->next;
-            free(token_current->value);
-            free(token_current);
-            token_current = token_next;
-        }
-
-        // Free the redirections list
-        t_list_tokens *redir_current = current->list_redirectors;
-        t_list_tokens *redir_next;
-        while (redir_current != NULL) {
-            redir_next = redir_current->next;
-            free(redir_current->value);
-            free(redir_current);
-            redir_current = redir_next;
-        }
-
-        // Free the parser node itself
-        free(current);
-
-        current = next;
-    }
-}
 
 
 // Main function
