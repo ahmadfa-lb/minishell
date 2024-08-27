@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/27 06:26:02 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:56:22 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,12 @@ char	*get_env(t_env *head, const char *key);
 int		set_env(t_env **head, const char *key, const char *value);
 int		unset_env(t_env **head, const char *key);
 
+//list to char**
+char	**tokens_to_args(t_list_tokens *tokens);
+
+//built-in
+void	execute_echo(char **args);
+char	*handle_pwd();
 
 #endif
 
