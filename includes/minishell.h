@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/27 14:56:22 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/27 14:35:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ typedef struct s_data
 {
 	t_cmd			*cmd;
     t_env           *env;
-	int				status;	
+	int				exit_status;	
 	char			*user_input;
 }					t_data;
 
@@ -111,7 +111,7 @@ typedef struct s_data
 // void				interactivehandle_sigint(int sig);
 // void				handlesignal(t_data *data);
 
-
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //lexer
 //cmd_to_token.c
 //static void	handle_pipe_token(char **current, t_list_tokens **tokens);
@@ -126,7 +126,6 @@ void	free_tokens(t_list_tokens *tokens);
 const char *token_type_to_string(t_tokens_type type);
 const char *quote_type_to_string(t_quote_type quote_type);
 t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space);
-
 //tokenization_utils.c
 int	ft_isspace(char c);
 void	ft_skip_whitespace(char **input);
@@ -137,9 +136,7 @@ char	*ft_strcat(char *dest, const char *src);
 size_t	ft_strnlen(const char *str, size_t n);
 char	*ft_strndup(const char *s, size_t n);
 int ft_is_delimiter(char c);
-
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-
 //parser
 //list_tokens_concatenation.c
 void ft_token_join(t_list_tokens **tmp, t_list_tokens **to_del);
@@ -157,16 +154,15 @@ ssize_t read_status_file(char *buffer, size_t size);
 pid_t ft_getuid();
 //handle_redirectors.c
 void free_parser_list(t_cmd *parser_list);
+t_list_tokens *get_last(t_list_tokens *head);
 void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list);
 void	parse_all_redirections(t_cmd *cmd_list);
-
 //handle_redirectors_helpers.c
 int is_redirector(int type);
 t_list_tokens	*remove_token(t_list_tokens **tokens_list, t_list_tokens *token);
 void append_cmd_node(t_cmd **cmd_list, t_cmd *new_node, t_list_tokens *head, t_list_tokens *last);
-t_cmd *create_cmd_node();
-t_list_tokens *get_last(t_list_tokens *head);
 void append_cmd_tokens(t_cmd **cmd_list, t_list_tokens *head, t_list_tokens *last);
+t_cmd *create_cmd_node();
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //envp
 //env.c
@@ -180,6 +176,24 @@ void	free_envp_list(t_env *head);
 char	*get_env(t_env *head, const char *key);
 int		set_env(t_env **head, const char *key, const char *value);
 int		unset_env(t_env **head, const char *key);
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//excute
+//file_checks_utils.c
+bool	ft_check_executable(char *input, t_data *data);
+bool	ft_check_if_directory(char *input, t_data *data);
+bool	ft_check_file_existence(char *input, t_data *data);
+bool	ft_check_file_status(char *input, t_data *data);
+
+
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+//errors_monitoring
+//printing_errors.c
+void	ft_print_error_message(char *arg1, char *arg2);
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+
 
 //list to char**
 char	**tokens_to_args(t_list_tokens *tokens);
