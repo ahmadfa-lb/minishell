@@ -6,7 +6,7 @@
 #    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/08/28 09:58:49 by afarachi         ###   ########.fr        #
+#    Updated: 2024/08/28 16:00:54 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
 	   $(SRC_DIR)/execute/execute.c \
 	   $(SRC_DIR)/execute/file_checks_utils.c \
 	   $(SRC_DIR)/execute/env_list_to_**array_conversion.c \
+	   $(SRC_DIR)/execute/execution_helpers.c \
 	   $(SRC_DIR)/errors_monitoring/printing_errors.c \
 	   ${SRC_DIR}/minishell.c
 
