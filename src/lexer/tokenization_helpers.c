@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 08:15:13 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/27 04:56:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:03:09 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,18 +95,18 @@ void	free_tokens(t_list_tokens *tokens)
 //     }
 // }
 
-// // void free_tokens(t_list_tokens *token_list)
-// // {
-// //     t_list_tokens *temp;
+// void free_tokens(t_list_tokens *token_list)
+// {
+//     t_list_tokens *temp;
 
-// //     while (token_list)
-// //     {
-// //         temp = token_list;
-// //         token_list = token_list->next;
-// //         free(temp->value); // Free the duplicated string
-// //         free(temp);        // Free the node
-// //     }
-// // }
+//     while (token_list)
+//     {
+//         temp = token_list;
+//         token_list = token_list->next;
+//         free(temp->value); // Free the duplicated string
+//         free(temp);        // Free the node
+//     }
+// }
 
 t_list_tokens	*create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space)
 {

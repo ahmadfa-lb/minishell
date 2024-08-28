@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/28 06:42:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 15:29:44 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_cmd
     t_list_tokens	*list_redirectors;
 	// int				running;
 	// pid_t			pid;
+	char			*command_path;
 	struct s_cmd	*next;
 	struct s_cmd    *prev;
 }					t_cmd;
@@ -93,7 +94,7 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-	t_cmd			*cmd;
+	t_cmd			*cmd_list;
     t_env           *env_list;
 	t_list_tokens	*first_tokens_list;
 	char			**env_array;
@@ -182,20 +183,26 @@ int		unset_env(t_env **head, const char *key);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //execute
 //execute.c
-char **build_arguments(t_list_tokens *tokens_list);
+char	**build_arguments(t_list_tokens *tokens_list);
+int	ft_lstsize1(t_cmd *lst);
+bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd);
 int ft_execute_command(t_data *data);
-
-
+//execution_helpers.c
+char	*ft_strjoin_path(const char *dir, const char *cmd);
+bool	ft_is_executable(const char *path);
+void	ft_free_split(char **split);
+// static char	*find_executable_in_paths(char **paths, t_cmd *cmd);
+bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd);
 //file_checks_utils.c
 bool	ft_check_executable(char *input, t_data *data);
 bool	ft_check_if_directory(char *input, t_data *data);
 bool	ft_check_file_existence(char *input, t_data *data);
 bool	ft_check_file_status(char *input, t_data *data);
-//evn_list_to_**array_conversion.c
-// static int count_env_variables(t_env *env_list);
-// static char **allocate_env_array(int count);
-// static char *create_env_variable(t_env *env);
-char **env_list_to_array(t_data *data);
+//env_list_to_**array_conversion.c
+// static int	count_env_variables(t_env *env_list);
+// static char	**allocate_env_array(int count);
+// static char	*create_env_variable(t_env *env);
+char	**env_list_to_array(t_data *data);
 
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -213,6 +220,7 @@ char	**tokens_to_args(t_list_tokens *tokens);
 //built-in
 void	execute_echo(char **args);
 char	*handle_pwd();
+
 
 #endif
 

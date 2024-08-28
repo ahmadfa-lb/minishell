@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:03:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 08:17:29 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:45:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ bool	ft_check_file_existence(char *input, t_data *data)
 	}
 	return (true);
 }
+
 bool	ft_check_file_status(char *input, t_data *data)
 {
 	if (!ft_check_file_existence(input, data))
