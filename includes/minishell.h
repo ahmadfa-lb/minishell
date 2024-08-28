@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/27 14:35:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 04:26:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,12 @@ char	*get_env(t_env *head, const char *key);
 int		set_env(t_env **head, const char *key, const char *value);
 int		unset_env(t_env **head, const char *key);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-//excute
+//execute
+//execute.c
+char **build_arguments(t_list_tokens *tokens_list);
+int ft_execute_command(t_data *data);
+
+
 //file_checks_utils.c
 bool	ft_check_executable(char *input, t_data *data);
 bool	ft_check_if_directory(char *input, t_data *data);

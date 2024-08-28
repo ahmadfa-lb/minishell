@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/27 12:04:30 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 04:31:18 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,30 @@ void print_cmd_list(t_cmd *cmd_list) {
     }
 }
 
+t_data *initialize_data(void)
+{
+    t_data *data;
+
+    // Allocate memory for the t_data structure
+    data = (t_data *)malloc(sizeof(t_data));
+    if (!data)
+        return (NULL); // Return NULL if memory allocation fails
+
+    // Initialize the cmd pointer to NULL
+    data->cmd = NULL;
+
+    // Initialize the env pointer to NULL
+    data->env = NULL;
+
+    // Initialize the exit_status to 0 (default success status)
+    data->exit_status = 0;
+
+    // Initialize user_input to NULL
+    data->user_input = NULL;
+
+    return data;
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -47,7 +71,8 @@ int main(int argc, char **argv, char **envp)
     char *input;
 	t_env *envp_list = init_copy_envp_to_list(envp);
     t_list_tokens *tokens = NULL;
-    t_cmd *cmd_list = NULL;
+    // t_cmd *cmd_list = NULL;
+    t_data *data = initialize_data();
 
     while ((input = readline("minishell> ")) != NULL)
     {
@@ -79,23 +104,24 @@ int main(int argc, char **argv, char **envp)
 
         
         // Split the tokens by pipes and create command nodes
-        split_tokens_by_pipe(tokens, &cmd_list);
+        split_tokens_by_pipe(tokens, &data->cmd);
         // free_tokens(tokens);    
         // Parse redirections for all command nodes
-        parse_all_redirections(cmd_list);
+        parse_all_redirections(data->cmd);
 
         // Print the command list to check the results
-        print_cmd_list(cmd_list);
+        print_cmd_list(data->cmd);
         
-
+        ft_execute_command(data);
         
         free_tokens(tokens);
         tokens = NULL;
         free(input);
-         free_parser_list(cmd_list);
-		cmd_list = NULL;
+         free_parser_list(data->cmd);
+		data->cmd = NULL;
+        free(data);
     }
-
+    
     free_envp_list(envp_list);
     // free_tokens(tokens);
     printf("\nExiting minishell...\n");
