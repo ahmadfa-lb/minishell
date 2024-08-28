@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/28 15:29:44 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 22:48:08 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
+# include <error.h>
 
 /* System and Process Management */
 # include <signal.h>
@@ -220,7 +222,9 @@ char	**tokens_to_args(t_list_tokens *tokens);
 //built-in
 void	execute_echo(char **args);
 char	*handle_pwd();
-
+int		change_dir(char **args, t_env *env_list);
+void	print_env(t_env *env_list);
+void	handle_export(t_env **env_list, char *input);
 
 #endif
 
