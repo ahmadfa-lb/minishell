@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 04:31:18 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 06:59:54 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ t_data *initialize_data(void)
     data->cmd = NULL;
 
     // Initialize the env pointer to NULL
-    data->env = NULL;
+    data->env_list = NULL;
+    data->env_array = NULL;
 
     // Initialize the exit_status to 0 (default success status)
     data->exit_status = 0;
@@ -68,11 +69,13 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-    char *input;
-	t_env *envp_list = init_copy_envp_to_list(envp);
-    t_list_tokens *tokens = NULL;
-    // t_cmd *cmd_list = NULL;
     t_data *data = initialize_data();
+    char *input;
+	data->env_list = init_copy_envp_to_list(envp);
+    data->env_array = env_list_to_array(data);
+    //t_list_tokens *tokens = NULL;
+    // t_cmd *cmd_list = NULL;
+    
 
     while ((input = readline("minishell> ")) != NULL)
     {
@@ -84,14 +87,14 @@ int main(int argc, char **argv, char **envp)
 
         add_history(input);
 
-        tokenize(input, &tokens);
+        tokenize(input, &data->first_tokens_list);
 
         // Apply dollar expansion before concatenating nodes
-        tokens = dollar_expansion(tokens, envp_list);  // Make sure to define or pass the `env` variable
+        data->first_tokens_list = dollar_expansion(data->first_tokens_list, data->env_list);  // Make sure to define or pass the `env` variable
 
-        concate_nodes(&tokens);
+        concate_nodes(&data->first_tokens_list);
 
-        t_list_tokens *current_token = tokens;
+        t_list_tokens *current_token = data->first_tokens_list;
         while (current_token)
         {
             printf("Token: %s, Value: %s, quote_type: %s, space: %d\n",
@@ -104,7 +107,7 @@ int main(int argc, char **argv, char **envp)
 
         
         // Split the tokens by pipes and create command nodes
-        split_tokens_by_pipe(tokens, &data->cmd);
+        split_tokens_by_pipe(data->first_tokens_list, &data->cmd);
         // free_tokens(tokens);    
         // Parse redirections for all command nodes
         parse_all_redirections(data->cmd);
@@ -114,15 +117,15 @@ int main(int argc, char **argv, char **envp)
         
         ft_execute_command(data);
         
-        free_tokens(tokens);
-        tokens = NULL;
+        free_tokens(data->first_tokens_list);
+        data->first_tokens_list = NULL;
         free(input);
          free_parser_list(data->cmd);
 		data->cmd = NULL;
         free(data);
     }
     
-    free_envp_list(envp_list);
+    free_envp_list(data->env_list);
     // free_tokens(tokens);
     printf("\nExiting minishell...\n");
     return 0;

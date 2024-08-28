@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   converting_the_env_list_to_**array.c               :+:      :+:    :+:   */
+/*   env_list_to_**array_conversion.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 05:17:59 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 05:30:28 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 07:02:18 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,20 @@ static char *create_env_variable(t_env *env)
     return (env_var);
 }
 
-char **env_list_to_array(t_env *env_list)
+char **env_list_to_array(t_data *data)
 {
     int count;
     char **env_array;
 	t_env *current;
 	int i;
 
-	count = count_env_variables(env_list);
+	count = count_env_variables(data->env_list);
     env_array = allocate_env_array(count);
     if (!env_array)
+    {
         return NULL;
-	current = env_list;
+    }   
+	current = data->env_list;
     i = 0;
     while (current)
 	{

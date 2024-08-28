@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 05:30:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 07:00:41 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int ft_execute_command(t_data *data)
             return (data->exit_status);
 
         char **arguments = build_arguments(current_cmd->tokens_list);
-        execve(current_cmd->tokens_list->value, arguments, data->env);
+        execve(current_cmd->tokens_list->value, arguments, data->env_array);
         perror("execve");
         free(arguments); // Free the allocated memory
         exit(EXIT_FAILURE);
@@ -122,7 +122,7 @@ int ft_execute_command(t_data *data)
                 exit(data->exit_status);
             }
             char **arguments = build_arguments(current_cmd->tokens_list);
-            execve(current_cmd->tokens_list->value, arguments, data->env);
+            execve(current_cmd->tokens_list->value, arguments, data->env_array);
             perror("execve");
             free(arguments); // Free the allocated memory
             exit(EXIT_FAILURE);

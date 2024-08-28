@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/28 04:26:23 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/28 06:42:52 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define SUCCESS 0
 # define FAILURE 1
 
+extern int	signal_number;
 
 typedef struct s_env
 {
@@ -93,14 +94,16 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_cmd			*cmd;
-    t_env           *env;
+    t_env           *env_list;
+	t_list_tokens	*first_tokens_list;
+	char			**env_array;
 	int				exit_status;	
 	char			*user_input;
 }					t_data;
 
 
 
-// extern int			signal_number;
+
 // void				art(void);
 // char				*get_path(char *cmd, char **env);
 // void				initcmd(const char *input, char **env, t_data *data);
@@ -188,7 +191,11 @@ bool	ft_check_executable(char *input, t_data *data);
 bool	ft_check_if_directory(char *input, t_data *data);
 bool	ft_check_file_existence(char *input, t_data *data);
 bool	ft_check_file_status(char *input, t_data *data);
-
+//evn_list_to_**array_conversion.c
+// static int count_env_variables(t_env *env_list);
+// static char **allocate_env_array(int count);
+// static char *create_env_variable(t_env *env);
+char **env_list_to_array(t_data *data);
 
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
