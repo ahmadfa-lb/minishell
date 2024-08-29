@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 15:27:31 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:43:16 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int ft_execute_command(t_data *data)
     while (current_cmd)
     {
         // Validate the command before execution
-        if (!ft_is_cmd_valid(data, current_cmd))
+        if (!ft_verify_if_cmd_is_valid(data, current_cmd))
         {
             current_cmd = current_cmd->next;
             continue;
