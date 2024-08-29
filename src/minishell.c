@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 11:29:13 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:20:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,14 @@ int main(int argc, char **argv, char **envp)
     // t_list_tokens *tokens = NULL;
     // t_cmd *cmd_list = NULL;
 
-    while ((input = readline("minishell> ")) != NULL)
+    while (1)
     {
-        if (*input == '\0')
-        {
-            free(input);
-            continue;
-        }
+        input = readline("minishell> ");
+        // if (*input == '\0')
+        // {
+        //     free(input);
+        //     continue;
+        // }
 
         add_history(input);
 
@@ -161,16 +162,16 @@ int main(int argc, char **argv, char **envp)
 
         concate_nodes(&data->first_tokens_list);
 
-        t_list_tokens *current_token = data->first_tokens_list;
-        while (current_token)
-        {
-            printf("Token: %s, Value: %s, quote_type: %s, space: %d\n",
-                   token_type_to_string(current_token->type),
-                   current_token->value,
-                   quote_type_to_string(current_token->quote_type),
-                   current_token->space);
-            current_token = current_token->next;
-        }
+        // t_list_tokens *current_token = data->first_tokens_list;
+        // while (current_token)
+        // {
+        //     printf("Token: %s, Value: %s, quote_type: %s, space: %d\n",
+        //            token_type_to_string(current_token->type),
+        //            current_token->value,
+        //            quote_type_to_string(current_token->quote_type),
+        //            current_token->space);
+        //     current_token = current_token->next;
+        // }
 
         // Split the tokens by pipes and create command nodes
         split_tokens_by_pipe(data->first_tokens_list, &data->cmd_list);
@@ -179,7 +180,7 @@ int main(int argc, char **argv, char **envp)
         parse_all_redirections(data->cmd_list);
 
         // Print the command list to check the results
-        print_cmd_list(data->cmd_list);
+        // print_cmd_list(data->cmd_list);
         
         ft_execute_command(data);
 
@@ -192,6 +193,6 @@ int main(int argc, char **argv, char **envp)
 
     free_envp_list(data->env_list);
     // free_tokens(tokens);
-    printf("\nExiting minishell...\n");
+    // printf("\n\n");
     return 0;
 }
