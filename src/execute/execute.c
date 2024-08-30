@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 08:42:07 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:24:00 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	initialize_command_execution(t_data *data, int *status, int *in_fd,
 	*pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
 }
 
-int	ft_execute_command(t_data *data, t_cmd *current_cmd)
+int	ft_execute_command(t_data **data, t_cmd *current_cmd)
 {
 	int		status;
 	int		in_fd; 
@@ -78,7 +78,7 @@ int	ft_execute_command(t_data *data, t_cmd *current_cmd)
 			current_cmd = current_cmd->next;
 			continue;
 		}
-		(handle_redirections(data, current_cmd),handle_piping(data->pipe_fds,
+		(handle_redirections(data, current_cmd),handle_piping(*data->pipe_fds,
 		data->nb_pipes),pids[i] = handle_forking());
 		if (pids[i] == 0) // Child process
 			handle_child_process(data, current_cmd, in_fd);

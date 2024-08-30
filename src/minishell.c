@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 12:11:27 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 13:53:58 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv, char **envp)
     art();
     (void)argc;
     (void)argv;
-    char *input;
+    //char *input;
     t_data *data = ft_calloc(1, sizeof(t_data));
     // t_env *envp_list = init_copy_envp_to_list(envp);
     data->env_list = init_copy_envp_to_list(envp);
@@ -147,20 +147,20 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
-        input = readline("minishell> ");
-        if (!input)
+        data->user_input = readline("minishell> ");
+        if (!data->user_input)
         {
-            free(input);
+            free(data->user_input);
             // continue;
             exit(0);
         }
 
-        add_history(input);
+        add_history(data->user_input);
 
-        tokenize(input, &data->first_tokens_list);
+        tokenize(data->user_input, &data->first_tokens_list);
 
         // Apply dollar expansion before concatenating nodes
-        data->first_tokens_list = dollar_expansion(data->first_tokens_list, data->env_list); // Make sure to define or pass the env variable
+        data->first_tokens_list = dollar_expansion(data); // Make sure to define or pass the env variable
 
         concate_nodes(&data->first_tokens_list);
 
@@ -189,7 +189,7 @@ int main(int argc, char **argv, char **envp)
         
         free_tokens(data->first_tokens_list);
         data->first_tokens_list = NULL;
-        free(input);
+        free(data->user_input);
         free_parser_list(data->cmd_list);
         data->cmd_list = NULL;
     }

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/30 10:19:03 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:24:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,8 @@ void concate_nodes(t_list_tokens **list_token);
 //handle_dollar.c
 void	handle_normal_variable(char *input, int *i, char **result, t_env *env);
 void	handle_two_dollar(char **result, int *i);
-char	*handle_dollar_sign(char *input, t_env *env);
-t_list_tokens	*dollar_expansion(t_list_tokens *tokens_list, t_env *env);
+char	*handle_dollar_sign(char *input, t_env *env, int exit_status);
+t_list_tokens	*dollar_expansion(t_data *data);
 //handle_dollar_utils.c
 char	*read_pid_line(int fd);
 pid_t	ft_getpid();
