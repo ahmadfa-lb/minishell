@@ -4,6 +4,7 @@
 		"minishell.h": "c",
 		"get_next_line.h": "c",
 		"libft.h": "c",
-		"stdint.h": "c"
+		"stdint.h": "c",
+		"art.h": "c"
 	}
 }

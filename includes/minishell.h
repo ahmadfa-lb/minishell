@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/30 08:51:07 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 10:19:03 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,7 @@ typedef struct s_data
 
 
 
-
-// void				art(void);
+void				art(void);
 // char				*get_path(char *cmd, char **env);
 // void				initcmd(const char *input, char **env, t_data *data);
 // void				runcmd(const char *input, char **env, t_data *data);

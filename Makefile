@@ -6,7 +6,7 @@
 #    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/08/30 08:54:20 by afarachi         ###   ########.fr        #
+#    Updated: 2024/08/30 09:08:04 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,9 @@ SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
 	   $(SRC_DIR)/execute/path_and_cmd_validation.c \
 	   $(SRC_DIR)/execute/execution_process_utils.c \
 	   $(SRC_DIR)/errors_monitoring/printing_errors.c \
-	   ${SRC_DIR}/minishell.c
+	   ${SRC_DIR}/minishell.c \
+	   ${SRC_DIR}/art.c
+	   
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

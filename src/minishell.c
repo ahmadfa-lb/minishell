@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 07:05:07 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 09:07:37 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void print_cmd_list(t_cmd *cmd_list)
 
 int main(int argc, char **argv, char **envp)
 {
+    art();
     (void)argc;
     (void)argv;
     char *input;
