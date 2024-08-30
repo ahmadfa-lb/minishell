@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_helpers.c                                :+:      :+:    :+:   */
+/*   path_and_cmd_validation.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 14:38:43 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:37:18 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,7 @@ char	*ft_strjoin_path(const char *dir, const char *cmd)
 	return (path);
 }
 
-bool	ft_is_executable(const char *path)
-{
-	struct stat sb;
 
-	if (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR)
-		return (true);
-	return (false);
-}
 void	ft_free_split(char **split)
 {
 	int	i;
@@ -50,7 +43,7 @@ void	ft_free_split(char **split)
 	free(split);
 }
 
-static char	*find_executable_in_paths(char **paths, t_cmd *cmd)
+char	*find_executable_in_paths(char **paths, t_cmd *cmd)
 {
 	char	*full_path;
 	int		i;
@@ -83,4 +76,33 @@ bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd)
 	cmd->command_path = find_executable_in_paths(paths, cmd);
 	ft_free_split(paths);
 	return (cmd->command_path != NULL);
+}
+
+bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
+{
+	char	*command;
+	char	*path_env;
+
+	command = cmd->tokens_list->value;
+	if (!command)
+		return (false);
+	if (ft_strchr(command, '/') || !(path_env = get_env(data->env_list, "PATH")))
+	{
+		if (!ft_check_file_status(command, data))
+			return (false);
+		cmd->command_path = ft_strdup(command);
+		if (!cmd->command_path)
+			return (perror("error duplicating command"), false);
+		return (true);
+	}
+	
+	if (*command && !ft_lookup_cmd_in_envpaths(data, cmd))
+	{
+		ft_print_error_message(command, ": command not found");
+		data->exit_status = 127;
+		return (false);
+	}
+	if (cmd->command_path) // Use command_path for execution
+		return (true);
+	return (false);
 }

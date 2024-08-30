@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/30 07:41:36 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:51:07 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,28 +187,40 @@ int		set_env(t_env **head, const char *key, const char *value);
 int		unset_env(t_env **head, const char *key);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //execute
-//execute.c
+//cmd_args_and_redirection.c
 char	**build_arguments(t_list_tokens *tokens_list);
-int	ft_lstsize1(t_cmd *lst);
-bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd);
-int ft_execute_command(t_data *data, t_cmd *current_cmd);
-//execution_helpers.c
-char	*ft_strjoin_path(const char *dir, const char *cmd);
-bool	ft_is_executable(const char *path);
-void	ft_free_split(char **split);
-// static char	*find_executable_in_paths(char **paths, t_cmd *cmd);
-bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd);
-//file_checks_utils.c
-bool	ft_check_executable(char *input, t_data *data);
-bool	ft_check_if_directory(char *input, t_data *data);
-bool	ft_check_file_existence(char *input, t_data *data);
-bool	ft_check_file_status(char *input, t_data *data);
+int	open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd);
+int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list);
 //env_list_to_**array_conversion.c
 // static int	count_env_variables(t_env *env_list);
 // static char	**allocate_env_array(int count);
 // static char	*create_env_variable(t_env *env);
 char	**env_list_to_array(t_data *data);
-
+//execute.c
+void	handle_parent_process(t_data *data, int *in_fd);
+void	wait_for_children(pid_t *pids, int count, t_data *data);
+void	handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd);
+void	initialize_command_execution(t_data *data, int *status, int *in_fd,
+	 pid_t **pids);
+int	ft_execute_command(t_data *data, t_cmd *current_cmd);
+//execution_process_utils.c
+void	handle_redirections(t_data *data, t_cmd *current_cmd);
+void	handle_piping(int *pipe_fds, int nb_pipes);
+pid_t	handle_forking(void);
+void	execute_command(t_cmd *current_cmd, t_data *data);
+void	cleanup_fds(t_data *data);
+//file_checks_utils.c
+bool	ft_is_executable(const char *path);
+bool	ft_check_executable(char *input, t_data *data);
+bool	ft_check_if_directory(char *input, t_data *data);
+bool	ft_check_file_existence(char *input, t_data *data);
+bool	ft_check_file_status(char *input, t_data *data);
+//path_and_cmd_validation.c
+char	*ft_strjoin_path(const char *dir, const char *cmd);
+void	ft_free_split(char **split);
+char	*find_executable_in_paths(char **paths, t_cmd *cmd);
+bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd);
+bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd);
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //errors_monitoring

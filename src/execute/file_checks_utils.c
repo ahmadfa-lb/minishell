@@ -6,11 +6,20 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:03:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 12:45:23 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:34:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+bool	ft_is_executable(const char *path)
+{
+	struct stat sb;
+
+	if (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR)
+		return (true);
+	return (false);
+}
 
 bool	ft_check_executable(char *input, t_data *data)
 {
