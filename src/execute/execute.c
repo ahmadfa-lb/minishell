@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 07:12:57 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:10:27 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,6 @@ char	**build_arguments(t_list_tokens *tokens_list)
 	return (arguments);
 }
 
-// int	ft_lstsize1(t_cmd *lst)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (lst)
-// 	{
-// 		lst = lst->next;
-// 		i++;
-// 	}
-// 	return (i);
-// }
-
 bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 {
 	char	*command;
@@ -81,29 +68,25 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 	return (false);
 }
 
-int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
+int	open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
 {
-    int fd;
+	int	fd;
 
-    // Open the file with the specified flags and mode
-    fd = open(filename, flags, mode);
-    if (fd == -1)
-    {
-        perror("open");
-        return -1; // Return an error code if opening the file fails
-    }
-
-    // Duplicate the file descriptor to the target file descriptor
-    if (dup2(fd, target_fd) == -1)
-    {
-        perror("dup2");
-        close(fd);
-        return -1; // Return an error code if duplicating the file descriptor fails
-    }
-    dup2(fd, STDIN_FILENO);
-    // Close the original file descriptor, as it is no longer needed
-    close(fd);
-    return 0; // Return success
+	fd = open(filename, flags, mode);
+	if (fd == -1)
+	{
+		perror("open");
+		return (-1);
+	}
+	if (dup2(fd, target_fd) == -1)
+	{
+		perror("dup2");
+		close(fd);
+		return (-1);
+	}
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (0);
 }
 
 
@@ -134,63 +117,118 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 	
 }
 
-void handle_redirections(t_data *data, t_cmd *current_cmd)
+void	handle_redirections(t_data *data, t_cmd *current_cmd)
 {
-    t_list_tokens *redir = current_cmd->list_redirectors;
-    
-    while (redir)
-    {
-        redirect(data, redir->type, redir->next);
-        redir = redir->next;
-    }
+	t_list_tokens	*redir;
+
+	redir = current_cmd->list_redirectors;
+	while (redir)
+	{
+	    redirect(data, redir->type, redir->next);
+	    redir = redir->next;
+	}
 }
-void handle_piping(int *pipe_fds, int nb_pipes)
+void	handle_piping(int *pipe_fds, int nb_pipes)
 {
-    if (nb_pipes > 0)
-    {
-        if (pipe(pipe_fds) == -1)
-        {
-            perror("pipe");
-            exit(EXIT_FAILURE);
-        }
-    }
+	if (nb_pipes > 0)
+	{
+		if (pipe(pipe_fds) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+	}
 }
-pid_t handle_forking()
+pid_t	handle_forking()
 {
-    pid_t pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    return pid;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	return (pid);
 }
 
-void execute_command(t_cmd *current_cmd, t_data *data)
+void	execute_command(t_cmd *current_cmd, t_data *data)
 {
-    char **arguments = build_arguments(current_cmd->tokens_list);
-    execve(current_cmd->command_path, arguments, data->env_array);
-    perror("execve");
-    free(arguments);
-    exit(EXIT_FAILURE);
+	char	**arguments;
+
+	arguments = build_arguments(current_cmd->tokens_list);
+	execve(current_cmd->command_path, arguments, data->env_array);
+	perror("execve");
+	free(arguments);
+	exit(EXIT_FAILURE);
 }
 
 
-int ft_execute_command(t_data *data,t_cmd *current_cmd)
+
+
+void cleanup_fds(t_data *data)
+{
+    dup2(data->saved_stdout, STDOUT_FILENO);
+    dup2(data->saved_stdin, STDIN_FILENO);
+    close(data->saved_stdout);
+    close(data->saved_stdin);
+}
+
+void handle_parent_process(t_data *data, int *in_fd)
+{
+    if (*in_fd != STDIN_FILENO)
+        close(*in_fd);
+    if (data->nb_pipes > 0)
+    {
+        close(data->pipe_fds[1]);
+        *in_fd = data->pipe_fds[0];
+    }
+}
+
+void wait_for_children(pid_t *pids, int count, t_data *data)
 {
     int status;
-    int in_fd;
-    int pipe_fds[2];
-    pid_t *pids;
-    int i;
-    
-    status = 0;
-    in_fd = STDIN_FILENO;
+    for (int j = 0; j < count; j++)
+    {
+        waitpid(pids[j], &status, 0);
+        data->exit_status = WEXITSTATUS(status);
+    }
+}
+
+void handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd)
+{
+    if (in_fd != STDIN_FILENO)
+    {
+        dup2(in_fd, STDIN_FILENO);
+        close(in_fd);
+    }
+    if (data->nb_pipes > 0)
+    {
+        dup2(data->pipe_fds[1], STDOUT_FILENO);
+        close(data->pipe_fds[1]);
+        close(data->pipe_fds[0]);
+    }
+    execute_command(current_cmd, data);
+}
+
+void initialize_command_execution(t_data *data, int *status, int *in_fd, pid_t **pids, int *i)
+{
+    *status = 0;
+    *in_fd = STDIN_FILENO;
     data->saved_stdout = dup(STDOUT_FILENO);
     data->saved_stdin = dup(STDIN_FILENO);
-    pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
-    i = 0;
+    *pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
+    *i = 0;
+}
 
+int ft_execute_command(t_data *data, t_cmd *current_cmd)
+{
+    int status;
+    int in_fd; 
+    pid_t *pids;
+    int i;
+
+    initialize_command_execution(data, &status, &in_fd, &pids, &i);
     while (current_cmd)
     {
         if (!ft_verify_if_cmd_is_valid(data, current_cmd))
@@ -198,58 +236,17 @@ int ft_execute_command(t_data *data,t_cmd *current_cmd)
             current_cmd = current_cmd->next;
             continue;
         }
-
-        handle_redirections(data, current_cmd);
-        handle_piping(pipe_fds, data->nb_pipes);
-        pids[i] = handle_forking();
-
+        (handle_redirections(data, current_cmd),handle_piping(data->pipe_fds,
+        data->nb_pipes),pids[i] = handle_forking());
         if (pids[i] == 0) // Child process
-        {
-            if (in_fd != STDIN_FILENO)
-            {
-                dup2(in_fd, STDIN_FILENO);
-                close(in_fd);
-            }
-            if (data->nb_pipes > 0)
-            {
-                dup2(pipe_fds[1], STDOUT_FILENO);
-                close(pipe_fds[1]);
-                close(pipe_fds[0]);
-            }
-            execute_command(current_cmd, data);
-        }
-        else
-        {
-            // Parent process
-            if (in_fd != STDIN_FILENO)
-                close(in_fd);
-            if (data->nb_pipes > 0)
-            {
-                close(pipe_fds[1]);
-                in_fd = pipe_fds[0];
-            }
-        }
-
-        dup2(data->saved_stdout, STDOUT_FILENO);
-        dup2(data->saved_stdin, STDIN_FILENO);
+            handle_child_process(data, current_cmd, in_fd);
+        else // Parent process
+            handle_parent_process(data, &in_fd);
         current_cmd = current_cmd->next;
         data->nb_pipes--;
         i++;
     }
-
-    // Wait for all child processes to finish
-    int j = 0;
-    while (j < i) // Use i instead of nb_pipes as it tracks the number of created processes
-    {
-        waitpid(pids[j], &status, 0);
-        data->exit_status = WEXITSTATUS(status);
-        j++;
-    }
-
-    free(pids);
-    close(data->saved_stdout);
-    close(data->saved_stdin);
-    return status;
+    (wait_for_children(pids, i, data),free(pids),cleanup_fds(data));
+    return (status);
 }
-
 

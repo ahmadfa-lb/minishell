@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/30 07:09:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 07:41:36 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_data
 	// pid_t			*pids;
 	int				saved_stdout;
     int				saved_stdin;
+	int				pipe_fds[2];
 	int				exit_status;	
 	char			*user_input;
 }					t_data;

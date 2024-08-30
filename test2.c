@@ -3,6 +3,82 @@
 // #include <readline/readline.h>
 // #include <readline/history.h>
 
+// int ft_execute_command(t_data *data,t_cmd *current_cmd)
+// {
+//     int status;
+//     int in_fd;
+//     pid_t *pids;
+//     int i;
+//     int j;
+    
+//     status = 0;
+//     in_fd = STDIN_FILENO;
+//     data->saved_stdout = dup(STDOUT_FILENO);
+//     data->saved_stdin = dup(STDIN_FILENO);
+//     pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
+//     i = 0;
+
+//     while (current_cmd)
+//     {
+//         if (!ft_verify_if_cmd_is_valid(data, current_cmd))
+//         {
+//             current_cmd = current_cmd->next;
+//             continue;
+//         }
+
+//         handle_redirections(data, current_cmd);
+//         handle_piping(data->pipe_fds, data->nb_pipes);
+//         pids[i] = handle_forking();
+
+//         if (pids[i] == 0) // Child process
+//         {
+//             if (in_fd != STDIN_FILENO)
+//             {
+//                 dup2(in_fd, STDIN_FILENO);
+//                 close(in_fd);
+//             }
+//             if (data->nb_pipes > 0)
+//             {
+//                 dup2(data->pipe_fds[1], STDOUT_FILENO);
+//                 close(data->pipe_fds[1]);
+//                 close(data->pipe_fds[0]);
+//             }
+//             execute_command(current_cmd, data);
+//         }
+//         else
+//         {
+//             // Parent process
+//             if (in_fd != STDIN_FILENO)
+//                 close(in_fd);
+//             if (data->nb_pipes > 0)
+//             {
+//                 close(data->pipe_fds[1]);
+//                 in_fd = data->pipe_fds[0];
+//             }
+//         }
+
+//         dup2(data->saved_stdout, STDOUT_FILENO);
+//         dup2(data->saved_stdin, STDIN_FILENO);
+//         current_cmd = current_cmd->next;
+//         data->nb_pipes--;
+//         i++;
+//     }
+
+//     // Wait for all child processes to finish
+//     j = 0;
+//     while (j < i) // Use i instead of nb_pipes as it tracks the number of created processes
+//     {
+//         waitpid(pids[j], &status, 0);
+//         data->exit_status = WEXITSTATUS(status);
+//         j++;
+//     }
+
+//     free(pids);
+//     close(data->saved_stdout);
+//     close(data->saved_stdin);
+//     return status;
+// }
+
 
 // ssize_t read_status_file(char *buffer, size_t size)
 // {
