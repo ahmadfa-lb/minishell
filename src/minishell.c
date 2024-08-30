@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 09:07:37 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 12:11:27 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,11 +148,12 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         input = readline("minishell> ");
-        // if (*input == '\0')
-        // {
-        //     free(input);
-        //     continue;
-        // }
+        if (!input)
+        {
+            free(input);
+            // continue;
+            exit(0);
+        }
 
         add_history(input);
 
