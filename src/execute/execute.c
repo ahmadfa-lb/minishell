@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/29 15:49:46 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 03:25:51 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_
 
 int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 {
-	char	*name;
+	//char	*name;
 	//int		fd;
 
-	name = NULL;
+	//name = NULL;
 	if (token == TOKEN_REDIRECT_OUT)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_TRUNC,
 			0644, STDOUT_FILENO);
@@ -305,8 +305,9 @@ int ft_execute_command(t_data *data)
     int saved_stdin = dup(STDIN_FILENO);
     t_cmd *current_cmd = data->cmd_list;
     nb_pipes = ft_lstsize1(data->cmd_list) - 1;
-    pid_t *pid = malloc(sizeof(pid_t) * (nb_pipes + 1));
-
+    // pid_t *pid = malloc(sizeof(pid_t) * (nb_pipes + 1));
+    pid_t pid;
+    
     while (current_cmd)
     {
         if (!ft_verify_if_cmd_is_valid(data, current_cmd))
