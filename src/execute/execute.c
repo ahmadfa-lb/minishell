@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 03:25:51 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 07:12:57 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,18 @@ char	**build_arguments(t_list_tokens *tokens_list)
 	return (arguments);
 }
 
-int	ft_lstsize1(t_cmd *lst)
-{
-	int	i;
+// int	ft_lstsize1(t_cmd *lst)
+// {
+// 	int	i;
 
-	i = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		i++;
-	}
-	return (i);
-}
+// 	i = 0;
+// 	while (lst)
+// 	{
+// 		lst = lst->next;
+// 		i++;
+// 	}
+// 	return (i);
+// }
 
 bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 {
@@ -134,117 +134,10 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 	
 }
 
-
-
-// int ft_execute_command(t_data *data)
-// {
-//     int status = 0;
-//     int parser_length;
-//     int nb_pipes;
-//     int pipe_fds[2];
-//     int in_fd = STDIN_FILENO;
-//     t_cmd *current_cmd;
-//     pid_t pid;
-//     int saved_stdout = dup(STDOUT_FILENO); // Save original STDOUT
-//     int saved_stdin = dup(STDIN_FILENO);   // Save original STDIN
-
-//     parser_length = ft_lstsize1(data->cmd_list);
-//     nb_pipes = parser_length - 1;
-
-//     current_cmd = data->cmd_list;
-
-//     while (current_cmd)
-//     {
-//         // Validate the command before execution
-//         if (!ft_verify_if_cmd_is_valid(data, current_cmd))
-//         {
-//             current_cmd = current_cmd->next;
-//             continue;
-//         }
-
-//         // Handle redirections
-//         t_list_tokens *redir = current_cmd->list_redirectors;
-//         while (redir)
-//         {
-//             redirect(data, redir->type, redir->next);
-//             redir = redir->next;
-//         }
-
-//         // Create a pipe if there are still more commands
-//         if (nb_pipes > 0)
-//         {
-//             if (pipe(pipe_fds) == -1)
-//             {
-//                 perror("pipe");
-//                 exit(EXIT_FAILURE);
-//             }
-//         }
-
-//         // Fork the process
-//         pid = fork();
-//         if (pid == -1)
-//         {
-//             perror("fork");
-//             exit(EXIT_FAILURE);
-//         }
-//         else if (pid == 0) // Child process
-//         {
-//             // Handle input redirection from the previous command's pipe
-//             if (in_fd != STDIN_FILENO)
-//             {
-//                 dup2(in_fd, STDIN_FILENO);
-//                 close(in_fd);
-//             }
-
-//             // Handle output redirection to the next command's pipe
-//             if (nb_pipes > 0)
-//             {
-//                 dup2(pipe_fds[1], STDOUT_FILENO);
-//                 close(pipe_fds[1]);
-//                 close(pipe_fds[0]);
-//             }
-
-//             // Execute the command
-//             char **arguments = build_arguments(current_cmd->tokens_list);
-//             execve(current_cmd->command_path, arguments, data->env_array);
-//             perror("execve");
-//             free(arguments);
-//             exit(EXIT_FAILURE);
-//         }
-//         else // Parent process
-//         {
-//             // Close pipe ends not needed by the parent
-//             if (in_fd != STDIN_FILENO)
-//                 close(in_fd);
-//             if (nb_pipes > 0)
-//             {
-//                 close(pipe_fds[1]);
-//                 in_fd = pipe_fds[0]; // Next command reads from this pipe
-//             }
-
-//             // Wait for the child process to finish
-//             waitpid(pid, &status, 0);
-//             data->exit_status = WEXITSTATUS(status);
-//         }
-
-//         // Restore the original STDOUT and STDIN
-//         dup2(saved_stdout, STDOUT_FILENO);
-//         dup2(saved_stdin, STDIN_FILENO);
-
-//         current_cmd = current_cmd->next;
-//         nb_pipes--;
-//     }
-
-//     // Close the saved file descriptors as they are no longer needed
-//     close(saved_stdout);
-//     close(saved_stdin);
-
-//     return status;
-// }
-
 void handle_redirections(t_data *data, t_cmd *current_cmd)
 {
     t_list_tokens *redir = current_cmd->list_redirectors;
+    
     while (redir)
     {
         redirect(data, redir->type, redir->next);
@@ -272,6 +165,7 @@ pid_t handle_forking()
     }
     return pid;
 }
+
 void execute_command(t_cmd *current_cmd, t_data *data)
 {
     char **arguments = build_arguments(current_cmd->tokens_list);
@@ -280,34 +174,23 @@ void execute_command(t_cmd *current_cmd, t_data *data)
     free(arguments);
     exit(EXIT_FAILURE);
 }
-void handle_parent_process(int *in_fd, int *pipe_fds, int nb_pipes, int *status, t_data *data, pid_t pid)
+
+
+int ft_execute_command(t_data *data,t_cmd *current_cmd)
 {
-    if (*in_fd != STDIN_FILENO)
-        close(*in_fd);
-    if (nb_pipes > 0)
-    {
-        close(pipe_fds[1]);
-        *in_fd = pipe_fds[0];
-    }
-    waitpid(pid, status, 0);
-    data->exit_status = WEXITSTATUS(*status);
-}
-void restore_file_descriptors(int saved_stdout, int saved_stdin)
-{
-    dup2(saved_stdout, STDOUT_FILENO);
-    dup2(saved_stdin, STDIN_FILENO);
-}
-int ft_execute_command(t_data *data)
-{
-    int status = 0, nb_pipes, pipe_fds[2];
-    int in_fd = STDIN_FILENO;
-    int saved_stdout = dup(STDOUT_FILENO);
-    int saved_stdin = dup(STDIN_FILENO);
-    t_cmd *current_cmd = data->cmd_list;
-    nb_pipes = ft_lstsize1(data->cmd_list) - 1;
-    // pid_t *pid = malloc(sizeof(pid_t) * (nb_pipes + 1));
-    pid_t pid;
+    int status;
+    int in_fd;
+    int pipe_fds[2];
+    pid_t *pids;
+    int i;
     
+    status = 0;
+    in_fd = STDIN_FILENO;
+    data->saved_stdout = dup(STDOUT_FILENO);
+    data->saved_stdin = dup(STDIN_FILENO);
+    pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
+    i = 0;
+
     while (current_cmd)
     {
         if (!ft_verify_if_cmd_is_valid(data, current_cmd))
@@ -317,17 +200,17 @@ int ft_execute_command(t_data *data)
         }
 
         handle_redirections(data, current_cmd);
-        handle_piping(pipe_fds, nb_pipes);
-        pid = handle_forking();
+        handle_piping(pipe_fds, data->nb_pipes);
+        pids[i] = handle_forking();
 
-        if (pid == 0) // Child process
+        if (pids[i] == 0) // Child process
         {
             if (in_fd != STDIN_FILENO)
             {
                 dup2(in_fd, STDIN_FILENO);
                 close(in_fd);
             }
-            if (nb_pipes > 0)
+            if (data->nb_pipes > 0)
             {
                 dup2(pipe_fds[1], STDOUT_FILENO);
                 close(pipe_fds[1]);
@@ -335,17 +218,38 @@ int ft_execute_command(t_data *data)
             }
             execute_command(current_cmd, data);
         }
-        // else{
-            
-        // }
+        else
+        {
+            // Parent process
+            if (in_fd != STDIN_FILENO)
+                close(in_fd);
+            if (data->nb_pipes > 0)
+            {
+                close(pipe_fds[1]);
+                in_fd = pipe_fds[0];
+            }
+        }
 
-        restore_file_descriptors(saved_stdout, saved_stdin);
+        dup2(data->saved_stdout, STDOUT_FILENO);
+        dup2(data->saved_stdin, STDIN_FILENO);
         current_cmd = current_cmd->next;
-        nb_pipes--;
+        data->nb_pipes--;
+        i++;
     }
-    handle_parent_process(&in_fd, pipe_fds, nb_pipes, &status, data, pid);
 
-    close(saved_stdout);
-    close(saved_stdin);
+    // Wait for all child processes to finish
+    int j = 0;
+    while (j < i) // Use i instead of nb_pipes as it tracks the number of created processes
+    {
+        waitpid(pids[j], &status, 0);
+        data->exit_status = WEXITSTATUS(status);
+        j++;
+    }
+
+    free(pids);
+    close(data->saved_stdout);
+    close(data->saved_stdin);
     return status;
 }
+
+

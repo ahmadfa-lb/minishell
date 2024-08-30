@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/27 06:32:13 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 07:04:58 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,52 @@ t_list_tokens *get_last(t_list_tokens *head)
         head = head->next;
     return head;
 }
-
-void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list)
+int	ft_lstsize1(t_cmd *lst)
 {
-    t_list_tokens *tmp = tokens_list;
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+
+// void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list)
+// {
+//     t_list_tokens *tmp = tokens_list;
+//     t_list_tokens *head;
+//     t_list_tokens *last;
+
+//     while (tmp)
+//     {
+//         head = tmp;
+//         last = get_last(head);
+//         if (last->next)
+//         {   
+//             tmp = last->next->next;
+//         }
+//         else
+//             tmp = last->next;
+//         t_cmd *new_cmd = create_cmd_node(head, last);
+//         append_cmd_node(cmd_list, new_cmd, head, last);
+//     }
+// }
+
+void split_tokens_by_pipe(t_data *data, t_cmd **cmd_list)
+{
+    t_list_tokens *tmp = data->first_tokens_list;
     t_list_tokens *head;
     t_list_tokens *last;
+
     while (tmp)
     {
         head = tmp;
         last = get_last(head);
         if (last->next)
-        {
+        {   
             tmp = last->next->next;
         }
         else
@@ -53,6 +87,7 @@ void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list)
         t_cmd *new_cmd = create_cmd_node(head, last);
         append_cmd_node(cmd_list, new_cmd, head, last);
     }
+    data->nb_pipes = ft_lstsize1(*cmd_list) - 1;
 }
 
 // Parse all redirections for each command in the command list

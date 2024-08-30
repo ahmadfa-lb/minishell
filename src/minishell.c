@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/29 15:20:08 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 07:05:07 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ int main(int argc, char **argv, char **envp)
         // }
 
         // Split the tokens by pipes and create command nodes
-        split_tokens_by_pipe(data->first_tokens_list, &data->cmd_list);
+        split_tokens_by_pipe(data, &data->cmd_list);
+        //printf("\nnb_pipes: %d\n",data->nb_pipes);
         // free_tokens(tokens);
         // Parse redirections for all command nodes
         parse_all_redirections(data->cmd_list);
@@ -182,15 +183,15 @@ int main(int argc, char **argv, char **envp)
         // Print the command list to check the results
         // print_cmd_list(data->cmd_list);
         
-        ft_execute_command(data);
-
+        data->exit_status =  ft_execute_command(data, data->cmd_list);
+        
         free_tokens(data->first_tokens_list);
         data->first_tokens_list = NULL;
         free(input);
         free_parser_list(data->cmd_list);
         data->cmd_list = NULL;
     }
-
+    printf("\nexit status: %d \n", data->exit_status);
     free_envp_list(data->env_list);
     // free_tokens(tokens);
     // printf("\n\n");

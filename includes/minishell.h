@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/28 22:48:08 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/30 07:09:04 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ typedef struct s_cmd
 {
 	t_list_tokens	*tokens_list;
     t_list_tokens	*list_redirectors;
-	// int				running;
-	// pid_t			pid;
 	char			*command_path;
 	struct s_cmd	*next;
 	struct s_cmd    *prev;
@@ -100,6 +98,10 @@ typedef struct s_data
     t_env           *env_list;
 	t_list_tokens	*first_tokens_list;
 	char			**env_array;
+	int				nb_pipes;
+	// pid_t			*pids;
+	int				saved_stdout;
+    int				saved_stdin;
 	int				exit_status;	
 	char			*user_input;
 }					t_data;
@@ -161,7 +163,7 @@ pid_t ft_getuid();
 //handle_redirectors.c
 void free_parser_list(t_cmd *parser_list);
 t_list_tokens *get_last(t_list_tokens *head);
-void split_tokens_by_pipe(t_list_tokens *tokens_list, t_cmd **cmd_list);
+void split_tokens_by_pipe(t_data *data, t_cmd **cmd_list);
 void	parse_all_redirections(t_cmd *cmd_list);
 //handle_redirectors_helpers.c
 int is_redirector(int type);
@@ -188,7 +190,7 @@ int		unset_env(t_env **head, const char *key);
 char	**build_arguments(t_list_tokens *tokens_list);
 int	ft_lstsize1(t_cmd *lst);
 bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd);
-int ft_execute_command(t_data *data);
+int ft_execute_command(t_data *data, t_cmd *current_cmd);
 //execution_helpers.c
 char	*ft_strjoin_path(const char *dir, const char *cmd);
 bool	ft_is_executable(const char *path);
