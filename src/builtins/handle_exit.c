@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 21:27:26 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/30 22:54:59 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 10:57:35 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void simulate_exit(char **args)
             printf("exit: %s: numeric argument required\n", args[1]);
             exit(255); // Standard behavior for non-numeric arguments
         }
-        exit_status = atoi(args[1]);
+        exit_status = ft_atoi(args[1]);
 
         // Ensure the exit status is within the range [0, 255]
         if (exit_status < 0 || exit_status > 255)
