@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:05:48 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/31 04:12:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/31 08:12:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ int	ft_env(t_env *env_list)
 	while (temp != NULL)
 	{
 		if (temp->hidden == 0)
-			printf("%s=\"%s\"\n", temp->key, temp->value);
+			printf("%s=\"%s\n"X, temp->key, temp->value);
 		temp = temp->next;
 	}
+	printf("\n");
 	return (0);
 }
