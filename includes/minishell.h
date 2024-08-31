@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/31 10:17:13 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 10:51:52 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,15 +175,15 @@ t_cmd *create_cmd_node();
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //envp
 //env.c
-t_env	*create_envp_node(char *key, char *value);
+t_env	*create_envp_node(char *key, char *value, int hidden);
 void	split_envp(char *envp_str, char **key, char **value);
-t_env	*create_envp_list_node(char *envp_str);
+t_env	*create_envp_list_node(char *envp_str, int hidden);
 void	add_node_to_envp_list(t_env **head, t_env **current, t_env *new_node);
 t_env	*init_copy_envp_to_list(char **envp);
 //env_utils.c
 void	free_envp_list(t_env *head);
 char	*get_env(t_env *head, const char *key);
-int		set_env(t_env **head, const char *key, const char *value);
+int		set_env(t_env **head, const char *key, const char *value, int hidden);
 int		unset_env(t_env **head, const char *key);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //execute

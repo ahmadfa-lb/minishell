@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/21 13:45:27 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:39:57 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,16 @@ char	*get_env(t_env *head, const char *key)
 	return NULL;
 }
 
-int	set_env(t_env **head, const char *key, const char *value)
+int	set_env(t_env **head, const char *key, const char *value, int hidden)
 {
 	t_env *current;
 	t_env *new_node;
 
 	current = *head;
+	if (!value)
+	{
+		value = ft_strdup("");
+	}
 	while (current)
 	{
 		if (ft_strcmp(current->key, key) == 0) {
@@ -51,7 +55,7 @@ int	set_env(t_env **head, const char *key, const char *value)
 		}
 		current = current->next;
 	}
-	new_node = create_envp_node((char *)key, (char *)value);
+	new_node = create_envp_node((char *)key, (char *)value, hidden);
 	if (!new_node)
 		return (-1);
 	new_node->next = *head;

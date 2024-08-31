@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/22 13:52:46 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:52:41 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_env	*create_envp_node(char *key, char *value)
+t_env	*create_envp_node(char *key, char *value, int hidden)
 {
 	t_env	*new_node;
 
@@ -21,6 +21,7 @@ t_env	*create_envp_node(char *key, char *value)
 		return (NULL);
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
+	new_node->hidden = hidden;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -42,14 +43,14 @@ void	split_envp(char *envp_str, char **key, char **value)
 	}
 }
 
-t_env	*create_envp_list_node(char *envp_str)
+t_env *create_envp_list_node(char *envp_str, int hidden)
 {
 	char	*key;
 	char	*value;
 	t_env	*new_node;
 
 	split_envp(envp_str, &key, &value);
-	new_node = create_envp_node(key, value);
+	new_node = create_envp_node(key, value, hidden);
 	free(key);
 	free(value);
 	return (new_node);
@@ -88,21 +89,21 @@ t_env	*init_copy_envp_to_list(char **envp)
 	t_env	*current;
 	t_env	*new_node;
 	char *UID;
- 	pid_t uid;
+	pid_t uid;
 
 	uid = ft_getuid();
- 	UID = ft_itoa((int)uid);
+	UID = ft_itoa((int)uid);
 	head = NULL;
 	current = NULL;
 	while (*envp)
 	{
-		new_node = create_envp_list_node(*envp);
+		new_node = create_envp_list_node(*envp, 0);
 		if (!new_node)
 			free_envp_list(head);
 		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
-	if (set_env(&head, "UID", UID) != 0)
+	if (set_env(&head, "UID", UID, 0) != 0)
     {
         free_envp_list(head);
         return NULL;
