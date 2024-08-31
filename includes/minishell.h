@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/30 14:24:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:17:13 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_env
 {
     char *key;
     char *value;
+	int		hidden;
     struct s_env *next;
 } t_env;
 
@@ -234,11 +235,14 @@ void	ft_print_error_message(char *arg1, char *arg2);
 char	**tokens_to_args(t_list_tokens *tokens);
 
 //built-in
-void	execute_echo(char **args);
-char	*handle_pwd();
-int		change_dir(char **args, t_env *env_list);
-void	print_env(t_env *env_list);
-void	handle_export(t_env **env_list, char *input);
+int execute_echo(char **args);
+int handle_pwd(void);
+int change_dir(char **args, t_env *env_list);
+int print_env(t_env *env_list);
+int handle_export(t_env **env_list, char **input);
+void free_args(char **args);
+void split_envp(char *envp_str, char **key, char **value);
+void simulate_exit(char **args);
 
 #endif
 

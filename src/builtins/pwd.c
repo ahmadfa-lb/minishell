@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:09:45 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/27 12:01:24 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:49:06 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 //to be edit
-char *handle_pwd()
+int handle_pwd()
 {
     static char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        return cwd;
-    }
+        printf("%s\n", cwd);
     else
     {
-        perror("getcwd() error");
-        return NULL;
+        perror("pwd not found");
+        return (1);
     }
+    return (0);
 }

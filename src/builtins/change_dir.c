@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/28 22:45:33 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/30 21:47:33 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int cd_to_home(t_env *env_list)
         perror("chdir failed");
         return 1;
     }
-    set_env(&env_list, "OLDPWD", pwd);
-    set_env(&env_list, "PWD", home);
+    set_env(&env_list, "OLDPWD", pwd, 0);
+    set_env(&env_list, "PWD", home, 0);
     return 0;
 }
 
@@ -39,14 +39,14 @@ int cd_to_oldpwd(t_env *env_list)
     }
 
     // Update PWD and OLDPWD safely
-    set_env(&env_list, "OLDPWD", pwd);
+    set_env(&env_list, "OLDPWD", pwd, 0);
     char *new_pwd = getcwd(NULL, 0); // Use getcwd to get the current directory after chdir
     if (new_pwd == NULL)
     {
         perror("getcwd failed");
         return 1;
     }
-    set_env(&env_list, "PWD", new_pwd);
+    set_env(&env_list, "PWD", new_pwd, 0);
     free(new_pwd);
 
     return 0;
@@ -68,8 +68,8 @@ int cd_to_path(char *path, t_env *env_list)
         perror("getcwd failed");
         return 1;
     }
-    set_env(&env_list, "OLDPWD", pwd);
-    set_env(&env_list, "PWD", new_pwd);
+    set_env(&env_list, "OLDPWD", pwd, 0);
+    set_env(&env_list, "PWD", new_pwd, 0);
     free(new_pwd);
     return 0;
 }
@@ -81,7 +81,7 @@ int change_dir(char **args, t_env *env_list)
         return cd_to_home(env_list);
     }
 
-    if (args[1][0] == '-' && args[1][1] == '\0')
+    if ((args[1][0] == '-' && args[1][1] == '\0') || (args[1][0] == '-' && args[1][1] == '-' && args[1][2] == '\0'))
     {
         return cd_to_oldpwd(env_list);
     }
@@ -92,7 +92,7 @@ int change_dir(char **args, t_env *env_list)
     }
 
     fprintf(stderr, "cd: too many arguments\n");
-    return 1;
+    return (1);
 }
 
 //main for test if wou want

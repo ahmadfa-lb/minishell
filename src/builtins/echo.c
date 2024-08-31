@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:49:48 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/27 14:52:32 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/30 21:13:41 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool is_valid_n_flag(const char *arg)
 
     return true;
 }
-void execute_echo(char **args)
+int execute_echo(char **args)
 {
     bool newline = true;
     int i = 1;
@@ -49,4 +49,5 @@ void execute_echo(char **args)
     // Print a newline unless "-n" was specified
     if (newline)
         printf("\n");
+    return (0);
 }
