@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 14:24:19 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/08/31 06:22:19 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,51 @@ char	*find_executable_in_paths(char **paths, t_cmd *cmd)
 	return (NULL);
 }
 
+// bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd)
+// {
+// 	char	**paths;
+// 	char	*path_var;
+
+// 	path_var = get_env(data->env_list, "PATH");
+// 	if (!path_var)
+// 		return (false);
+// 	paths = ft_split(path_var, ':');
+// 	if (!paths)
+// 		return (false);
+// 	cmd->command_path = find_executable_in_paths(paths, cmd);
+// 	ft_free_split(paths);
+// 	return (cmd->command_path != NULL);
+// }
+
+bool	is_builtin_command(t_cmd *cmd_list)
+{
+	t_list_tokens	*tokens;
+	char		*cmd_seq;
+
+	tokens = cmd_list->tokens_list;
+	cmd_seq = tokens->value;
+
+	if (!ft_strcmp("cd", cmd_seq))
+		return (true);
+	else if (!ft_strcmp("export", cmd_seq))
+		return (true);
+	else if (!ft_strcmp("unset", cmd_seq))
+		return (true);
+	else if (!ft_strcmp("exit", cmd_seq))
+		return (true);
+	else
+		return (false);
+}
+
 bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd)
 {
 	char	**paths;
 	char	*path_var;
 
+	// Check for shell built-in commands
+	if (is_builtin_command(cmd))
+		return (true);
+	
 	path_var = get_env(data->env_list, "PATH");
 	if (!path_var)
 		return (false);

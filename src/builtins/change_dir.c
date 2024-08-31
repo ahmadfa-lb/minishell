@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_dir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/30 21:47:33 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 04:55:32 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int cd_to_path(char *path, t_env *env_list)
     return 0;
 }
 
-int change_dir(char **args, t_env *env_list)
+int ft_cd(char **args, t_env *env_list)
 {
     if (args[1] == NULL)
     {

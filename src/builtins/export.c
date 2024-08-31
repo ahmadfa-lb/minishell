@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/08/30 21:44:05 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 05:11:29 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void	free_resources(char *key, char *value)
 	free(key);
 }
 
-int	handle_export(t_env **env_list, char **input)
+int	ft_export(t_env **env_list, char **input)
 {
 	char *key;
 	char *value;

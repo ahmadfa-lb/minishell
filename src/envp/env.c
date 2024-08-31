@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/31 10:52:41 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 04:07:39 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,11 @@ t_env	*init_copy_envp_to_list(char **envp)
 		add_node_to_envp_list(&head, &current, new_node);
 		envp++;
 	}
-	if (set_env(&head, "UID", UID, 0) != 0)
+	if (set_env(&head, "UID", UID, 2) != 0)
     {
         free_envp_list(head);
         return NULL;
     }
-	// add_uid_to_envp_list(head);
 	free(UID);
 	return (head);
 }

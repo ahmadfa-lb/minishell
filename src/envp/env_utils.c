@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/31 10:39:57 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 05:17:15 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,28 +63,3 @@ int	set_env(t_env **head, const char *key, const char *value, int hidden)
 	return (0);
 }
 
-int	unset_env(t_env **head, const char *key)
-{
-	t_env *current;
-	t_env *previous;
-
-	current = *head;
-	previous = NULL;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			if (previous) 
-				previous->next = current->next;
-			else
-				*head = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
-			return (0);
-		}
-		previous = current;
-		current = current->next;
-	}
-	return (-1);
-}

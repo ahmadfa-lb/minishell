@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:09:45 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/30 19:49:06 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 05:10:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 //to be edit
-int handle_pwd()
+int ft_pwd()
 {
     static char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != NULL)

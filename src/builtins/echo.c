@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:49:48 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/30 21:13:41 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 05:46:41 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ bool is_valid_n_flag(const char *arg)
 
     return true;
 }
-int execute_echo(char **args)
+int ft_echo(char **args)
 {
     bool newline = true;
     int i = 1;
 
+
+    printf("\ndasdasdasdasdasd\n");
     // Use the is_valid_n_flag function to check for multiple `-n` options
     while (args[i] && is_valid_n_flag(args[i]))
     {

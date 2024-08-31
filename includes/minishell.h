@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/31 10:51:52 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/08/31 06:15:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,9 @@ void	ft_free_split(char **split);
 char	*find_executable_in_paths(char **paths, t_cmd *cmd);
 bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd);
 bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd);
-
+//adadas
+int handle_builtin_command(t_cmd *current_cmd, t_data *data);
+bool	check_if_builtin(t_cmd *cmd_list);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //errors_monitoring
 //printing_errors.c
@@ -235,14 +237,15 @@ void	ft_print_error_message(char *arg1, char *arg2);
 char	**tokens_to_args(t_list_tokens *tokens);
 
 //built-in
-int execute_echo(char **args);
-int handle_pwd(void);
-int change_dir(char **args, t_env *env_list);
-int print_env(t_env *env_list);
-int handle_export(t_env **env_list, char **input);
+int ft_echo(char **args);
+int ft_pwd();
+int ft_cd(char **args, t_env *env_list);
+int	ft_env(t_env *env_list);
+int ft_export(t_env **env_list, char **input);
+int ft_unset(t_env **head, char **keys);
 void free_args(char **args);
 void split_envp(char *envp_str, char **key, char **value);
-void simulate_exit(char **args);
+int ft_exit(char **args);
 
 #endif
 

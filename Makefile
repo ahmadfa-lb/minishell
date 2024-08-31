@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+         #
+#    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/08/31 10:13:19 by mouhamad_kr      ###   ########.fr        #
+#    Updated: 2024/08/31 06:10:35 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,10 +43,12 @@ SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
 	   $(SRC_DIR)/execute/cmd_args_and_redirection.c \
 	   $(SRC_DIR)/execute/path_and_cmd_validation.c \
 	   $(SRC_DIR)/execute/execution_process_utils.c \
+	   $(SRC_DIR)/execute/builtins_handling.c \
 	   $(SRC_DIR)/errors_monitoring/printing_errors.c \
 	   $(SRC_DIR)/builtins/change_dir.c \
 	   $(SRC_DIR)/builtins/echo.c \
 	   $(SRC_DIR)/builtins/export.c \
+	   $(SRC_DIR)/builtins/unset.c \
 	   $(SRC_DIR)/builtins/env.c \
 	   $(SRC_DIR)/builtins/pwd.c \
 	   $(SRC_DIR)/builtins/handle_exit.c \
