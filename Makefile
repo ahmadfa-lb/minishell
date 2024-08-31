@@ -6,7 +6,7 @@
 #    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/08/31 06:24:46 by afarachi         ###   ########.fr        #
+#    Updated: 2024/08/31 08:15:12 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
        $(SRC_DIR)/parser/list_tokens_concatenation.c \
 	   $(SRC_DIR)/parser/handle_dollar.c \
 	   $(SRC_DIR)/parser/handle_dollar_utils.c \
-	   $(SRC_DIR)/envp/env.c \
+	   $(SRC_DIR)/envp/envp.c \
 	   $(SRC_DIR)/envp/env_utils.c \
 	   $(SRC_DIR)/parser/handle_redirectors.c \
 	   $(SRC_DIR)/parser/handle_redirectors_helpers.c \
