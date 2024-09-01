@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 05:17:32 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/31 08:06:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:43:16 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int find_and_remove_key(t_env **head, const char *key)
 int ft_unset(t_env **head, char **keys)
 {
     int status = 0;
-    int i = 0;
+    int i = 1;
 
     while (keys[i])
     {

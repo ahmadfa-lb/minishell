@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/08/31 08:09:21 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:49:30 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ int	ft_export(t_env **env_list, char **input)
 		free_resources(key, value);
 		i++;
 	}
-	printf("\n");
+	// printf("\n");
 	return (0);
 }
 

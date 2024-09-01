@@ -3,70 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/31 19:03:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:33:50 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_parent_process(t_data *data, int *in_fd)
+void handle_parent_process(t_data *data, int *in_fd)
 {
-	if (*in_fd != STDIN_FILENO)
-		close(*in_fd);
-	if (data->nb_pipes > 0)
-	{
-		close(data->pipe_fds[1]);
-		*in_fd = data->pipe_fds[0];
-	}
+    if (*in_fd != STDIN_FILENO)
+        close(*in_fd);
+    if (data->nb_pipes > 0)
+    {
+        close(data->pipe_fds[1]);
+        *in_fd = data->pipe_fds[0];
+    }
 }
 
-void	wait_for_children(pid_t *pids, int count, t_data *data)
+void wait_for_children(pid_t *pids, int count, t_data *data)
 {
-	int	status;
-	int	j;
+    int status;
+    int j;
 
-	j = 0;
-	while(j < count)
-	{
-		waitpid(pids[j], &status, 0);
-		data->exit_status = WEXITSTATUS(status);
-		j++;
-	}
+    j = 0;
+    while (j < count)
+    {
+        waitpid(pids[j], &status, 0);
+        data->exit_status = WEXITSTATUS(status);
+        j++;
+    }
 }
 
-void	handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd)
+void handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd)
 {
-	if (in_fd != STDIN_FILENO)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
-	if (data->nb_pipes > 0)
-	{
-		dup2(data->pipe_fds[1], STDOUT_FILENO);
-		close(data->pipe_fds[1]);
-		close(data->pipe_fds[0]);
-	}
-	execute_command(current_cmd, data);
+    if (in_fd != STDIN_FILENO)
+    {
+        dup2(in_fd, STDIN_FILENO);
+        close(in_fd);
+    }
+    if (data->nb_pipes > 0)
+    {
+        dup2(data->pipe_fds[1], STDOUT_FILENO);
+        close(data->pipe_fds[1]);
+        close(data->pipe_fds[0]);
+    }
+    execute_command(current_cmd, data);
 }
 
-void	initialize_command_execution(t_data *data, int *status, int *in_fd,
-	 pid_t **pids)
+void initialize_command_execution(t_data *data, int *status, int *in_fd,
+                                  pid_t **pids)
 {
-	*status = 0;
-	*in_fd = STDIN_FILENO;
-	data->saved_stdout = dup(STDOUT_FILENO);
-	data->saved_stdin = dup(STDIN_FILENO);
-	*pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
+    *status = 0;
+    *in_fd = STDIN_FILENO;
+    data->saved_stdout = dup(STDOUT_FILENO);
+    data->saved_stdin = dup(STDIN_FILENO);
+    *pids = malloc(sizeof(pid_t) * (data->nb_pipes + 1));
 }
 
 // int	ft_execute_command(t_data *data, t_cmd *current_cmd)
 // {
 // 	int		status;
-// 	int		in_fd; 
+// 	int		in_fd;
 // 	pid_t	*pids;
 // 	int		i;
 
@@ -106,10 +106,10 @@ void	initialize_command_execution(t_data *data, int *status, int *in_fd,
 
 int ft_execute_command(t_data *data, t_cmd *current_cmd)
 {
-    int     status;
-    int     in_fd; 
-    pid_t   *pids;
-    int     i;
+    int status;
+    int in_fd;
+    pid_t *pids;
+    int i;
 
     (initialize_command_execution(data, &status, &in_fd, &pids), i = 0);
     while (current_cmd)
@@ -156,4 +156,3 @@ int ft_execute_command(t_data *data, t_cmd *current_cmd)
     (wait_for_children(pids, i, data), free(pids), cleanup_fds(data));
     return (status);
 }
-
