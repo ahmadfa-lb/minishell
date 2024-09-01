@@ -994,447 +994,611 @@
 // }
 
 
-#include "includes/minishell.h"
+// #include "includes/minishell.h"
 
 
-size_t	ft_strnlen(const char *str, size_t n)
-{
-	size_t length;
+// size_t	ft_strnlen(const char *str, size_t n)
+// {
+// 	size_t length;
 	
-	length = 0;
-	while (length < n && str[length] != '\0')
-		length++;
-	return (length);
-}
-char	*ft_strdup(const char *s)
-{
-	int		i;
-	char	*d;
+// 	length = 0;
+// 	while (length < n && str[length] != '\0')
+// 		length++;
+// 	return (length);
+// }
+// char	*ft_strdup(const char *s)
+// {
+// 	int		i;
+// 	char	*d;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	d = (char *) malloc ((i + 1) * sizeof (char));
-	if (!d)
-		return (0);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		d[i] = s[i];
-		i++;
-	}
-	d[i] = '\0';
-	return (d);
-}
-
-
-char	*ft_strndup(const char *s, size_t n)
-{
-	size_t len;
-	char *new_str;
-
-	len = ft_strnlen(s, n);
-	new_str = malloc(len + 1);
-	if (!new_str)
-		return NULL; 
-	ft_strncpy(new_str, s, len);       
-	new_str[len] = '\0';
-	return (new_str);
-}
-int ft_is_delimiter(char c)
-{
-    if (c == '$')
-    {
-        return 1;
-    }
-    if (c == '|' || c == '>' || c == '<')
-    {
-        return 1;
-    }
-    if (c == '\'' || c == '"')
-    {
-        return 1;
-    }
-    return 0;
-}
+// 	i = 0;
+// 	while (s[i] != '\0')
+// 		i++;
+// 	d = (char *) malloc ((i + 1) * sizeof (char));
+// 	if (!d)
+// 		return (0);
+// 	i = 0;
+// 	while (s[i] != '\0')
+// 	{
+// 		d[i] = s[i];
+// 		i++;
+// 	}
+// 	d[i] = '\0';
+// 	return (d);
+// }
 
 
+// char	*ft_strndup(const char *s, size_t n)
+// {
+// 	size_t len;
+// 	char *new_str;
 
-int	ft_isspace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-void	ft_skip_whitespace(char **input)
-{
-	while (ft_isspace(**input))
-		(*input)++;
-}
-
-char	*ft_strncpy(char *dest, const char *src, size_t n) 
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		if (src[i] != '\0') 
-			dest[i] = src[i];
-		else
-			dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
-
-char	*ft_strcpy(char *dest, const char *src)
-{
-	char	*dest_ptr;
-
-	dest_ptr = dest;
-	while (*src)
-		*dest_ptr++ = *src++;
-	*dest_ptr = '\0';
-	return (dest);
-}
-
-char	*ft_strcat(char *dest, const char *src)
-{
-	char	*dest_ptr;
-
-	dest_ptr = dest;
-	while (*dest_ptr)
-		dest_ptr++;
-	while (*src)
-		*dest_ptr++ = *src++;
-	*dest_ptr = '\0';
-	return (dest);
-}
+// 	len = ft_strnlen(s, n);
+// 	new_str = malloc(len + 1);
+// 	if (!new_str)
+// 		return NULL; 
+// 	ft_strncpy(new_str, s, len);       
+// 	new_str[len] = '\0';
+// 	return (new_str);
+// }
+// int ft_is_delimiter(char c)
+// {
+//     if (c == '$')
+//     {
+//         return 1;
+//     }
+//     if (c == '|' || c == '>' || c == '<')
+//     {
+//         return 1;
+//     }
+//     if (c == '\'' || c == '"')
+//     {
+//         return 1;
+//     }
+//     return 0;
+// }
 
 
-// Convert token type to string
-const char *token_type_to_string(t_tokens_type type)
-{
-	switch (type)
-	{
-	case TOKEN_WORD:
-		return "TOKEN_WORD";
-	case TOKEN_PIPE:
-		return "TOKEN_PIPE";
-	case TOKEN_REDIRECT_IN:
-		return "TOKEN_REDIRECT_IN";
-	case TOKEN_REDIRECT_OUT:
-		return "TOKEN_REDIRECT_OUT";
-	case TOKEN_APPEND:
-		return "TOKEN_APPEND";
-	case TOKEN_HEREDOC:
-		return "TOKEN_HEREDOC";
-	case TOKEN_ERROR:
-		return "TOKEN_ERROR";
-	default:
-		return "UNKNOWN";
-	}
-}
 
-char	*process_quoted_string(char **input, char quote_type, bool *space)
-{
-	char *start; // Skip the opening quote
-	char *end;
-	char *result;
-	size_t len;
+// int	ft_isspace(char c)
+// {
+// 	return (c == ' ' || c == '\t' || c == '\n'
+// 		|| c == '\v' || c == '\f' || c == '\r');
+// }
 
-	start = ++(*input);
-	*space = true;
-	// non gere
-	while (**input && **input != quote_type)
-	{
-		if (**input == '\\' && (*(*input + 1) == quote_type || *(*input + 1) == '\\'))
-			(*input)++;
-		(*input)++;
-	}
-	end = *input;
+// void	ft_skip_whitespace(char **input)
+// {
+// 	while (ft_isspace(**input))
+// 		(*input)++;
+// }
+
+// char	*ft_strncpy(char *dest, const char *src, size_t n) 
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		if (src[i] != '\0') 
+// 			dest[i] = src[i];
+// 		else
+// 			dest[i] = '\0';
+// 		i++;
+// 	}
+// 	return (dest);
+// }
+
+// char	*ft_strcpy(char *dest, const char *src)
+// {
+// 	char	*dest_ptr;
+
+// 	dest_ptr = dest;
+// 	while (*src)
+// 		*dest_ptr++ = *src++;
+// 	*dest_ptr = '\0';
+// 	return (dest);
+// }
+
+// char	*ft_strcat(char *dest, const char *src)
+// {
+// 	char	*dest_ptr;
+
+// 	dest_ptr = dest;
+// 	while (*dest_ptr)
+// 		dest_ptr++;
+// 	while (*src)
+// 		*dest_ptr++ = *src++;
+// 	*dest_ptr = '\0';
+// 	return (dest);
+// }
+
+
+// // Convert token type to string
+// const char *token_type_to_string(t_tokens_type type)
+// {
+// 	switch (type)
+// 	{
+// 	case TOKEN_WORD:
+// 		return "TOKEN_WORD";
+// 	case TOKEN_PIPE:
+// 		return "TOKEN_PIPE";
+// 	case TOKEN_REDIRECT_IN:
+// 		return "TOKEN_REDIRECT_IN";
+// 	case TOKEN_REDIRECT_OUT:
+// 		return "TOKEN_REDIRECT_OUT";
+// 	case TOKEN_APPEND:
+// 		return "TOKEN_APPEND";
+// 	case TOKEN_HEREDOC:
+// 		return "TOKEN_HEREDOC";
+// 	case TOKEN_ERROR:
+// 		return "TOKEN_ERROR";
+// 	default:
+// 		return "UNKNOWN";
+// 	}
+// }
+
+// char	*process_quoted_string(char **input, char quote_type, bool *space)
+// {
+// 	char *start; // Skip the opening quote
+// 	char *end;
+// 	char *result;
+// 	size_t len;
+
+// 	start = ++(*input);
+// 	*space = true;
+// 	// non gere
+// 	while (**input && **input != quote_type)
+// 	{
+// 		if (**input == '\\' && (*(*input + 1) == quote_type || *(*input + 1) == '\\'))
+// 			(*input)++;
+// 		(*input)++;
+// 	}
+// 	end = *input;
 	
-	// if (**input == quote_type)
-	// {
-	// 	(*input)++; // Skip closing quote
-	// }
-	len = end - start;
-	result = malloc(len + 1);
-	if (!result)
-		return NULL;
-	ft_strncpy(result, start, len);
-	result[len] = '\0';
+// 	// if (**input == quote_type)
+// 	// {
+// 	// 	(*input)++; // Skip closing quote
+// 	// }
+// 	len = end - start;
+// 	result = malloc(len + 1);
+// 	if (!result)
+// 		return NULL;
+// 	ft_strncpy(result, start, len);
+// 	result[len] = '\0';
 
-	(void)space;
-	 if (*(*input + 1) && !ft_isspace(*(*input + 1)) && *(*input + 1) != '>' && *(*input + 1) != '<' && *(*input + 1) != '|')
-	 	*space = false;
-	// start = result;
-	// free(result);
-	return (result);
-}
+// 	(void)space;
+// 	 if (*(*input + 1) && !ft_isspace(*(*input + 1)) && *(*input + 1) != '>' && *(*input + 1) != '<' && *(*input + 1) != '|')
+// 	 	*space = false;
+// 	// start = result;
+// 	// free(result);
+// 	return (result);
+// }
 
-const char *quote_type_to_string(t_quote_type quote_type)
-{
-	switch (quote_type)
-	{
-	case DOUBLE_QUOTE:
-		return "DOUBLE_QUOTE";
-	case SINGLE_QUOTE:
-		return "SINGLE_QUOTE";
-	default:
-		return "NO_QUOTE";
-	}
-}
-
-
-static void handle_pipe_token(char **current, t_list_tokens **tokens)
-{
-	t_list_tokens *new_token;
-	char *pipe;
-
-	pipe = ft_strdup("|");
-	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, pipe, true);
-	if (!new_token)
-	{
-		free(pipe);
-		return;
-	}
-
-	append_token(tokens, new_token);
-	(*current)++;
-}
-
-// Helper function to handle redirection tokens
-static void handle_redirection_token(char **current, t_list_tokens **tokens)
-{
-	t_list_tokens *new_token;
-	char redirect_char;
-	size_t len;
-
-	len = 1;
-	redirect_char = **current;
-	if (*(*current + 1) == redirect_char)
-	{
-		len++;
-		(*current)++;
-	}
-	new_token = create_token_node(
-		(len == 2) ? (redirect_char == '<' ? TOKEN_HEREDOC : TOKEN_APPEND) : (redirect_char == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT),
-		NO_QUOTE,
-		ft_strndup(*current - len + 1, len),
-		true);
-	if (!new_token)
-		return;
-
-	append_token(tokens, new_token);
-	(*current)++;
-}
-
-// Helper function to handle quoted string tokens
-static void handle_quoted_string_token(char **current, t_list_tokens **tokens)
-{
-	char quote_type;
-	char *quoted_string;
-	t_list_tokens *new_token;
-	bool space;
-
-	quote_type = **current;
-	quoted_string = process_quoted_string(current, quote_type, &space);
-	if (!quoted_string)
-		return;
-
-	new_token = create_token_node(
-		TOKEN_WORD,
-		(quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE,
-		quoted_string,
-		space);
-	if (!new_token)
-	{
-		free(quoted_string);
-		return;
-	}
-	// free(quoted_string);
-	append_token(tokens, new_token);
-	(*current)++;
-}
+// const char *quote_type_to_string(t_quote_type quote_type)
+// {
+// 	switch (quote_type)
+// 	{
+// 	case DOUBLE_QUOTE:
+// 		return "DOUBLE_QUOTE";
+// 	case SINGLE_QUOTE:
+// 		return "SINGLE_QUOTE";
+// 	default:
+// 		return "NO_QUOTE";
+// 	}
+// }
 
 
-static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
-{
-	t_list_tokens *new_token;
-	char *start;
-	char *value;
-	// char *val_dup;
-	bool space;
+// static void handle_pipe_token(char **current, t_list_tokens **tokens)
+// {
+// 	t_list_tokens *new_token;
+// 	char *pipe;
 
-	start = *current;
-	while (**current && !ft_isspace(**current) && **current != '|' &&
-		   **current != '<' && **current != '>' && **current != '"' && **current != '\'')
-		(*current)++;
-	if (*current > start)
-	{
-		space = !(*(*current) && (*(*current) == '\'' || *(*current) == '"'));
-		value = ft_strndup(start, *current - start);
-		if (!value) // Check if memory allocation failed
-			return;
-		// val_dup = ft_strdup(value);
-		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, value, space);
-		if (!new_token)
-			return (free(value), (void)0);
-		(append_token(tokens, new_token), free(value));
-	}
-}
+// 	pipe = ft_strdup("|");
+// 	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, pipe, true);
+// 	if (!new_token)
+// 	{
+// 		free(pipe);
+// 		return;
+// 	}
 
-// Tokenize the input string into tokens
-void tokenize(char *input, t_list_tokens **tokens)
-{
-	char *current;
+// 	append_token(tokens, new_token);
+// 	(*current)++;
+// }
 
-	current = input;
-	while (*current)
-	{
-		while (ft_isspace(*current))
-			current++;
-		if (*current == '|')
-		{
-			handle_pipe_token(&current, tokens);
-			continue;
-		}
-		if (*current == '<' || *current == '>')
-		{
-			handle_redirection_token(&current, tokens);
-			continue;
-		}
-		if (*current == '"' || *current == '\'')
-		{
-			handle_quoted_string_token(&current, tokens);
-			continue;
-		}
-		handle_unquoted_word_token(&current, tokens);
-	}
-}
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
-// +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // Helper function to handle redirection tokens
+// static void handle_redirection_token(char **current, t_list_tokens **tokens)
+// {
+// 	t_list_tokens *new_token;
+// 	char redirect_char;
+// 	size_t len;
+
+// 	len = 1;
+// 	redirect_char = **current;
+// 	if (*(*current + 1) == redirect_char)
+// 	{
+// 		len++;
+// 		(*current)++;
+// 	}
+// 	new_token = create_token_node(
+// 		(len == 2) ? (redirect_char == '<' ? TOKEN_HEREDOC : TOKEN_APPEND) : (redirect_char == '<' ? TOKEN_REDIRECT_IN : TOKEN_REDIRECT_OUT),
+// 		NO_QUOTE,
+// 		ft_strndup(*current - len + 1, len),
+// 		true);
+// 	if (!new_token)
+// 		return;
+
+// 	append_token(tokens, new_token);
+// 	(*current)++;
+// }
+
+// // Helper function to handle quoted string tokens
+// static void handle_quoted_string_token(char **current, t_list_tokens **tokens)
+// {
+// 	char quote_type;
+// 	char *quoted_string;
+// 	t_list_tokens *new_token;
+// 	bool space;
+
+// 	quote_type = **current;
+// 	quoted_string = process_quoted_string(current, quote_type, &space);
+// 	if (!quoted_string)
+// 		return;
+
+// 	new_token = create_token_node(
+// 		TOKEN_WORD,
+// 		(quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE,
+// 		quoted_string,
+// 		space);
+// 	if (!new_token)
+// 	{
+// 		free(quoted_string);
+// 		return;
+// 	}
+// 	// free(quoted_string);
+// 	append_token(tokens, new_token);
+// 	(*current)++;
+// }
 
 
+// static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
+// {
+// 	t_list_tokens *new_token;
+// 	char *start;
+// 	char *value;
+// 	// char *val_dup;
+// 	bool space;
 
-// Create a new token node
-t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space) {
-    t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
-    if (!new_token) return NULL;
-    new_token->type = type;
-    new_token->quote_type = quote_type;
-    new_token->value = ft_strdup(value);
-    new_token->space = space;
-    new_token->next = NULL;
-    return new_token;
-}
+// 	start = *current;
+// 	while (**current && !ft_isspace(**current) && **current != '|' &&
+// 		   **current != '<' && **current != '>' && **current != '"' && **current != '\'')
+// 		(*current)++;
+// 	if (*current > start)
+// 	{
+// 		space = !(*(*current) && (*(*current) == '\'' || *(*current) == '"'));
+// 		value = ft_strndup(start, *current - start);
+// 		if (!value) // Check if memory allocation failed
+// 			return;
+// 		// val_dup = ft_strdup(value);
+// 		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, value, space);
+// 		if (!new_token)
+// 			return (free(value), (void)0);
+// 		(append_token(tokens, new_token), free(value));
+// 	}
+// }
+
+// // Tokenize the input string into tokens
+// void tokenize(char *input, t_list_tokens **tokens)
+// {
+// 	char *current;
+
+// 	current = input;
+// 	while (*current)
+// 	{
+// 		while (ft_isspace(*current))
+// 			current++;
+// 		if (*current == '|')
+// 		{
+// 			handle_pipe_token(&current, tokens);
+// 			continue;
+// 		}
+// 		if (*current == '<' || *current == '>')
+// 		{
+// 			handle_redirection_token(&current, tokens);
+// 			continue;
+// 		}
+// 		if (*current == '"' || *current == '\'')
+// 		{
+// 			handle_quoted_string_token(&current, tokens);
+// 			continue;
+// 		}
+// 		handle_unquoted_word_token(&current, tokens);
+// 	}
+// }
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
+// // +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_++_+_+_+_+_+_+_+_+_+_+
 
 
 
-// Append a token to the end of the token list
-void append_token(t_list_tokens **tokens, t_list_tokens *new_token) {
-    t_list_tokens *last = *tokens;
-    if (!last) {
-        *tokens = new_token;
-        return;
+// // Create a new token node
+// t_list_tokens *create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space) {
+//     t_list_tokens *new_token = malloc(sizeof(t_list_tokens));
+//     if (!new_token) return NULL;
+//     new_token->type = type;
+//     new_token->quote_type = quote_type;
+//     new_token->value = ft_strdup(value);
+//     new_token->space = space;
+//     new_token->next = NULL;
+//     return new_token;
+// }
+
+
+
+// // Append a token to the end of the token list
+// void append_token(t_list_tokens **tokens, t_list_tokens *new_token) {
+//     t_list_tokens *last = *tokens;
+//     if (!last) {
+//         *tokens = new_token;
+//         return;
+//     }
+//     while (last->next) {
+//         last = last->next;
+//     }
+//     last->next = new_token;
+// }
+
+
+
+
+
+
+
+
+
+
+
+// // Function to print the token list
+// void print_tokens_list(t_list_tokens *tokens_list) {
+//     t_list_tokens *current = tokens_list;
+//     while (current) {
+//         printf("Token: type=%d, value=%s\n", current->type, current->value);
+//         current = current->next;
+//     }
+// }
+
+// // Function to print the command list
+// void print_cmd_list(t_cmd *cmd_list) {
+//     t_cmd *current_cmd = cmd_list;
+//     int cmd_index = 1;
+
+//     while (current_cmd) {
+//         printf("Command Node %d:\n", cmd_index);
+//         printf("Tokens List:\n");
+//         print_tokens_list(current_cmd->tokens_list);
+//         printf("Redirectors List:\n");
+//         print_tokens_list(current_cmd->list_redirectors);
+//         printf("\n");
+
+//         current_cmd = current_cmd->next;
+//         cmd_index++;
+//     }
+// }
+
+
+
+
+// // Main function
+// int main() {
+//     char *input;
+//     t_list_tokens *tokens_list = NULL;
+//     t_cmd *cmd_list = NULL;
+
+//     while ((input = readline("minishell> ")) != NULL) {
+//         if (*input == '\0') {
+//             free(input);
+//             continue;
+//         }
+//         add_history(input);
+
+//         tokenize(input, &tokens_list);
+
+//         // Split the tokens by pipes and create command nodes
+//         split_tokens_by_pipe(tokens_list, &cmd_list);
+
+//         // Parse redirections for all command nodes
+//         parse_all_redirections(cmd_list);
+
+//         // Print the command list to check the results
+//         print_cmd_list(cmd_list);
+
+//         // Free the input string
+//         free(input);
+
+//         // Free the command list and tokens_list if needed
+//         // free_cmd_list(cmd_list);
+//         // cmd_list = NULL;
+// 		free_parser_list(cmd_list);
+// 		cmd_list = NULL;
+//     }
+//     return 0;
+// }
+
+
+
+// //ls -l > file | ahmad | farachi << heredoc | echo "ahmad" | cat -e > file
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>  // For open()
+#include <stdbool.h>
+#include <readline/readline.h>
+
+// Define token types
+typedef enum { LESS_LESS } t_tokens_type;  // Define token types as needed
+typedef enum { NO_QUOTE, SINGLE_QUOTE, DOUBLE_QUOTE } t_quote_type; // Add other quote types as needed
+
+typedef struct s_token {
+    t_tokens_type type;
+    t_quote_type quote_type;
+    char *value;
+    bool space;
+    struct s_token *next;
+} t_list_tokens;
+
+typedef struct s_cmd {
+    t_list_tokens *tokens_list;
+    t_list_tokens *list_redirectors;
+    char *command_path;
+    char *hd_file_name;  // For heredoc filename
+    struct s_cmd *next;
+    struct s_cmd *prev;
+} t_cmd;
+
+typedef struct s_env {
+    char *key;
+    char *value;
+    int hidden;
+    struct s_env *next;
+} t_env;
+
+typedef struct s_data {
+    t_cmd *cmd_list;  // List of commands
+    t_env *env_list;  // List of environment variables
+    t_list_tokens *first_tokens_list; // Other fields as needed
+    char **env_array;  // Array of environment variables
+    int nb_pipes;      // Number of pipes
+    int saved_stdout;  // Saved standard output
+    int saved_stdin;   // Saved standard input
+    int pipe_fds[2];   // Pipe file descriptors
+    int exit_status;    // Exit status
+    char *user_input;   // User input
+} t_data;
+
+// Function prototypes
+char *generate_temp_filename(void);
+char *handle_heredoc(t_data *data, t_list_tokens *redirector);
+int send_heredoc(t_data *data);
+
+// Generate a temporary filename
+char *generate_temp_filename(void) {
+    static int i = 0;
+    char *filename = malloc(50);
+    if (filename) {
+        snprintf(filename, 50, "/tmp/heredoc_%d.txt", i++);
     }
-    while (last->next) {
-        last = last->next;
-    }
-    last->next = new_token;
+    return filename;
 }
 
+// Handle heredoc input and write to a temporary file
+char *handle_heredoc(t_data *data, t_list_tokens *redirector) {
+    char *line = NULL;
+    char *temp_filename = generate_temp_filename();
+    int fd;
 
-
-
-
-
-
-
-
-
-
-// Function to print the token list
-void print_tokens_list(t_list_tokens *tokens_list) {
-    t_list_tokens *current = tokens_list;
-    while (current) {
-        printf("Token: type=%d, value=%s\n", current->type, current->value);
-        current = current->next;
+    if (!temp_filename) {
+        return NULL;  // Return if generating the temp filename failed
     }
-}
 
-// Function to print the command list
-void print_cmd_list(t_cmd *cmd_list) {
-    t_cmd *current_cmd = cmd_list;
-    int cmd_index = 1;
-
-    while (current_cmd) {
-        printf("Command Node %d:\n", cmd_index);
-        printf("Tokens List:\n");
-        print_tokens_list(current_cmd->tokens_list);
-        printf("Redirectors List:\n");
-        print_tokens_list(current_cmd->list_redirectors);
-        printf("\n");
-
-        current_cmd = current_cmd->next;
-        cmd_index++;
+    fd = open(temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1) {
+        perror("open");
+        free(temp_filename);
+        return NULL;
     }
-}
 
-
-
-
-// Main function
-int main() {
-    char *input;
-    t_list_tokens *tokens_list = NULL;
-    t_cmd *cmd_list = NULL;
-
-    while ((input = readline("minishell> ")) != NULL) {
-        if (*input == '\0') {
-            free(input);
-            continue;
+    // Loop until the delimiter is detected
+    while (1) {
+        line = readline("> ");
+        if (!line) {
+            perror("readline");
+            break;  // Exit loop if readline fails
         }
-        add_history(input);
 
-        tokenize(input, &tokens_list);
+        // Check if the input matches the heredoc delimiter
+        if (strcmp(line, redirector->value) == 0) {
+            free(line);
+            break;  // Break the loop if the delimiter is matched
+        }
 
-        // Split the tokens by pipes and create command nodes
-        split_tokens_by_pipe(tokens_list, &cmd_list);
-
-        // Parse redirections for all command nodes
-        parse_all_redirections(cmd_list);
-
-        // Print the command list to check the results
-        print_cmd_list(cmd_list);
-
-        // Free the input string
-        free(input);
-
-        // Free the command list and tokens_list if needed
-        // free_cmd_list(cmd_list);
-        // cmd_list = NULL;
-		free_parser_list(cmd_list);
-		cmd_list = NULL;
+        // Write the input line to the temporary file
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);  // Add the newline character
+        free(line);  // Free the line after writing it to the file
     }
-    return 0;
+
+    close(fd);
+    return temp_filename;  // Return the name of the temporary file
 }
 
+// Send heredoc for commands
+int send_heredoc(t_data *data) {
+    t_cmd *cmd = data->cmd_list;  // Start with the first command
+    int result = EXIT_SUCCESS;
 
+    while (cmd) {
+        if (cmd->list_redirectors && cmd->list_redirectors->type == LESS_LESS) {
+            // Generate the heredoc filename
+            if (cmd->hd_file_name) {
+                free(cmd->hd_file_name);  // Free the old filename if it exists
+            }
+            cmd->hd_file_name = handle_heredoc(data, cmd->list_redirectors);
+            if (!cmd->hd_file_name) {
+                result = EXIT_FAILURE;  // Handle failure to create heredoc
+                break;
+            }
+        }
+        cmd = cmd->next;  // Move to the next command
+    }
 
-//ls -l > file | ahmad | farachi << heredoc | echo "ahmad" | cat -e > file
+    return result;  // Return the result of the heredoc processing
+}
+
+// Test main function
+int main(void) {
+    // Setup a minimal data structure
+    t_data data;
+    t_cmd cmd;
+    t_list_tokens redirector;
+
+    // Initialize the redirector for heredoc
+    redirector.type = LESS_LESS;
+    redirector.quote_type = NO_QUOTE;  // Change this to SINGLE_QUOTE or DOUBLE_QUOTE as needed
+    redirector.value = "hola";  // The delimiter for heredoc
+    redirector.next = NULL;  // No additional tokens
+
+    // Link the redirector to the command
+    cmd.list_redirectors = &redirector;  // Assign the redirector to the command
+    cmd.hd_file_name = NULL;  // Initialize the heredoc filename to NULL
+    cmd.next = NULL;  // No additional commands for this test
+
+    // Link the command to the data structure
+    data.cmd_list = &cmd;  // Assign the command to the data
+    data.env_list = NULL;  // Initialize the env list as NULL
+
+    // Call the send_heredoc function
+    if (send_heredoc(&data) == EXIT_SUCCESS) {
+        printf("Heredoc created: %s\n", cmd.hd_file_name);
+    } else {
+        printf("Failed to create heredoc.\n");
+    }
+
+    // Clean up (freeing allocated memory, etc.)
+    free(cmd.hd_file_name);  // Free the heredoc filename if it was allocated
+
+    return 0;
+}

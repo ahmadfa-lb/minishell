@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 13:53:58 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/01 08:42:28 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
+        data->env_array = env_list_to_array(data);
         data->user_input = readline("minishell> ");
         if (!data->user_input)
         {

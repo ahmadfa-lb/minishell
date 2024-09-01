@@ -6,18 +6,18 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 08:39:55 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/01 11:46:23 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	**build_arguments(t_list_tokens *tokens_list)
+char **build_arguments(t_list_tokens *tokens_list)
 {
-	int				count;
-	t_list_tokens	*tmp;
-	char			**arguments;
-	int				i;
+	int count;
+	t_list_tokens *tmp;
+	char **arguments;
+	int i;
 
 	count = 0;
 	tmp = tokens_list;
@@ -39,11 +39,9 @@ char	**build_arguments(t_list_tokens *tokens_list)
 	return (arguments);
 }
 
-
-
-int	open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
+int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
 {
-	int	fd;
+	int fd;
 
 	fd = open(filename, flags, mode);
 	if (fd == -1)
@@ -62,13 +60,12 @@ int	open_and_duplicate(const char *filename, int flags, mode_t mode, int target_
 	return (0);
 }
 
-
 int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 {
-	//char	*name;
-	//int		fd;
+	// char	*name;
+	// int		fd;
 
-	//name = NULL;
+	// name = NULL;
 	if (token == TOKEN_REDIRECT_OUT)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_TRUNC,
 			0644, STDOUT_FILENO);
@@ -78,14 +75,14 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_APPEND,
 			0644, STDOUT_FILENO);
 	// else if (token = TOKEN_HEREDOC)
-	// 	name = handle_heredoc();
+	// 	name = handle_heredoc(data->cmd_list->heredocs_delimiters, data, tokens_list->quote_type);
 	// if (name)
 	// {
 	// 	fd = open(name, O_RDONLY);
 	// 	if (fd > 0)
-	// 		
+
 	// 	close(fd);
 	// }
 	return (data->exit_status);
-	
+
 }

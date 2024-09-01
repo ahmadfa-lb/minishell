@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/01 10:49:30 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/01 10:24:19 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,9 @@ void	print_sorted_env_list(t_env *head)
 	sort_env_list(current);
 	while (current)
 	{
-		printf("%s=\"%s\"\n"X, current->key, current->value);
+		printf("%s=\"%s\"\n", current->key, current->value);
 		current = current->next;
 	}
-	printf("\n");
 }
 
 // int	update_env_value(t_env *head, const char *key, const char *new_value)

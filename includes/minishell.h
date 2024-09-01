@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/01 10:22:57 by zmourtab          #+#    #+#             */
-/*   Updated: 2024/08/31 18:07:29 by afarachi         ###   ########.fr       */
+/*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
+/*   Updated: 2024/09/01 11:50:15 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ char	**env_list_to_array(t_data *data);
 //execute.c
 void	handle_parent_process(t_data *data, int *in_fd);
 void	wait_for_children(pid_t *pids, int count, t_data *data);
-void	handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd);
+int		handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd);
 void	initialize_command_execution(t_data *data, int *status, int *in_fd,
 	 pid_t **pids);
 int	ft_execute_command(t_data *data, t_cmd *current_cmd);
@@ -207,7 +207,7 @@ int	ft_execute_command(t_data *data, t_cmd *current_cmd);
 void	handle_redirections(t_data *data, t_cmd *current_cmd);
 void	handle_piping(int *pipe_fds, int nb_pipes);
 pid_t	handle_forking(void);
-void	execute_command(t_cmd *current_cmd, t_data *data);
+int	execute_command(t_cmd *current_cmd, t_data *data);
 void	cleanup_fds(t_data *data);
 //file_checks_utils.c
 bool	ft_is_executable(const char *path);
@@ -248,7 +248,3 @@ void split_envp(char *envp_str, char **key, char **value);
 int ft_exit(char **args);
 
 #endif
-
-
-
-
