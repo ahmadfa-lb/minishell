@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/30 14:03:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:56:01 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,27 @@ void handle_normal_variable(char *input, int *i, char **result, t_env *env)
 	if (start != end)
 	{
 		sub_env = ft_substr(input, start, end - start);
-        env_value = get_env(env, sub_env);
-        if (env_value)
-            *result = ft_strjoin(*result, env_value);
-        free(sub_env);
+		env_value = get_env(env, sub_env);
+		if (env_value)
+			*result = ft_strjoin(*result, env_value);
+		free(sub_env);
 	}
 	else
-        *result = ft_strjoin(*result, "$");
+		*result = ft_strjoin(*result, "$");
 }
 
-void	handle_two_dollar(char **result, int *i)
+void handle_two_dollar(char **result, int *i)
 {
-	char	*num_str;
+	char *num_str;
 
 	num_str = ft_itoa(getpid());
 	*result = ft_strjoin(*result, num_str);
 	*i += 2;
 	free(num_str);
 }
-void	handle_dollarexitstatus(char **result, int exit_status, int *i)
+void handle_dollarexitstatus(char **result, int exit_status, int *i)
 {
-	char	*string;
+	char *string;
 
 	string = ft_itoa(exit_status);
 	*result = ft_strjoin(*result, string);
@@ -55,11 +55,11 @@ void	handle_dollarexitstatus(char **result, int exit_status, int *i)
 	free(string);
 }
 
-char	*handle_dollar_sign(char *input, t_env *env, int exit_status)
+char *handle_dollar_sign(char *input, t_env *env, int exit_status)
 {
-	int		i;
-	char	*result;
-	char	tmp[2];
+	int i;
+	char *result;
+	char tmp[2];
 
 	i = 0;
 	result = ft_strdup("");
@@ -85,17 +85,88 @@ char	*handle_dollar_sign(char *input, t_env *env, int exit_status)
 	return (result);
 }
 
-t_list_tokens	*dollar_expansion(t_data *data)
+// t_list_tokens	*dollar_expansion(t_data *data)
+// {
+// 	t_list_tokens	*current_token;
+// 	char *result = NULL;
+// 	char **split_strings = NULL;
+
+// 	current_token = data->first_tokens_list;
+// 	while (current_token)
+// 	{
+// 		if (current_token->value && ft_strchr(current_token->value, '$') &&
+// 		 current_token->quote_type != SINGLE_QUOTE)
+// 			current_token->value = handle_dollar_sign(current_token->value, data->env_list, data->exit_status);
+// 		current_token = current_token->next;
+// 	}
+// 	return (data->first_tokens_list);
+// }
+
+int get_string_array_length(char **string)
 {
-	t_list_tokens	*current_token;
-	
+	int length = 0;
+
+	if (string == NULL)
+		return 0;
+	while (string[length] != NULL)
+		length++;
+	return length;
+}
+
+t_list_tokens *dollar_expansion(t_data *data)
+{
+	t_list_tokens *current_token;
+	char *result = NULL;
+	char **split_strings = NULL;
+	t_list_tokens *new_token;
+	int array_length = 0;
+	int i = 0;
+
 	current_token = data->first_tokens_list;
 	while (current_token)
 	{
-		if (current_token->value && ft_strchr(current_token->value, '$') &&
-		 current_token->quote_type != SINGLE_QUOTE)
-			current_token->value = handle_dollar_sign(current_token->value, data->env_list, data->exit_status);
-		current_token = current_token->next;
+		if (current_token->value && ft_strchr(current_token->value, '$') && current_token->quote_type != SINGLE_QUOTE)
+		{
+			result = handle_dollar_sign(current_token->value, data->env_list, data->exit_status);
+			split_strings = ft_split(result, ' ');
+			if (split_strings[0] == NULL)
+			{
+				// Case 1: Remove the node if the split result is empty
+				current_token = current_token->next;
+				free(current_token->value);
+				free(current_token);
+				current_token = NULL;
+			}
+			else if (split_strings[0] && split_strings[1] == NULL)
+			{
+				current_token->value = split_strings[0];
+			}
+			else
+			{
+				//free(current_token->value);
+				current_token->value = ft_strdup(split_strings[0]);
+				array_length = get_string_array_length(split_strings);
+				i = 1;
+				while (i < array_length)
+				{
+					char *test = ft_strdup(split_strings[i]);
+					new_token = create_token_node(current_token->type, current_token->quote_type, test, 1);
+					append_token(&current_token, new_token);
+					current_token = current_token->next;
+					i++;
+				}
+				i = 0;
+				free(result);
+				while (split_strings[i])
+				{
+					free(split_strings[i]);
+					i++;
+				}
+				free(split_strings);
+			}
+			current_token = current_token->next;
+		}
+		return (data->first_tokens_list);
 	}
 	return (data->first_tokens_list);
 }

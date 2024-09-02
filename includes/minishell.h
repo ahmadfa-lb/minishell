@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/01 11:50:15 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:21:57 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,7 @@ char	**env_list_to_array(t_data *data);
 void	handle_parent_process(t_data *data, int *in_fd);
 void	wait_for_children(pid_t *pids, int count, t_data *data);
 int		handle_child_process(t_data *data, t_cmd *current_cmd, int in_fd);
-void	initialize_command_execution(t_data *data, int *status, int *in_fd,
-	 pid_t **pids);
+
 int	ft_execute_command(t_data *data, t_cmd *current_cmd);
 //execution_process_utils.c
 void	handle_redirections(t_data *data, t_cmd *current_cmd);

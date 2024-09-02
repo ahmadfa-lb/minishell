@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 03:41:11 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:09:05 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ void print_cmd_list(t_cmd *cmd_list)
         cmd_index++;
     }
 }
+
+
+
 
 // t_data *initialize_data(void)
 // {
@@ -133,6 +136,7 @@ void print_cmd_list(t_cmd *cmd_list)
 //     return 0;
 // }
 
+
 int main(int argc, char **argv, char **envp)
 {
     art();
@@ -147,8 +151,8 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
-        free(data->env_array);
-        data->env_array = env_list_to_array(data);
+        //free(data->env_array);
+        
         data->user_input = readline("minishell> ");
         if (!data->user_input)
         {
@@ -156,14 +160,13 @@ int main(int argc, char **argv, char **envp)
             // continue;
             exit(0);
         }
-
+        
         add_history(data->user_input);
 
         tokenize(data->user_input, &data->first_tokens_list);
 
         // Apply dollar expansion before concatenating nodes
         data->first_tokens_list = dollar_expansion(data); // Make sure to define or pass the env variable
-
         concate_nodes(&data->first_tokens_list);
 
         // t_list_tokens *current_token = data->first_tokens_list;
@@ -185,8 +188,8 @@ int main(int argc, char **argv, char **envp)
         parse_all_redirections(data->cmd_list);
 
         // Print the command list to check the results
+        data->env_array = env_list_to_array(data);
         // print_cmd_list(data->cmd_list);
-        
         data->exit_status =  ft_execute_command(data, data->cmd_list);
         
         free_tokens(data->first_tokens_list);

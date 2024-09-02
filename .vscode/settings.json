@@ -5,6 +5,16 @@
 		"get_next_line.h": "c",
 		"libft.h": "c",
 		"stdint.h": "c",
-		"art.h": "c"
+		"art.h": "c",
+		"optional": "c",
+		"system_error": "c",
+		"array": "c",
+		"functional": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"utility": "c",
+		"variant": "c",
+		"charconv": "c",
+		"format": "c"
 	}
 }
