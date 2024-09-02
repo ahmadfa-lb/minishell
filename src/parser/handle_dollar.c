@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/02 12:56:01 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:00:00 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ char *handle_dollar_sign(char *input, t_env *env, int exit_status)
 // t_list_tokens	*dollar_expansion(t_data *data)
 // {
 // 	t_list_tokens	*current_token;
-// 	char *result = NULL;
-// 	char **split_strings = NULL;
 
 // 	current_token = data->first_tokens_list;
 // 	while (current_token)
@@ -119,6 +117,7 @@ t_list_tokens *dollar_expansion(t_data *data)
 	char *result = NULL;
 	char **split_strings = NULL;
 	t_list_tokens *new_token;
+	t_list_tokens *temp;
 	int array_length = 0;
 	int i = 0;
 
@@ -129,13 +128,12 @@ t_list_tokens *dollar_expansion(t_data *data)
 		{
 			result = handle_dollar_sign(current_token->value, data->env_list, data->exit_status);
 			split_strings = ft_split(result, ' ');
-			if (split_strings[0] == NULL)
+			if (!split_strings || !*split_strings)
 			{
-				// Case 1: Remove the node if the split result is empty
-				current_token = current_token->next;
-				free(current_token->value);
-				free(current_token);
-				current_token = NULL;
+				temp = current_token->next;
+				ft_free_node(&data->first_tokens_list, current_token);
+				current_token = temp;
+				continue;
 			}
 			else if (split_strings[0] && split_strings[1] == NULL)
 			{
@@ -143,7 +141,7 @@ t_list_tokens *dollar_expansion(t_data *data)
 			}
 			else
 			{
-				//free(current_token->value);
+				// free(current_token->value);
 				current_token->value = ft_strdup(split_strings[0]);
 				array_length = get_string_array_length(split_strings);
 				i = 1;
@@ -164,9 +162,9 @@ t_list_tokens *dollar_expansion(t_data *data)
 				}
 				free(split_strings);
 			}
-			current_token = current_token->next;
 		}
-		return (data->first_tokens_list);
+		current_token = current_token->next;
 	}
 	return (data->first_tokens_list);
 }
+

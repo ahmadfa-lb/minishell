@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:49:48 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/01 09:53:10 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 14:38:35 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int ft_echo(char **args)
     // Print each argument separated by a space
     while (args[i])
     {
-        printf("%s my echo", args[i]);
+        printf("%s", args[i]);
         if (args[i + 1])
             printf(" ");
         i++;

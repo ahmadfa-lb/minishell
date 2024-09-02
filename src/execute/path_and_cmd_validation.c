@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 04:41:10 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:20:52 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ bool	ft_lookup_cmd_in_envpaths(t_data *data, t_cmd *cmd)
 	char	**paths;
 	char	*path_var;
 
-	
-	
 	path_var = get_env(data->env_list, "PATH");
 	if (!path_var)
 		return (false);
@@ -127,6 +125,8 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 		// Check for shell built-in commands
 	if (is_builtin_command(cmd))
 		return (true);
+	
+
 	if (ft_strchr(command, '/') || !(path_env = get_env(data->env_list, "PATH")))
 	{
 		if (!ft_check_file_status(command, data))
@@ -136,13 +136,15 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 			return (perror("error duplicating command"), false);
 		return (true);
 	}
-	
+
 	if (*command && !ft_lookup_cmd_in_envpaths(data, cmd))
 	{
 		ft_print_error_message(command, ": command not found");
 		data->exit_status = 127;
 		return (false);
 	}
+	
+	
 	if (cmd->command_path) // Use command_path for execution
 		return (true);
 	return (false);
