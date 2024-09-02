@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/01 11:46:23 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 03:21:27 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,47 @@ char **build_arguments(t_list_tokens *tokens_list)
 	return (arguments);
 }
 
+// int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
+// {
+// 	int fd;
+
+// 	fd = open(filename, flags, mode);
+// 	if (fd == -1)
+// 	{
+// 		perror("open");
+// 		return (-1);
+// 	}
+// 	if (dup2(fd, target_fd) == -1)
+// 	{
+// 		perror("dup2");
+// 		close(fd);
+// 		return (-1);
+// 	}
+// 	dup2(fd, STDIN_FILENO);
+// 	close(fd);
+// 	return (0);
+// }
+
 int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
 {
-	int fd;
+    int fd;
 
-	fd = open(filename, flags, mode);
-	if (fd == -1)
-	{
-		perror("open");
-		return (-1);
-	}
-	if (dup2(fd, target_fd) == -1)
-	{
-		perror("dup2");
-		close(fd);
-		return (-1);
-	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	return (0);
+    fd = open(filename, flags, mode);
+    if (fd == -1)
+    {
+        perror("open");
+        return (-1);
+    }
+    if (dup2(fd, target_fd) == -1)
+    {
+        perror("dup2");
+        close(fd);
+        return (-1);
+    }
+    close(fd);
+    return (0);
 }
+
 
 int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 {

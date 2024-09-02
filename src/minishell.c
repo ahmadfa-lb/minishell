@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/01 08:42:28 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 03:41:11 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
+        free(data->env_array);
         data->env_array = env_list_to_array(data);
         data->user_input = readline("minishell> ");
         if (!data->user_input)
@@ -196,6 +197,7 @@ int main(int argc, char **argv, char **envp)
     }
     printf("\nexit status: %d \n", data->exit_status);
     free_envp_list(data->env_list);
+    free(data->env_array);
     // free_tokens(tokens);
     // printf("\n\n");
     return 0;
