@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:40:06 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/01 11:50:01 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/02 06:18:53 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,30 @@ void	handle_redirections(t_data *data, t_cmd *current_cmd)
 	}
 }
 
-// void	handle_piping(int *pipe_fds, int nb_pipes)
-// {
-// 	if (nb_pipes > 0)
-// 	{
-// 		if (pipe(pipe_fds) == -1)
-// 		{
-// 			perror("pipe");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// }
+void	handle_piping(int *pipe_fds, int nb_pipes)
+{
+	if (nb_pipes > 0)
+	{
+		if (pipe(pipe_fds) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
 
-// pid_t	handle_forking(void)
-// {
-// 	pid_t	pid;
+pid_t	handle_forking(void)
+{
+	pid_t	pid;
 
-// 	pid = fork();
-// 	if (pid == -1)
-// 	{
-// 		perror("fork");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	return (pid);
-// }
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	return (pid);
+}
 
 int	execute_command(t_cmd *current_cmd, t_data *data)
 {
@@ -65,6 +65,24 @@ int	execute_command(t_cmd *current_cmd, t_data *data)
 }
 
 
+
+void cleanup_fds(t_data *data)
+{
+
+    
+    if (data->saved_stdin != STDIN_FILENO)
+    {
+        dup2(data->saved_stdin, STDIN_FILENO);
+        close(data->saved_stdin);
+    }
+
+	if (data->saved_stdout != STDOUT_FILENO)
+    {
+        dup2(data->saved_stdout, STDOUT_FILENO);
+        close(data->saved_stdout);
+    }
+
+}
 // // int	execute_command(t_cmd *current_cmd, t_data *data)
 // // {
 // // 	char	**arguments;
@@ -76,10 +94,3 @@ int	execute_command(t_cmd *current_cmd, t_data *data)
 // // 	exit(EXIT_FAILURE);
 // // }
 
-// void	cleanup_fds(t_data *data)
-// {
-// 	dup2(data->saved_stdout, STDOUT_FILENO);
-// 	dup2(data->saved_stdin, STDIN_FILENO);
-// 	close(data->saved_stdout);
-// 	close(data->saved_stdin);
-// }
