@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 07:00:16 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 23:10:08 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,7 @@ int ft_pwd();
 int ft_cd(char **args, t_env *env_list);
 int	ft_env(t_env *env_list);
 int ft_export(t_env **env_list, char **input);
+int check_key(char *key) ;
 int ft_unset(t_env **head, char **keys);
 void free_args(char **args);
 void split_envp(char *envp_str, char **key, char **value);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 05:17:32 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 03:16:23 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 23:34:55 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void remove_env_node(t_env **head, t_env *current, t_env *previous)
     free(current);
 }
 
-int find_and_remove_key(t_env **head, const char *key)
+void find_and_remove_key(t_env **head, const char *key)
 {
     t_env *current = *head;
     t_env *previous = NULL;
@@ -60,27 +60,28 @@ int find_and_remove_key(t_env **head, const char *key)
         if (ft_strcmp(current->key, key) == 0)
         {
             remove_env_node(head, current, previous);
-            return 0; // Key found and removed
+            return ; // Key found and removed
         }
         previous = current;
         current = current->next;
     }
     
-    return -1; // Key not found
+    return ; // Key not found
 }
 
 int ft_unset(t_env **head, char **keys)
 {
     int status = 0;
     int i = 1;
-
+    
     while (keys[i])
     {
-        if (find_and_remove_key(head, keys[i]) == -1)
+        if (!check_key(keys[i]))
         {
-            printf("unset: `%s': not found\n", keys[i]);
-            status = -1;
+            printf("unset: `%s': not a valid identifier\n", keys[i]);
+            status = 1;
         }
+        find_and_remove_key(head, keys[i]);
         i++; // Move to the next key in the array
     }
 

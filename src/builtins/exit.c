@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 21:27:26 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/03 22:53:38 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/03 22:56:38 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int calculate_exit_status(int status)
         res += 256; // Adjust for negative results to ensure the result is within the 0-255 range
     }
 
-    return res;
+    return (res);
 }
 void handle_too_many_args_error()
 {
