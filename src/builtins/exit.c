@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 21:27:26 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/03 10:38:20 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:40:17 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int check_status_str(char *str)
     int i;
 
     i = 0;
+    if (str[i] == '-' || str[i] == '+')
+    {
+        i++;
+    }
+    
     while (str[i])
     {
         if (!ft_isdigit(str[i]))
@@ -80,6 +85,18 @@ int check_status_str(char *str)
     }
     return (1);
 }
+int calculate_exit_status(int status)
+{
+    int res;
+
+    res = status % 256; // Apply modulo 256
+    while (res < 0)
+    {
+        res += 256; // Adjust for negative results to ensure the result is within the 0-255 range
+    }
+
+    return res;
+}
 
 int convert_and_validate_exit_status(char *arg)
 {
@@ -88,18 +105,13 @@ int convert_and_validate_exit_status(char *arg)
     if (!check_status_str(arg))
     {
         printf("exit: %s: numeric argument required\n", arg);
-        return 255; // Standard behavior for non-numeric arguments
+        return 1; // Standard behavior for non-numeric arguments
     }
 
     exit_status = ft_atoi(arg);
 
-    if (exit_status < 0 || exit_status > 255)
-    {
-        printf("exit: %s: numeric argument in range required\n", arg);
-        return 255;
-    }
-
-    return exit_status;
+    printf("exit: %d\n", calculate_exit_status(exit_status));
+    return calculate_exit_status(exit_status);
 }
 
 void handle_too_many_args_error()
