@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 13:21:57 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 07:00:16 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ void				art(void);
 // void				interactivehandle_sigquit(int sig);
 // void				interactivehandle_sigint(int sig);
 // void				handlesignal(t_data *data);
-
+bool	check_initial_errors(char *input, t_data *data);
+void free_data(t_data *data);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //lexer
 //cmd_to_token.c

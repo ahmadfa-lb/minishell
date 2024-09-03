@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 16:20:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 04:39:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,12 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 	command = cmd->tokens_list->value;
 	if (!command)
 		return (false);
+	if (!*command)
+	{
+		ft_print_error_message("'': ", "command not found");
+		data->exit_status = 127;
+		return (false);
+	}
 		// Check for shell built-in commands
 	if (is_builtin_command(cmd))
 		return (true);

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/02 17:00:00 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 05:13:24 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char *handle_dollar_sign(char *input, t_env *env, int exit_status)
 			result = ft_strjoin(result, tmp);
 			i++;
 		}
-	free(input);
+	// free(input);
 	return (result);
 }
 
@@ -130,10 +130,22 @@ t_list_tokens *dollar_expansion(t_data *data)
 			split_strings = ft_split(result, ' ');
 			if (!split_strings || !*split_strings)
 			{
-				temp = current_token->next;
-				ft_free_node(&data->first_tokens_list, current_token);
-				current_token = temp;
-				continue;
+				if (current_token->quote_type == NO_QUOTE ||current_token->value[0] == '"')	
+				{
+					printf("\nddddd\n");
+					temp = current_token->next;
+					ft_free_node(&data->first_tokens_list, current_token);
+					current_token = temp;
+					continue;
+				}
+				else
+				{
+					current_token->value = handle_dollar_sign(current_token->value, data->env_list, data->exit_status);
+					continue;
+					
+				}
+
+				
 			}
 			else if (split_strings[0] && split_strings[1] == NULL)
 			{

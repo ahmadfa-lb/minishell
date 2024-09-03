@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/27 03:59:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 04:57:24 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ static void handle_quoted_string_token(char **current, t_list_tokens **tokens)
 	quoted_string = process_quoted_string(current, quote_type, &space);
 	if (!quoted_string)
 		return;
-
 	new_token = create_token_node(
 		TOKEN_WORD,
 		(quote_type == '"') ? DOUBLE_QUOTE : SINGLE_QUOTE,
@@ -123,7 +122,8 @@ static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 	t_list_tokens *new_token;
 	char *start;
 	char *value;
-	char *val_dup;
+	// char *val_dup;
+	char *temp;
 	bool space;
 
 	start = *current;
@@ -136,8 +136,9 @@ static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 		value = ft_strndup(start, *current - start);
 		if (!value) // Check if memory allocation failed
 			return;
-		val_dup = ft_strdup(value);
-		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, val_dup, space);
+		// val_dup = ft_strdup(value);
+		temp = value;
+		new_token = create_token_node(TOKEN_WORD, NO_QUOTE, temp, space);
 		if (!new_token)
 			return (free(value), (void)0);
 		(append_token(tokens, new_token), free(value));

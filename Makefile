@@ -6,7 +6,7 @@
 #    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/08/31 08:15:12 by afarachi         ###   ########.fr        #
+#    Updated: 2024/09/03 05:50:34 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRCS = $(SRC_DIR)/lexer/cmd_to_tokens.c \
 	   $(SRC_DIR)/builtins/exit.c \
 	   $(SRC_DIR)/builtins/tokens_to_argc.c \
 	   ${SRC_DIR}/minishell.c \
+	   ${SRC_DIR}/syntax.c \
 	   ${SRC_DIR}/art.c
 	   
 
