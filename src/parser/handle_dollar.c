@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/03 05:13:24 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:36:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ t_list_tokens *dollar_expansion(t_data *data)
 			{
 				if (current_token->quote_type == NO_QUOTE ||current_token->value[0] == '"')	
 				{
-					printf("\nddddd\n");
 					temp = current_token->next;
 					ft_free_node(&data->first_tokens_list, current_token);
 					current_token = temp;
