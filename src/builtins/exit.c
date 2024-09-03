@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_exit.c                                      :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 21:27:26 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/31 06:15:25 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:38:20 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,6 @@ int ft_exit(char **args)
     else
         exit_status = 0; // Default exit status
 
-    printf("Exiting with status: %d\n", exit_status);
+    //printf("Exiting with status: %d\n", exit_status);
     return(exit(exit_status),exit_status);
 }
