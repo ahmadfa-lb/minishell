@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 05:53:38 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 07:20:57 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:32:26 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,50 @@ bool check_pipes(t_list_tokens *token_list)
     return true;
 }
 
-bool check_tokens_redirections(t_list_tokens *token_list)
+// bool check_tokens_redirections(t_list_tokens *token_list)
+// {
+//     while (token_list)
+//     {
+//         if (token_list->type == TOKEN_REDIRECT_IN || token_list->type == TOKEN_REDIRECT_OUT ||
+//             token_list->type == TOKEN_APPEND || token_list->type == TOKEN_HEREDOC)
+//         {
+//             // Check if a redirection token is followed by another redirection token or pipe
+//             if (!token_list->next || token_list->next->type == TOKEN_PIPE ||
+//                 (token_list->next->type >= TOKEN_REDIRECT_IN && token_list->next->type <= TOKEN_HEREDOC))
+//                 return false;
+//         }
+//         token_list = token_list->next;
+//     }
+//     return true;
+// }
+
+bool check_tokens_redirections(t_list_tokens *token_list, t_data *data)
 {
     while (token_list)
-    {
+	{	
         if (token_list->type == TOKEN_REDIRECT_IN || token_list->type == TOKEN_REDIRECT_OUT ||
             token_list->type == TOKEN_APPEND || token_list->type == TOKEN_HEREDOC)
         {
-            // Check if a redirection token is followed by another redirection token or pipe
+            // Check if a redirection token is at the end or followed by another redirection or a pipe
             if (!token_list->next || token_list->next->type == TOKEN_PIPE ||
                 (token_list->next->type >= TOKEN_REDIRECT_IN && token_list->next->type <= TOKEN_HEREDOC))
+            {
+                // Print the error with "newline" if it's the last token
+                if (!token_list->next || (!token_list->next->next && token_list->next->type == TOKEN_REDIRECT_OUT))
+                    print_syntax_error("newline", &(data->exit_status));
+                else if (token_list->next->type == TOKEN_PIPE)
+                    print_syntax_error("|", &(data->exit_status));
+                else if (token_list->next->type == TOKEN_REDIRECT_IN)
+                    print_syntax_error("<", &(data->exit_status));
+                else if (token_list->next->type == TOKEN_REDIRECT_OUT)
+                    print_syntax_error(">", &(data->exit_status));
+                else if (token_list->next->type == TOKEN_APPEND)
+                    print_syntax_error(">>", &(data->exit_status));
+                else if (token_list->next->type == TOKEN_HEREDOC)
+                    print_syntax_error("<<", &(data->exit_status));
+
                 return false;
+            }
         }
         token_list = token_list->next;
     }
@@ -101,10 +134,10 @@ bool	check_initial_errors(char *input, t_data *data)
 		print_syntax_error("|", &(data->exit_status));
 		return (false);
 	}
-	else if (!check_tokens_redirections(data->first_tokens_list))
+	else if (!check_tokens_redirections(data->first_tokens_list, data))
 	{
-		print_syntax_error("<, >, >> or <<", &(data->exit_status));
-		data->exit_status = 2;
+		// print_syntax_error("<, >, >> or <<", &(data->exit_status));
+		// data->exit_status = 2;
 		return (false);
 	}
 	return (true);
