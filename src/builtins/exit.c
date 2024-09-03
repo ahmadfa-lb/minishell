@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 21:27:26 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/03 18:40:17 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/03 14:16:54 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,30 @@
 //     printf("Exiting with status: %d\n", exit_status);
 //     exit(exit_status);
 // }
+
+
+long	ft_atol(const char *str)
+{
+	long int	nb;
+	int			sign;
+
+	nb = 0;
+	sign = 1;
+	while (ft_isspace((int)*str))
+		str++;
+	if (*str == '+' || *str == '-')
+	{
+		if (*str == '-')
+			sign = (-1);
+		str++;
+	}
+	while (ft_isdigit((int)*str))
+	{
+		nb = nb * 10 + *str - '0';
+		str++;
+	}
+	return (sign * nb);
+}
 
 int check_status_str(char *str)
 {
