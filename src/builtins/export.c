@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/04 01:17:58 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/04 01:52:43 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	print_sorted_env_list(t_env *head)
 	sort_env_list(current);
 	while (current)
 	{
-		printf("%s=\"%s\"\n", current->key, current->value);
+		printf("%s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 }
