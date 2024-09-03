@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   change_dir.c                                       :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/31 04:55:32 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 00:48:37 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int cd_to_home(t_env *env_list)
 
     if (home == NULL || chdir(home) != 0)
     {
-        perror("chdir failed");
+        printf("cd: HOME not set\n");
         return 1;
     }
     set_env(&env_list, "OLDPWD", pwd, 0);
@@ -34,10 +34,10 @@ int cd_to_oldpwd(t_env *env_list)
 
     if (old_pwd == NULL || chdir(old_pwd) != 0)
     {
-        perror("chdir failed");
+        printf("cd: %s: No such file or directory\n", old_pwd);
         return 1;
     }
-
+    printf("%s\n", old_pwd);
     // Update PWD and OLDPWD safely
     set_env(&env_list, "OLDPWD", pwd, 0);
     char *new_pwd = getcwd(NULL, 0); // Use getcwd to get the current directory after chdir
@@ -59,7 +59,7 @@ int cd_to_path(char *path, t_env *env_list)
 
     if (chdir(path) != 0)
     {
-        perror("chdir failed");
+        printf("cd: %s: No such file or directory\n", path);
         return 1;
     }
     new_pwd = getcwd(NULL, 0);
@@ -81,9 +81,14 @@ int ft_cd(char **args, t_env *env_list)
         return cd_to_home(env_list);
     }
 
-    if ((args[1][0] == '-' && args[1][1] == '\0') || (args[1][0] == '-' && args[1][1] == '-' && args[1][2] == '\0'))
+    if (args[1][0] == '-' && args[1][1] == '\0')
     {
         return cd_to_oldpwd(env_list);
+    }
+    if (args[1][0] == '-' && args[1][1] == '-')
+    {
+        printf("cd: --: invalid option\n");
+        return (2);
     }
 
     if (args[2] == NULL)
