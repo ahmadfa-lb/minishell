@@ -6,7 +6,7 @@
 /*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/03 23:40:14 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/04 01:17:58 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,12 @@ int	is_input_null(char **input)
 	return (input[1] == NULL);
 }
 
-int	is_key_invalid(char *key)
+int	is_key_invalid(char *key, char *value)
 {
+	
 	if (check_key(key) == 0)
 	{
-		printf("Invalid key: %s\n", key); // Debugging
+		printf("export: `%s=%s': not a valid identifier\n", key, value); // Debugging
 		return (1);
 	}
 	return (0);
@@ -188,7 +189,7 @@ int	ft_export(t_env **env_list, char **input)
 	while (input[i])
 	{
 		split_envp(input[i], &key, &value);
-		if (is_key_invalid(key))
+		if (is_key_invalid(key, value))
 		{
 			free_resources(key, value);
 			i++;
