@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 05:24:28 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:03:13 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,8 @@ int ft_execute_command(t_data *data, t_cmd *current_cmd)
 	in_fd = STDIN_FILENO;
 	(initialize_command_execution(data, &status, &pids), i = 0);
 	if (data->nb_pipes == 0) // Single command, no pipes
-	{
+	{		
+			handle_redirections(data, current_cmd);
 			if (check_if_builtin(current_cmd))
 				status = handle_builtin_command(current_cmd, data);
 			else
