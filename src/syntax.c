@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 05:53:38 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 10:32:26 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 03:52:13 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void print_syntax_error(char *error_message, int *exit_status)
 }
 
 
-bool check_unclosed_quotes(char *input)
+char check_unclosed_quotes(char *input)
 {
     int single_quote = 0;
     int double_quote = 0;
@@ -42,8 +42,7 @@ bool check_unclosed_quotes(char *input)
         return '\'';
     if (double_quote % 2 != 0)
         return '\"';
-
-    return 0;
+    return '\0';
 }
 
 bool check_pipes(t_list_tokens *token_list)
