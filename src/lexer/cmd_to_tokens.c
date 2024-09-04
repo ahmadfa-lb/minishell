@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 04:57:24 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:40:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,28 @@
 #include "../../includes/minishell.h"
 
 // Helper function to handle pipe tokens
-static void handle_pipe_token(char **current, t_list_tokens **tokens)
+static void	handle_pipe_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens *new_token;
-	char *pipe;
+	t_list_tokens	*new_token;
+	char			*pipe;
 
 	pipe = ft_strdup("|");
 	new_token = create_token_node(TOKEN_PIPE, NO_QUOTE, pipe, true);
 	if (!new_token)
 	{
 		free(pipe);
-		return;
+		return ;
 	}
-
 	append_token(tokens, new_token);
 	(*current)++;
 }
 
 // Helper function to handle redirection tokens
-static void handle_redirection_token(char **current, t_list_tokens **tokens)
+static void	handle_redirection_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens *new_token;
-	char redirect_char;
-	size_t len;
+	t_list_tokens	*new_token;
+	char			redirect_char;
+	size_t			len;
 
 	len = 1;
 	redirect_char = **current;
@@ -117,18 +116,17 @@ static void handle_quoted_string_token(char **current, t_list_tokens **tokens)
 // 	}
 // }
 
-static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
+static void	handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 {
-	t_list_tokens *new_token;
-	char *start;
-	char *value;
-	// char *val_dup;
-	char *temp;
-	bool space;
+	t_list_tokens	*new_token;
+	char			*start;
+	char			*value;
+	char			*temp;
+	bool			space;
 
 	start = *current;
 	while (**current && !ft_isspace(**current) && **current != '|' &&
-		   **current != '<' && **current != '>' && **current != '"' && **current != '\'')
+			**current != '<' && **current != '>' && **current != '"' && **current != '\'')
 		(*current)++;
 	if (*current > start)
 	{
@@ -146,9 +144,9 @@ static void handle_unquoted_word_token(char **current, t_list_tokens **tokens)
 }
 
 // Tokenize the input string into tokens
-void tokenize(char *input, t_list_tokens **tokens)
+void	tokenize(char *input, t_list_tokens **tokens)
 {
-	char *current;
+	char	*current;
 
 	current = input;
 	while (*current)
@@ -158,17 +156,17 @@ void tokenize(char *input, t_list_tokens **tokens)
 		if (*current == '|')
 		{
 			handle_pipe_token(&current, tokens);
-			continue;
+			continue ;
 		}
 		if (*current == '<' || *current == '>')
 		{
 			handle_redirection_token(&current, tokens);
-			continue;
+			continue ;
 		}
 		if (*current == '"' || *current == '\'')
 		{
 			handle_quoted_string_token(&current, tokens);
-			continue;
+			continue ;
 		}
 		handle_unquoted_word_token(&current, tokens);
 	}

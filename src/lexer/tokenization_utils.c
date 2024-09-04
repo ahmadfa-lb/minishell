@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 14:32:35 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:28:42 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	ft_skip_whitespace(char **input)
 		(*input)++;
 }
 
-char	*ft_strncpy(char *dest, const char *src, size_t n) 
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < n)
 	{
-		if (src[i] != '\0') 
+		if (src[i] != '\0')
 			dest[i] = src[i];
 		else
 			dest[i] = '\0';

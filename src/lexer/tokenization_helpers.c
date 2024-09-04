@@ -6,35 +6,35 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 08:15:13 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 15:09:09 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:35:52 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // Helper function to append a token to the list
-void append_token(t_list_tokens **tokens, t_list_tokens *new_token)
+void	append_token(t_list_tokens **tokens, t_list_tokens *new_token)
 {
-	t_list_tokens *last = *tokens;
+	t_list_tokens	*last;
+
+	last = *tokens;
 	if (!*tokens)
 	{
 		*tokens = new_token;
-		return;
+		return ;
 	}
 	while (last->next)
-	{
 		last = last->next;
-	}
 	last->next = new_token;
 }
 
 // Function to process quoted strings
 char	*process_quoted_string(char **input, char quote_type, bool *space)
 {
-	char *start; // Skip the opening quote
-	char *end;
-	char *result;
-	size_t len;
+	char	*start;// Skip the opening quote
+	char	*end;
+	char	*result;
+	size_t	len;
 
 	start = ++(*input);
 	*space = true;
@@ -59,8 +59,8 @@ char	*process_quoted_string(char **input, char quote_type, bool *space)
 	result[len] = '\0';
 
 	(void)space;
-	 if (*(*input + 1) && !ft_isspace(*(*input + 1)) && *(*input + 1) != '>' && *(*input + 1) != '<' && *(*input + 1) != '|')
-	 	*space = false;
+	if (*(*input + 1) && !ft_isspace(*(*input + 1)) && *(*input + 1) != '>' && *(*input + 1) != '<' && *(*input + 1) != '|')
+		*space = false;
 	// start = result;
 	// free(result);
 	return (result);
@@ -69,18 +69,17 @@ char	*process_quoted_string(char **input, char quote_type, bool *space)
 // Free the token list
 void	free_tokens(t_list_tokens *tokens)
 {
-    t_list_tokens *next;
+	t_list_tokens	*next;
 
-    while (tokens)
-    {
-        next = tokens->next;
-        if (tokens->value)
-            free(tokens->value); // Free the value string
-        free(tokens); // Free the token structure
+	while (tokens)
+	{
+		next = tokens->next;
+		if (tokens->value)
+			free(tokens->value); // Free the value string
+		free(tokens); // Free the token structure
 		tokens= next;
-    }
+	}
 }
-
 
 t_list_tokens	*create_token_node(t_tokens_type type, t_quote_type quote_type, char *value, bool space)
 {
@@ -88,7 +87,7 @@ t_list_tokens	*create_token_node(t_tokens_type type, t_quote_type quote_type, ch
 
 	new_token = malloc(sizeof(t_list_tokens));
 	if (!new_token)
-	    return NULL;
+		return (NULL);
 	new_token->type = type;
 	new_token->quote_type = quote_type;
 	new_token->value = ft_strdup(value);
@@ -152,7 +151,3 @@ const char *quote_type_to_string(t_quote_type quote_type)
 		return "NO_QUOTE";
 	}
 }
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/08/31 05:17:15 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:25:21 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	free_envp_list(t_env *head)
 {
-	t_env *current;
-	
+	t_env	*current;
+
 	while (head)
 	{
 		current = head->next;
@@ -25,30 +25,30 @@ void	free_envp_list(t_env *head)
 		head = current;
 	}
 }
+
 char	*get_env(t_env *head, const char *key)
 {
 	while (head)
 	{
-		if (ft_strcmp(head->key, key) == 0) 
-			return head->value;
+		if (ft_strcmp(head->key, key) == 0)
+			return (head->value);
 		head = head->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
 int	set_env(t_env **head, const char *key, const char *value, int hidden)
 {
-	t_env *current;
-	t_env *new_node;
+	t_env	*current;
+	t_env	*new_node;
 
 	current = *head;
 	if (!value)
-	{
 		value = ft_strdup("");
-	}
 	while (current)
 	{
-		if (ft_strcmp(current->key, key) == 0) {
+		if (ft_strcmp(current->key, key) == 0)
+		{
 			free(current->value);
 			current->value = ft_strdup(value);
 			return (0);
@@ -62,4 +62,3 @@ int	set_env(t_env **head, const char *key, const char *value, int hidden)
 	*head = new_node;
 	return (0);
 }
-

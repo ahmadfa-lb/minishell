@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/02 03:21:27 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:00:53 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_APPEND,
 			0644, STDOUT_FILENO);
 	// else if (token = TOKEN_HEREDOC)
-	// 	name = handle_heredoc(data->cmd_list->heredocs_delimiters, data, tokens_list->quote_type);
+	// 	name = handle_heredoc(data->cmd_list, data);
 	// if (name)
 	// {
 	// 	fd = open(name, O_RDONLY);
@@ -105,5 +105,5 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 	// 	close(fd);
 	// }
 	return (data->exit_status);
-
 }
+
