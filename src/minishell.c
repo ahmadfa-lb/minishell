@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:42 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 10:29:02 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:16:28 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,16 +111,16 @@ int main(int argc, char **argv, char **envp)
         data->first_tokens_list = dollar_expansion(data); // Make sure to define or pass the env variable
         concate_nodes(&data->first_tokens_list);
 
-        // t_list_tokens *current_token = data->first_tokens_list;
-        // while (current_token)
-        // {
-        //     printf("Token: %s, Value: %s, quote_type: %s, space: %d\n",
-        //            token_type_to_string(current_token->type),
-        //            current_token->value,
-        //            quote_type_to_string(current_token->quote_type),
-        //            current_token->space);
-        //     current_token = current_token->next;
-        // }
+        t_list_tokens *current_token = data->first_tokens_list;
+        while (current_token)
+        {
+            printf("Token: %s, Value: %s, quote_type: %s, space: %d\n",
+                   token_type_to_string(current_token->type),
+                   current_token->value,
+                   quote_type_to_string(current_token->quote_type),
+                   current_token->space);
+            current_token = current_token->next;
+        }
 
         if (check_initial_errors(data->user_input, data))
         {
@@ -134,7 +134,7 @@ int main(int argc, char **argv, char **envp)
 
             // Print the command list to check the results
             data->env_array = env_list_to_array(data);
-            // print_cmd_list(data->cmd_list);
+            print_cmd_list(data->cmd_list);
             data->exit_status =  ft_execute_command(data, data->cmd_list);
         }
 

@@ -1448,9 +1448,23 @@
 #include <stdbool.h>
 #include <readline/readline.h>
 
-// Define token types
-typedef enum { LESS_LESS } t_tokens_type;  // Define token types as needed
-typedef enum { NO_QUOTE, SINGLE_QUOTE, DOUBLE_QUOTE } t_quote_type; // Add other quote types as needed
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_ERROR
+} t_tokens_type;
+
+typedef enum e_quote_type
+{
+	DOUBLE_QUOTE,
+	SINGLE_QUOTE,
+	NO_QUOTE
+} t_quote_type;
 
 typedef struct s_token {
     t_tokens_type type;
@@ -1464,7 +1478,6 @@ typedef struct s_cmd {
     t_list_tokens *tokens_list;
     t_list_tokens *list_redirectors;
     char *command_path;
-    char *hd_file_name;  // For heredoc filename
     struct s_cmd *next;
     struct s_cmd *prev;
 } t_cmd;
@@ -1495,16 +1508,6 @@ char *handle_heredoc(t_data *data, t_list_tokens *redirector);
 int send_heredoc(t_data *data);
 
 // Generate a temporary filename
-char *generate_temp_filename(void) {
-    static int i = 0;
-    char *filename = malloc(50);
-    if (filename) {
-        snprintf(filename, 50, "/tmp/heredoc_%d.txt", i++);
-    }
-    return filename;
-}
-
-// Handle heredoc input and write to a temporary file
 char *handle_heredoc(t_data *data, t_list_tokens *redirector) {
     char *line = NULL;
     char *temp_filename = generate_temp_filename();
@@ -1551,7 +1554,7 @@ int send_heredoc(t_data *data) {
     int result = EXIT_SUCCESS;
 
     while (cmd) {
-        if (cmd->list_redirectors && cmd->list_redirectors->type == LESS_LESS) {
+        if (cmd->list_redirectors && cmd->list_redirectors->type == TOKEN_HEREDOC) {
             // Generate the heredoc filename
             if (cmd->hd_file_name) {
                 free(cmd->hd_file_name);  // Free the old filename if it exists
@@ -1567,6 +1570,7 @@ int send_heredoc(t_data *data) {
 
     return result;  // Return the result of the heredoc processing
 }
+
 
 // Test main function
 int main(void) {
