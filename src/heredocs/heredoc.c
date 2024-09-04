@@ -6,111 +6,91 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 10:55:56 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 09:32:25 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 14:21:22 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	create_heredoc(t_list_tokens *heredoc_token, bool quotes, t_data *data, char *file_name, bool *stop_heredoc)
+char	*generate_heredoc_filename(void)
 {
-	int		fd;
-	char	*line;
+	static int	index;
+	char		*filename;
 
-	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd < 0)
+	index = 0;
+	filename = ft_strjoin("/tmp/heredoc_", ft_itoa(index++));
+	return filename;
+}
+
+void	write_heredoc_to_file(const char *filename, const char *content)
+{
+    int	fd;
+
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
 	{
-		perror("Error opening heredoc file");
-		return (EXIT_FAILURE);
+		perror("open");
+		return;
 	}
-
-	line = readline("> ");
-	while (line && strcmp(heredoc_token->value, line) != 0 && !(*stop_heredoc))
-	{
-		if (!quotes)
-		{
-			// Call your expander function here, if implemented.
-			line = expander_str(data, line);
-		}
-		write(fd, line, strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-		line = readline("> ");
-	}
-	free(line);
-
-	if (*stop_heredoc || !line)
-	{
-		close(fd);
-		return (EXIT_FAILURE);
-	}
-
+	write(fd, content, ft_strlen(content));
 	close(fd);
-	return (EXIT_SUCCESS);
 }
 
-int	ft_heredoc(t_data *data, t_list_tokens *heredoc_token, char *file_name, bool *stop_heredoc)
+char	*read_heredoc_input(const char *delimiter)
 {
-	bool	quotes;
-	int		sl;
+    char	*line;
+    char	*heredoc_content;
+	char	*temp;
 
-	sl = EXIT_SUCCESS;
-	quotes = (heredoc_token->quote_type == DOUBLE_QUOTE || heredoc_token->quote_type == SINGLE_QUOTE);
+	heredoc_content = ft_strdup("");
+    while (1)
+    {
+        line = readline("> ");
+        if (!line)
+        {
+            free(heredoc_content);
+            return NULL;
+        }
+        if (ft_strcmp(line, delimiter) == 0)
+        {
+            free(line);
+            break;
+        }
+        temp = ft_strjoin(heredoc_content, line);
+        heredoc_content = temp;
+        temp = ft_strjoin(heredoc_content, "\n");
+        //free(heredoc_content);
+        heredoc_content = temp;
+        free(line);
+    }
+    return (heredoc_content);
+}
 
-	// Remove surrounding quotes if they exist
-	if (quotes)
+
+char	*handle_heredoc(t_cmd *cmd, t_data *data)
+{
+	t_list_tokens	*redir_token;
+	char			*heredoc_content;
+	char			*filename;
+	t_list_tokens	*heredoc_token;
+
+	redir_token = cmd->list_redirectors;
+	while (redir_token)
 	{
-		delete_quotes(heredoc_token->value, '\"');
-		delete_quotes(heredoc_token->value, '\'');
-	}
-
-	*stop_heredoc = 0;
-	sl = create_heredoc(heredoc_token, quotes, data, file_name, stop_heredoc);
-
-	return (sl);
-}
-
-char *generate_heredoc_filename(void)
-{
-	static int i = 0;
-	char *num;
-	char *file_name;
-
-	num = ft_itoa(i++); // Assuming you have an ft_itoa implementation.
-	file_name = ft_strjoin("/tmp/heredoc_", num); // Assuming you have an ft_strjoin implementation.
-	free(num);
-	return (file_name);
-}
-
-int handle_heredoc(t_data *data, t_cmd *cmd)
-{
-	t_list_tokens	*start;
-	int				sl;
-	char			*file_name;
-	bool			stop_heredoc = false;
-
-	start = cmd->list_redirectors;
-	sl = EXIT_SUCCESS;
-
-	while (cmd->list_redirectors)
-	{
-		if (cmd->list_redirectors->type == TOKEN_HEREDOC)
-		{
-			file_name = generate_heredoc_filename();
-			sl = ft_heredoc(data, cmd->list_redirectors, file_name, &stop_heredoc);
-			if (sl)
-			{
-				data->exit_status = 1;
-				free(file_name);
-				return (EXIT_FAILURE);
-			}
-
-			// Store the heredoc filename in the command's structure
-			cmd->command_path = file_name;
-		}
-		cmd->list_redirectors = cmd->list_redirectors->next;
-	}
-
-	cmd->list_redirectors = start;
-	return (EXIT_SUCCESS);
+	    if (redir_token->type == TOKEN_HEREDOC)
+	    {
+	        heredoc_content = read_heredoc_input(redir_token->next->value);
+	        heredoc_token = create_token_node(TOKEN_WORD, NO_QUOTE, heredoc_content, false);
+	        append_token(&data->first_tokens_list, heredoc_token);
+	        data->first_tokens_list = dollar_expansion(data);
+            heredoc_content = ft_strdup(heredoc_token->value);
+            ft_free_node(&data->first_tokens_list, heredoc_token);
+            filename = generate_heredoc_filename();
+            write_heredoc_to_file(filename, heredoc_content); 
+            free(heredoc_content);
+            return (filename);
+        }
+        redir_token = redir_token->next;
+    }
+    return (NULL);
 }

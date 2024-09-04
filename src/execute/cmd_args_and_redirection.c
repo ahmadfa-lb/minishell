@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 10:00:53 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 14:22:18 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_
 
 int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 {
-	// char	*name;
-	// int		fd;
+	char	*name;
+	int		fd;
 
-	// name = NULL;
+	name = NULL;
 	if (token == TOKEN_REDIRECT_OUT)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_TRUNC,
 			0644, STDOUT_FILENO);
@@ -95,15 +95,15 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 	else if (token == TOKEN_APPEND)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_APPEND,
 			0644, STDOUT_FILENO);
-	// else if (token = TOKEN_HEREDOC)
-	// 	name = handle_heredoc(data->cmd_list, data);
-	// if (name)
-	// {
-	// 	fd = open(name, O_RDONLY);
-	// 	if (fd > 0)
+	else if ((token = TOKEN_HEREDOC))
+		name = handle_heredoc(data->cmd_list, data);
+	if (name)
+	{
+		fd = open(name, O_RDONLY);
+		if (fd > 0)
 
-	// 	close(fd);
-	// }
+		close(fd);
+	}
 	return (data->exit_status);
 }
 

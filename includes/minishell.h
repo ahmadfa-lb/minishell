@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/03 23:10:08 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/04 14:21:57 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,12 @@ bool	check_if_builtin(t_cmd *cmd_list);
 void	ft_print_error_message(char *arg1, char *arg2);
 
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-
+//heredocs
+//heredoc.c
+char	*generate_heredoc_filename(void);
+void	write_heredoc_to_file(const char *filename, const char *content);
+char	*read_heredoc_input(const char *delimiter);
+char	*handle_heredoc(t_cmd *cmd, t_data *data);
 
 
 //list to char**
