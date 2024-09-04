@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/04 10:30:44 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:57:47 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ char *handle_dollar_sign(char *input, t_env *env, int exit_status)
 	while (i < ft_strlen1(input) && input[i])
 		if (input[i] == '$')
 		{
+			if (!input[i + 1])
+				result = ft_strjoin(result, "$");
 			if (input[i + 1] == '?')
 				handle_dollarexitstatus(&result, exit_status, &i);
 			else if (input[i + 1] == '$')
@@ -345,46 +347,39 @@ t_list_tokens *dollar_expansion(t_data *data)
 			// Only split if the token is not quoted
 			if (current_token->quote_type == NO_QUOTE)
 			{
-				if (current_token->quote_type == NO_QUOTE && !current_token->next)
+				split_strings = ft_split(result, ' ');
+				if (!split_strings || !*split_strings)
 				{
-					current_token->value = ft_strdup("$");
+					// Remove token if empty after expansion
+					temp = current_token->next;
+					ft_free_node(&data->first_tokens_list, current_token);
+					current_token = temp;
+					continue;
+				}
+				else if (split_strings[0] && split_strings[1] == NULL)
+				{
+					current_token->value = split_strings[0];
 				}
 				else
 				{
-					split_strings = ft_split(result, ' ');
-					if (!split_strings || !*split_strings)
+					current_token->value = ft_strdup(split_strings[0]);
+					array_length = get_string_array_length(split_strings);
+					i = 1;
+					while (i < array_length)
 					{
-						// Remove token if empty after expansion
-						temp = current_token->next;
-						ft_free_node(&data->first_tokens_list, current_token);
-						current_token = temp;
-						continue;
+						new_token = create_token_node(current_token->type, current_token->quote_type, ft_strdup(split_strings[i]), 1);
+						insert_at(&data->first_tokens_list, current_token, new_token);
+						current_token = current_token->next;
+						i++;
 					}
-					else if (split_strings[0] && split_strings[1] == NULL)
+					free(result);
+					i = 0;
+					while (split_strings[i])
 					{
-						current_token->value = split_strings[0];
+						free(split_strings[i]);
+						i++;
 					}
-					else
-					{
-						current_token->value = ft_strdup(split_strings[0]);
-						array_length = get_string_array_length(split_strings);
-						i = 1;
-						while (i < array_length)
-						{
-							new_token = create_token_node(current_token->type, current_token->quote_type, ft_strdup(split_strings[i]), 1);
-							insert_at(&data->first_tokens_list, current_token, new_token);
-							current_token = current_token->next;
-							i++;
-						}
-						free(result);
-						i = 0;
-						while (split_strings[i])
-						{
-							free(split_strings[i]);
-							i++;
-						}
-						free(split_strings);
-					}
+					free(split_strings);
 				}
 			}
 			else
