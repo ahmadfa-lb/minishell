@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: moabbas <moabbas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:49:48 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/04 22:49:55 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/05 23:53:57 by moabbas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ bool	is_valid_n_flag(const char *arg)
 {
 	int	i;
 
-	i = 1;
 	if (arg[0] != '-' || arg[1] != 'n')
 		return (false);
+	i = 1;
 	while (arg[i] != '\0')
 	{
 		if (arg[i] != 'n')

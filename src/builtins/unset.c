@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: moabbas <moabbas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 05:17:32 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 22:45:43 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/06 00:16:38 by moabbas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// int	ft_unset(t_env **head, const char *key)
-// {
-// 	t_env *current;
-// 	t_env *previous;
-
-// 	current = *head;
-// 	previous = NULL;
-// 	while (current)
-// 	{
-// 		if (ft_strcmp(current->key, key) == 0)
-// 		{
-// 			if (previous) 
-// 				previous->next = current->next;
-// 			else
-// 				*head = current->next;
-// 			free(current->key);
-// 			free(current->value);
-// 			free(current);
-// 			return (0);
-// 		}
-// 		previous = current;
-// 		current = current->next;
-// 	}
-// 	return (-1);
-// }
 
 void	remove_env_node(t_env **head, t_env *current, t_env *previous)
 {
@@ -66,7 +40,6 @@ void	find_and_remove_key(t_env **head, const char *key)
 		previous = current;
 		current = current->next;
 	}
-	return ;
 }
 
 int	ft_unset(t_env **head, char **keys)

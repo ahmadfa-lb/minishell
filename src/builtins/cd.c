@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/04 22:33:35 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/06 05:57:31 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cd_to_home(t_env *env_list)
 	pwd = get_env(env_list, "PWD");
 	if (home == NULL || chdir(home) != 0)
 	{
-		printf("cd: HOME not set\n");
+		printf("minishell: cd: HOME not set\n");
 		return (1);
 	}
 	set_env(&env_list, "OLDPWD", pwd, 0);
@@ -91,6 +91,6 @@ int	ft_cd(char **args, t_env *env_list)
 	}
 	if (args[2] == NULL)
 		return (cd_to_path(args[1], env_list));
-	printf("cd: too many arguments\n");
+	write(STDERR_FILENO, "cd: too many arguments\n", 23);
 	return (1);
 }
