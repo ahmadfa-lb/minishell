@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:03:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/30 08:34:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:20:39 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	ft_is_executable(const char *path)
 {
-	struct stat sb;
+	struct stat	sb;
 
 	if (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR)
 		return (true);

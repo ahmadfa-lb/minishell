@@ -6,18 +6,18 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 14:22:18 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/05 19:07:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char **build_arguments(t_list_tokens *tokens_list)
+char	**build_arguments(t_list_tokens *tokens_list)
 {
-	int count;
-	t_list_tokens *tmp;
-	char **arguments;
-	int i;
+	int				count;
+	t_list_tokens	*tmp;
+	char			**arguments;
+	int				i;
 
 	count = 0;
 	tmp = tokens_list;
@@ -32,59 +32,37 @@ char **build_arguments(t_list_tokens *tokens_list)
 	i = 0;
 	while (tokens_list)
 	{
-		arguments[i++] = tokens_list->value;
+		arguments[i++] = ft_strdup(tokens_list->value);
 		tokens_list = tokens_list->next;
 	}
 	arguments[i] = NULL;
 	return (arguments);
 }
 
-// int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
-// {
-// 	int fd;
-
-// 	fd = open(filename, flags, mode);
-// 	if (fd == -1)
-// 	{
-// 		perror("open");
-// 		return (-1);
-// 	}
-// 	if (dup2(fd, target_fd) == -1)
-// 	{
-// 		perror("dup2");
-// 		close(fd);
-// 		return (-1);
-// 	}
-// 	dup2(fd, STDIN_FILENO);
-// 	close(fd);
-// 	return (0);
-// }
-
-int open_and_duplicate(const char *filename, int flags, mode_t mode, int target_fd)
+int	open_and_duplicate(const char *filename, int flags, mode_t mode,
+	int target_fd)
 {
-    int fd;
+	int	fd;
 
-    fd = open(filename, flags, mode);
-    if (fd == -1)
-    {
-        perror("open");
-        return (-1);
-    }
-    if (dup2(fd, target_fd) == -1)
-    {
-        perror("dup2");
-        close(fd);
-        return (-1);
-    }
-    close(fd);
-    return (0);
+	fd = open(filename, flags, mode);
+	if (fd == -1)
+	{
+		perror("open");
+		return (-1);
+	}
+	if (dup2(fd, target_fd) == -1)
+	{
+		perror("dup2");
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (0);
 }
 
-
-int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
+int	redirect(t_data *data, t_tokens_type token, t_list_tokens *tokens_list)
 {
 	char	*name;
-	int		fd;
 
 	name = NULL;
 	if (token == TOKEN_REDIRECT_OUT)
@@ -95,15 +73,24 @@ int	redirect(t_data *data,t_tokens_type token, t_list_tokens *tokens_list)
 	else if (token == TOKEN_APPEND)
 		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_APPEND,
 			0644, STDOUT_FILENO);
-	else if ((token = TOKEN_HEREDOC))
-		name = handle_heredoc(data->cmd_list, data);
+	else if (token == TOKEN_HEREDOC)
+		name = handle_heredoc(data->cmd_list, data, tokens_list->quote_type);
 	if (name)
 	{
-		fd = open(name, O_RDONLY);
-		if (fd > 0)
-
-		close(fd);
+		open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
+		free(name);
 	}
 	return (data->exit_status);
 }
 
+void	handle_redirections(t_data *data, t_cmd *current_cmd)
+{
+	t_list_tokens	*redir;
+
+	redir = current_cmd->list_redirectors;
+	while (redir)
+	{
+		redirect(data, redir->type, redir->next);
+		redir = redir->next;
+	}
+}

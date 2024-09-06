@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 05:17:59 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/28 15:13:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:17:06 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	count_env_variables(t_env *env_list)
 {
 	int	count;
-	
+
 	count = 0;
 	while (env_list)
 	{
@@ -28,7 +28,7 @@ static int	count_env_variables(t_env *env_list)
 static char	**allocate_env_array(int count)
 {
 	char	**env_array;
-	
+
 	env_array = malloc((count + 1) * sizeof(char *));
 	if (!env_array)
 		return (NULL);
@@ -38,15 +38,15 @@ static char	**allocate_env_array(int count)
 
 static char	*create_env_variable(t_env *env)
 {
-	int		key_len; 
-	int		value_len; 
+	int		key_len;
+	int		value_len;
 	char	*env_var;
 
 	key_len = strlen(env->key);
 	value_len = strlen(env->value);
-	env_var	= malloc(key_len + value_len + 2);
+	env_var = malloc(key_len + value_len + 2);
 	if (!env_var)
-	    return NULL;
+		return (NULL);
 	ft_strcpy(env_var, env->key);
 	env_var[key_len] = '=';
 	ft_strcpy(env_var + key_len + 1, env->value);
