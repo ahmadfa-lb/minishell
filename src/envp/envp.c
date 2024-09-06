@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 08:27:20 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 08:35:56 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,6 @@ void	add_node_to_envp_list(t_env **head, t_env **current, t_env *new_node)
 		(*current)->next = new_node;
 	*current = new_node;
 }
-// void add_uid_to_envp_list(t_env *head)
-// {
-// 	char *UID;
-// 	pid_t uid;
-// 	int res;
-
-// 	uid = ft_getuid();
-// 	UID = ft_itoa((int)uid);
-
-// 	res = set_env(&head, "UID", UID);
-// 	if (res != 0)
-//     {
-//         free_envp_list(head);
-//         return NULL;
-//     }
-// 	free(res);
-// 	free(UID);
-// }
 
 t_env	*init_copy_envp_to_list(char **envp)
 {
@@ -100,14 +82,13 @@ t_env	*init_copy_envp_to_list(char **envp)
 		new_node = create_envp_list_node(*envp, 0);
 		if (!new_node)
 			free_envp_list(head);
-		add_node_to_envp_list(&head, &current, new_node);
-		envp++;
+		(add_node_to_envp_list(&head, &current, new_node), envp++);
 	}
-	if (set_env(&head, "UID", uid_str, 2) != 0)
+	if (set_env(&head, "UID", uid_str, 4) != 0)
 	{
 		free_envp_list(head);
 		return (NULL);
 	}
-	free(uid_str);
+	(free(uid_str), increment_shell_level(&head, 0));
 	return (head);
 }

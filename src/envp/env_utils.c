@@ -6,24 +6,27 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/04 08:25:21 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 08:35:01 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_envp_list(t_env *head)
+void	increment_shell_level(t_env **env_list, int is_hidden)
 {
-	t_env	*current;
+	char	*shell_level_str;
+	char	*new_shell_level_str;
+	int		shell_level;
 
-	while (head)
-	{
-		current = head->next;
-		free(head->key);
-		free(head->value);
-		free(head);
-		head = current;
-	}
+	shell_level_str = get_env(*env_list, "SHLVL");
+	if (shell_level_str == NULL)
+		shell_level = 1;
+	else
+		shell_level = ft_atoi(shell_level_str);
+	shell_level++;
+	new_shell_level_str = ft_itoa(shell_level);
+	set_env(env_list, "SHLVL", new_shell_level_str, is_hidden);
+	free(new_shell_level_str);
 }
 
 char	*get_env(t_env *head, const char *key)
@@ -61,4 +64,20 @@ int	set_env(t_env **head, const char *key, const char *value, int hidden)
 	new_node->next = *head;
 	*head = new_node;
 	return (0);
+}
+
+void	setup_initial_environment(t_env **env_list)
+{
+	char	current_working_dir[1024];
+
+	if (!*env_list)
+		return ;
+	if (get_env(*env_list, "PWD"))
+		return ;
+	if (getcwd(current_working_dir, sizeof(current_working_dir)))
+		set_env(env_list, "PWD", current_working_dir, 0);
+	else
+		perror("minishell: getcwd");
+	set_env(env_list, "OLDPWD", NULL, 1);
+	set_env(env_list, "SHLVL", "1", 0);
 }
