@@ -1,54 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenization_utils1.c                              :+:      :+:    :+:   */
+/*   cmd_to_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/04 08:30:48 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 08:55:42 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-size_t	ft_strnlen(const char *str, size_t n)
+void	tokenize(char *input, t_list_tokens **tokens)
 {
-	size_t	length;
+	char	*current;
 
-	length = 0;
-	while (length < n && str[length] != '\0')
-		length++;
-	return (length);
-}
-
-char	*ft_strndup(const char *s, size_t n)
-{
-	size_t	len;
-	char	*new_str;
-
-	len = ft_strnlen(s, n);
-	new_str = malloc(len + 1);
-	if (!new_str)
-		return (NULL);
-	ft_strncpy(new_str, s, len);
-	new_str[len] = '\0';
-	return (new_str);
-}
-
-int	ft_is_delimiter(char c)
-{
-	if (c == '$')
+	current = input;
+	while (*current)
 	{
-		return (1);
+		while (ft_isspace(*current))
+			current++;
+		if (*current == '|')
+		{
+			handle_pipe_token(&current, tokens);
+			continue ;
+		}
+		if (*current == '<' || *current == '>')
+		{
+			handle_redirection_token(&current, tokens);
+			continue ;
+		}
+		if (*current == '"' || *current == '\'')
+		{
+			handle_quoted_string_token(&current, tokens);
+			continue ;
+		}
+		handle_unquoted_word_token(&current, tokens);
 	}
-	if (c == '|' || c == '>' || c == '<')
-	{
-		return (1);
-	}
-	if (c == '\'' || c == '"')
-	{
-		return (1);
-	}
-	return (0);
 }
