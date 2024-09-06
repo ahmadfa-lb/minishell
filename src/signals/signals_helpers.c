@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 12:44:16 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 13:08:42 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 15:00:16 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void handle_ctrl_d(t_data *data)
 		printf("exit\n");
     	exit(0);
     }
-    else
-        printf("\n"); 
 }
 
 void	handle_ctrl_c(int sig)
