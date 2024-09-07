@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:06:06 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:07:10 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ char	*find_executable_in_paths(char **paths, t_cmd *cmd)
 	int		i;
 
 	i = 0;
+	full_path = ft_strdup(cmd->tokens_list->value);
+	if (!access(full_path, X_OK))
+		return (full_path);
+	free(full_path);
 	while (paths[i])
 	{
 		full_path = ft_strjoin_path(paths[i], cmd->tokens_list->value);
