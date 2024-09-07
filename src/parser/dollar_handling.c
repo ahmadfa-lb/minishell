@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:38:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:03:08 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_two_dollar(char **result, int *i)
 {
 	char	*num_str;
 
-	num_str = ft_itoa(getpid());
+	num_str = ft_itoa(ft_getpid());
 	*result = ft_strjoin(*result, num_str);
 	*i += 2;
 	free(num_str);
