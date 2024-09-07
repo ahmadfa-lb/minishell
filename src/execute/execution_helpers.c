@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 06:35:11 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 08:46:45 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:05:27 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ int	set_redirection_and_execute(t_data *data, t_cmd *current_cmd)
 	stdout_copy = dup(STDOUT_FILENO);
 	if (stdin_copy < 0 || stdout_copy < 0)
 		(perror("minishell: "), exit(1));
-	handle_redirections(data, current_cmd);
+	if (!handle_redirections(data, current_cmd))
+		return (1);
 	status = handle_builtin_command(current_cmd, data);
 	if (dup2(stdin_copy, STDIN_FILENO) < 0
 		|| dup2(stdout_copy, STDOUT_FILENO) < 0)
@@ -103,5 +104,5 @@ bool	ft_handle_direct_command(t_data *data, t_cmd *cmd, char *command)
 		}
 		return (true);
 	}
-	return (false);
+	return (true);
 }

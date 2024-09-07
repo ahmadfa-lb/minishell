@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 07:16:46 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/05 19:49:58 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:32:26 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@ int	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n'
 		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-void	ft_skip_whitespace(char **input)
-{
-	while (ft_isspace(**input))
-		(*input)++;
 }
 
 int	ft_is_delimiter(char c)
@@ -40,6 +34,7 @@ int	ft_is_delimiter(char c)
 	}
 	return (0);
 }
+
 int	is_redirector(int type)
 {
 	return (type == TOKEN_REDIRECT_IN

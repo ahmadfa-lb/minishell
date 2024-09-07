@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/05 19:07:08 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:06:58 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	open_and_duplicate(const char *filename, int flags, mode_t mode,
 	fd = open(filename, flags, mode);
 	if (fd == -1)
 	{
-		perror("open");
+		perror(filename);
 		return (-1);
 	}
 	if (dup2(fd, target_fd) == -1)
@@ -63,34 +63,38 @@ int	open_and_duplicate(const char *filename, int flags, mode_t mode,
 int	redirect(t_data *data, t_tokens_type token, t_list_tokens *tokens_list)
 {
 	char	*name;
+	int		res;
 
 	name = NULL;
+	res = 0;
 	if (token == TOKEN_REDIRECT_OUT)
-		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_TRUNC,
-			0644, STDOUT_FILENO);
+		res = open_and_duplicate(tokens_list->value,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644, STDOUT_FILENO);
 	else if (token == TOKEN_REDIRECT_IN)
-		open_and_duplicate(tokens_list->value, O_RDONLY, 0, STDIN_FILENO);
+		res = open_and_duplicate(tokens_list->value, O_RDONLY, 0, STDIN_FILENO);
 	else if (token == TOKEN_APPEND)
-		open_and_duplicate(tokens_list->value, O_WRONLY | O_CREAT | O_APPEND,
-			0644, STDOUT_FILENO);
+		res = open_and_duplicate(tokens_list->value,
+				O_WRONLY | O_CREAT | O_APPEND, 0644, STDOUT_FILENO);
 	else if (token == TOKEN_HEREDOC)
 		name = handle_heredoc(data->cmd_list, data, tokens_list->quote_type);
 	if (name)
 	{
-		open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
+		res = open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
 		free(name);
 	}
-	return (data->exit_status);
+	return (res);
 }
 
-void	handle_redirections(t_data *data, t_cmd *current_cmd)
+int	handle_redirections(t_data *data, t_cmd *current_cmd)
 {
 	t_list_tokens	*redir;
 
 	redir = current_cmd->list_redirectors;
 	while (redir)
 	{
-		redirect(data, redir->type, redir->next);
+		if (redirect(data, redir->type, redir->next))
+			return (0);
 		redir = redir->next;
 	}
+	return (1);
 }

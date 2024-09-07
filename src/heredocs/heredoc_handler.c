@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 10:55:56 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 08:50:24 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:07:37 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,11 @@ char	*handle_heredoc(t_cmd *cmd, t_data *data, int quote_type)
 	delimiters = get_delimiters(cmd->list_redirectors);
 	i = 0;
 	filename = ft_strdup("");
+	signal(SIGQUIT, handle_execution_mode);
+	signal(SIGQUIT, SIG_IGN);
 	while (i < delimiters_count)
 	{
+		reset_heredoc_signals();
 		filename = generate_heredoc_filename(delimiters, data, quote_type, i);
 		if (i < delimiters_count - 1)
 			free(filename);

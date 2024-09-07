@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 08:52:31 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:07:32 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_list_tokens	*parse_input_to_tokens(char *delimiter)
 	delimiter_len = ft_strlen(delimiter);
 	while (1)
 	{
-		line = readline("");
+		line = readline("> ");
 		if (!line)
 			exit(0);
 		if (ft_strncmp(line, delimiter, delimiter_len) == 0)

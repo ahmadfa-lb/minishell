@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:56:10 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 08:35:56 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:41:20 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,6 @@ t_env	*init_copy_envp_to_list(char **envp)
 		return (NULL);
 	}
 	(free(uid_str), increment_shell_level(&head, 0));
+	set_env(&head, "OLDPWD", "", 0);
 	return (head);
 }

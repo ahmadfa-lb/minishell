@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 14:34:35 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 08:47:31 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:06:06 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 
 	command = cmd->tokens_list->value;
 	if (!command)
-		return (false);
+		return (true);
 	if (!*command)
 	{
 		data->exit_status = 127;
@@ -95,8 +95,8 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 	}
 	if (is_builtin_command(cmd))
 		return (true);
-	if (ft_handle_direct_command(data, cmd, command))
-		return (true);
+	if (!ft_handle_direct_command(data, cmd, command))
+		return (false);
 	if (*command && !ft_lookup_cmd_in_envpaths(data, cmd))
 	{
 		data->exit_status = 127;
@@ -106,38 +106,3 @@ bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
 		return (true);
 	return (false);
 }
-
-// bool	ft_verify_if_cmd_is_valid(t_data *data, t_cmd *cmd)
-// {
-// 	char	*command;
-// 	char	*path_env;
-
-// 	command = cmd->tokens_list->value;
-// 	if (!command)
-// 		return (false);
-// 	if (!*command)
-// 	{
-// 		data->exit_status = 127;
-// 		return (ft_print_error_message("'': ", "command not found"), false);
-// 	}
-// 	if (is_builtin_command(cmd))
-// 		return (true);
-// 	path_env = get_env(data->env_list, "PATH");
-// 	if (ft_strchr(command, '/') || !path_env)
-// 	{
-// 		if (!ft_check_file_status(command, data))
-// 			return (false);
-// 		cmd->command_path = ft_strdup(command);
-// 		if (!cmd->command_path)
-// 			return (perror("error duplicating command"), false);
-// 		return (true);
-// 	}
-// 	if (*command && !ft_lookup_cmd_in_envpaths(data, cmd))
-// 	{
-// 		data->exit_status = 127;
-// 		return (ft_print_error_message(command, ": command not found"), false);
-// 	}
-// 	if (cmd->command_path)
-// 		return (true);
-// 	return (false);
-// }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 16:24:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 14:11:24 by afarachi         ###   ########.fr       */
+/*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
+/*   Updated: 2024/09/06 19:00:34 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ void	print_sorted_env_list(t_env *head)
 	t_env	*current;
 
 	current = head;
-	sort_env_list(current);
 	while (current)
 	{
-		printf("%s=%s\n", current->key, current->value);
+		if (current->value && *current->value != '\0')
+			printf("export %s=\"%s\"\n", current->key, current->value);
+		else
+			printf("export %s\n", current->key);
 		current = current->next;
 	}
 }
@@ -87,7 +89,7 @@ int	ft_export(t_env **env_list, char **input)
 			continue ;
 		}
 		if (!value)
-			set_env(env_list, key, value, 1);
+			set_env(env_list, key, NULL, 1);
 		else
 			set_env(env_list, key, value, 0);
 		(free(key), free(value));

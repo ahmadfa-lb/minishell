@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 14:36:57 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:38:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,21 @@ char	*handle_dollar_sign(char *input, t_env *env, int exit_status)
 	char	*result;
 	char	tmp[2];
 
-	(i = 0, result = ft_strdup(""));
+	i = 0;
+	result = ft_strdup("");
 	while (i < ft_strlen1(input) && input[i])
 	{
 		if (input[i] == '$')
-		{
-			if (!input[i + 1])
-				(result = ft_strjoin(result, "$"),i++);
-			else if (input[i + 1] == '?')
-				handle_dollarexitstatus(&result, exit_status, &i);
-			else if (input[i + 1] == '$')
-				(handle_two_dollar(&result, &i), i++);
-			else if (ft_isdigit(input[i + 1]))
-				i += 2;
-			else
-				handle_normal_variable(input, &i, &result, env);
-		}
+			if (!input[i + 1] && ++i)
+				result = ft_strjoin(result, "$");
+		else if (input[i + 1] == '?')
+			handle_dollarexitstatus(&result, exit_status, &i);
+		else if (input[i + 1] == '$')
+			(handle_two_dollar(&result, &i), i++);
+		else if (ft_isdigit(input[i + 1]))
+			i += 2;
+		else
+			handle_normal_variable(input, &i, &result, env);
 		else
 			(ft_strlcpy(tmp, input + i, 2), result = ft_strjoin(result, tmp),
 				i++);

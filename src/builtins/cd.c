@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/06 05:57:31 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:52:06 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ int	cd_to_oldpwd(t_env *env_list)
 
 	old_pwd = get_env(env_list, "OLDPWD");
 	pwd = get_env(env_list, "PWD");
-	if (old_pwd == NULL || chdir(old_pwd) != 0)
+	if (old_pwd == NULL || !pwd)
 	{
-		printf("cd: %s: No such file or directory\n", old_pwd);
+		write(2, "OLDPWD or PWD is not set\n", 25);
 		return (1);
 	}
+	if (chdir(old_pwd) != 0)
+		return (perror("cd: chdir : "), 1);
 	printf("%s\n", old_pwd);
 	set_env(&env_list, "OLDPWD", pwd, 0);
 	new_pwd = getcwd(NULL, 0);
@@ -66,13 +68,13 @@ int	cd_to_path(char *path, t_env *env_list)
 		printf("cd: %s: No such file or directory\n", path);
 		return (1);
 	}
+	set_env(&env_list, "OLDPWD", pwd, 0);
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd == NULL)
 	{
 		perror("getcwd failed");
 		return (1);
 	}
-	set_env(&env_list, "OLDPWD", pwd, 0);
 	set_env(&env_list, "PWD", new_pwd, 0);
 	free(new_pwd);
 	return (0);

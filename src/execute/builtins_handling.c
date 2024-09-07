@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 04:34:28 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/05 18:51:37 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:05:13 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ bool	check_if_builtin(t_cmd *cmd_list)
 	char			*cmd_seq;
 
 	tokens = cmd_list->tokens_list;
+	if (!tokens)
+		return (false);
 	cmd_seq = tokens->value;
 	if (!ft_strcmp("echo", cmd_seq))
 		return (true);
