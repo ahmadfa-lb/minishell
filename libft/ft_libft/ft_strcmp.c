@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:14:47 by afarachi          #+#    #+#             */
-/*   Updated: 2024/08/20 04:24:52 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 10:28:34 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,3 @@ int	ft_strcmp(char *s1, const char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
-

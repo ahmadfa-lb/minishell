@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 16:51:23 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 14:46:43 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 10:26:18 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
-#include "../inc/libft.h"
+# include "../inc/libft.h"
 
 int	ft_printf_d(int nb);
 int	ft_printf_c(char c);

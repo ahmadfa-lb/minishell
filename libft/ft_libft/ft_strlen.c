@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:29:16 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 15:10:22 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 10:28:14 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ size_t	ft_strlen(const char *s)
 	}
 	return (len);
 }
-
 
 int	ft_strlen1(const char *s)
 {

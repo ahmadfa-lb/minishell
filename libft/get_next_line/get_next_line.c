@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 15:46:55 by afarachi          #+#    #+#             */
-/*   Updated: 2024/07/30 14:47:36 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/07 10:26:56 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_read_line(int fd, char **keep, char **tmp)
 		return ;
 	result = 1;
 	while (result > 0)
-
 	{
 		result = read(fd, buf, BUFFER_SIZE);
 		if (result == -1)
@@ -97,7 +96,6 @@ char	*get_before_nl(const char *s)
 char	*ft_parse_line(char **keep, char **tmp)
 {
 	char	*line;
-
 
 	*tmp = ft_strdup(*keep);
 	ft_free(keep, 0, 0);
