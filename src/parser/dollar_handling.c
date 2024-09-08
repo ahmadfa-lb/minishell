@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 04:56:29 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/07 11:03:08 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/08 11:50:30 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*handle_dollar_sign(char *input, t_env *env, int exit_status)
 		else if (input[i + 1] == '?')
 			handle_dollarexitstatus(&result, exit_status, &i);
 		else if (input[i + 1] == '$')
-			(handle_two_dollar(&result, &i), i++);
+			(handle_two_dollar(&result, &i));
 		else if (ft_isdigit(input[i + 1]))
 			i += 2;
 		else

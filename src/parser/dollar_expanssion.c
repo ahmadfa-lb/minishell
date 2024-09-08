@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:46:31 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/06 19:16:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:51:49 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static void	insert_split_tokens(t_data *data, t_list_tokens *current_token,
 	char			*str_value;
 
 	i = 1;
-	str_value = ft_strdup(split_strings[i]);
 	while (i < array_length)
 	{
+		str_value = ft_strdup(split_strings[i]);
 		new_token = create_token_node(current_token->type,
 				current_token->quote_type, str_value, 1);
 		insert_at(&data->first_tokens_list, current_token, new_token);
@@ -74,7 +74,9 @@ static void	process_dollar_expansion(t_list_tokens *current_token, t_data *data)
 			return (free(result), (void)0);
 	}
 	else
+	{
 		handle_quoted_token(current_token, result);
+	}
 	free(result);
 }
 

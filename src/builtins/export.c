@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/06 19:00:34 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:17:43 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	remove_quotes_from_str(char *str)
 	dst = str;
 	while (*src)
 	{
-		if (!quote && (*src == '\'' || *src == '\"'))
+		if (!quote && (*src == '\"'))
 			quote = *src;
 		else if (quote && *src == quote)
 			quote = 0;
@@ -45,7 +45,7 @@ void	print_sorted_env_list(t_env *head)
 	while (current)
 	{
 		if (current->value && *current->value != '\0')
-			printf("export %s=\"%s\"\n", current->key, current->value);
+			printf("export %s=%s\n", current->key, current->value);
 		else
 			printf("export %s\n", current->key);
 		current = current->next;
