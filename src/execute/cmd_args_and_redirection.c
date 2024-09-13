@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:06:58 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/13 16:37:19 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,15 @@ int	redirect(t_data *data, t_tokens_type token, t_list_tokens *tokens_list)
 	else if (token == TOKEN_APPEND)
 		res = open_and_duplicate(tokens_list->value,
 				O_WRONLY | O_CREAT | O_APPEND, 0644, STDOUT_FILENO);
-	else if (token == TOKEN_HEREDOC)
-		name = handle_heredoc(data->cmd_list, data, tokens_list->quote_type);
-	if (name)
+	else if (!data->cmd_list->next && token == TOKEN_HEREDOC)
 	{
-		res = open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
-		free(name);
+		name = handle_heredoc(data->cmd_list, data, tokens_list->quote_type);
+		if (name)
+		{
+			printf("444444\n");
+			res = open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
+			free(name);
+		}
 	}
 	return (res);
 }

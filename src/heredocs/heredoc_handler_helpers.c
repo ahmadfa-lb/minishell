@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:07:32 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:41:09 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,49 @@ void	update_heredoc_data(t_list_tokens **heredoc_tokens, t_data *data,
 		return ;
 	*heredoc_tokens = dollar_expansion(*heredoc_tokens, data);
 }
+
+int	herdoc_detected(t_cmd *current_cmd)
+{
+	t_list_tokens	*redirectors;
+
+	if (!current_cmd)
+		return (0);
+	redirectors = current_cmd->list_redirectors;
+	while (redirectors)
+	{
+		if (redirectors->type == TOKEN_HEREDOC)
+			return (1);
+		redirectors = redirectors->next;		
+	}
+	return (0);
+}
+
+void	handle_heredoc_for_cmd(t_data *data, t_cmd *cmd)
+{
+	char	*herdoc_file;
+	int		fd;
+	
+	herdoc_file = NULL;
+	if (herdoc_detected(cmd))
+	{
+		while (cmd->list_redirectors)
+		{
+			if (cmd->list_redirectors->type == TOKEN_HEREDOC)
+			{
+				herdoc_file = handle_heredoc(cmd, data,
+					cmd->list_redirectors->next->quote_type);
+				if (herdoc_file)
+				{
+					fd = open(herdoc_file, O_RDONLY);
+					if (fd != -1)
+						(dup2(fd, STDIN_FILENO), close(fd));
+					free(herdoc_file);
+				}
+				break ;
+				
+			}
+			cmd->list_redirectors = cmd->list_redirectors->next;
+		}
+	}
+}
+

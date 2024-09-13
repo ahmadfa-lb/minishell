@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 20:11:02 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:35:17 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,8 @@ t_list_tokens	*parse_input_to_tokens(char *delimiter);
 int				get_delimiters_count(t_list_tokens *redirectors);
 void			update_heredoc_data(t_list_tokens **heredoc_tokens,
 					t_data *data, t_quote_type quote_type);
+int				herdoc_detected(t_cmd *current_cmd);
+void			handle_heredoc_for_cmd(t_data *data, t_cmd *cmd);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //memory_management
 //cleanup_utils.c
@@ -311,4 +313,5 @@ void			handle_execution_mode(int sig);
 void			handle_ctrl_d(t_data *data);
 void			handle_ctrl_c(int sig);
 void			update_exit_status_on_signal(int *status);
+
 #endif
