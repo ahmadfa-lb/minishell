@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:39:00 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/06 08:35:01 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:05:53 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	set_env(t_env **head, const char *key, const char *value, int hidden)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
+			current->hidden = hidden;
 			return (0);
 		}
 		current = current->next;

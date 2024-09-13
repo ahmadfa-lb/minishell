@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/08 12:17:43 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:23:43 by mouhamad_kr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	print_sorted_env_list(t_env *head)
 	current = head;
 	while (current)
 	{
-		if (current->value && *current->value != '\0')
-			printf("export %s=%s\n", current->key, current->value);
-		else
-			printf("export %s\n", current->key);
+		if (current->hidden == 1)
+			printf("declare x- %s\n", current->key);
+		else if(current->hidden == 0)
+			printf("declare x- %s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 }
@@ -88,7 +88,7 @@ int	ft_export(t_env **env_list, char **input)
 			i++;
 			continue ;
 		}
-		if (!value)
+		if (ft_strchr(input[i], '=') == NULL)
 			set_env(env_list, key, NULL, 1);
 		else
 			set_env(env_list, key, value, 0);
