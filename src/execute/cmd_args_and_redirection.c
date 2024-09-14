@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:29:54 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/13 16:37:19 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/14 10:06:12 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	redirect(t_data *data, t_tokens_type token, t_list_tokens *tokens_list)
 		name = handle_heredoc(data->cmd_list, data, tokens_list->quote_type);
 		if (name)
 		{
-			printf("444444\n");
 			res = open_and_duplicate(name, O_RDONLY, 0, STDIN_FILENO);
 			free(name);
 		}

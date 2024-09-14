@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 12:44:16 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:29:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:40:38 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,29 @@ void	update_exit_status_on_signal(int *status)
 	g_signal_number = 0;
 }
 
+// void	handle_execution_mode(int sig)
+// {
+// 	g_signal_number = sig;
+// 	rl_replace_line("", 1);
+// 	write(1, "\n", 1);
+// 	rl_on_new_line();
+// }
+
 void	handle_execution_mode(int sig)
 {
 	g_signal_number = sig;
-	rl_replace_line("", 1);
-	write(1, "\n", 1);
-	rl_on_new_line();
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 1);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		//rl_redisplay();
+	}
 }
+
 
 void	handle_heredoc_ctrl_baskslash(int sig)
 {
 	g_signal_number = sig;
-	rl_replace_line("", 1);
+	//rl_replace_line("", 1);
 }

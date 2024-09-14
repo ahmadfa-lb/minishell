@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 04:34:28 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/06 19:05:13 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/14 14:36:33 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	execute_builtin(char *cmd, char **args, t_data *data)
 	if (!ft_strcmp("echo", cmd))
 		return (ft_echo(args));
 	else if (!ft_strcmp("cd", cmd))
-		return (ft_cd(args, data->env_list));
+		return (ft_cd(args, &data->env_list));
 	else if (!ft_strcmp("pwd", cmd))
 		return (ft_pwd());
 	else if (!ft_strcmp("export", cmd))

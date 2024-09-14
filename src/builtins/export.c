@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouhamad_kraytem <mouhamad_kraytem@stud    +#+  +:+       +#+        */
+/*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/13 15:23:43 by mouhamad_kr      ###   ########.fr       */
+/*   Updated: 2024/09/14 14:53:04 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	ft_export(t_env **env_list, char **input)
 			continue ;
 		}
 		if (ft_strchr(input[i], '=') == NULL)
-			set_env(env_list, key, NULL, 1);
+			set_env(env_list, key, "", 1);
 		else
 			set_env(env_list, key, value, 0);
 		(free(key), free(value));

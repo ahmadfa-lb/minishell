@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/13 15:35:17 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/14 14:29:54 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void			append_token(t_list_tokens **tokens, t_list_tokens *new_token);
 int				determine_token_type(char redirect_char, size_t len);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //builtins
-int				ft_cd(char **args, t_env *env_list);
+int				ft_cd(char **args, t_env **env_list);
 int				ft_echo(char **args);
 int				ft_env(t_env *env_list);
 int				ft_exit(char **args);
@@ -313,5 +313,6 @@ void			handle_execution_mode(int sig);
 void			handle_ctrl_d(t_data *data);
 void			handle_ctrl_c(int sig);
 void			update_exit_status_on_signal(int *status);
+
 
 #endif
