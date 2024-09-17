@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:24:29 by odib              #+#    #+#             */
-/*   Updated: 2024/09/14 14:53:04 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:06:45 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,17 @@ void	print_sorted_env_list(t_env *head)
 	{
 		if (current->hidden == 1)
 			printf("declare x- %s\n", current->key);
-		else if(current->hidden == 0)
+		else if (current->hidden == 0)
 			printf("declare x- %s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 }
 
-int	is_input_null(char **input)
+void	free_and_set(char *key, char *value, int *exit_status)
 {
-	return (input[1] == NULL);
+	free(key);
+	free(value);
+	*exit_status = 1;
 }
 
 int	is_key_invalid(char *key, char *value, char *input)
@@ -75,17 +77,18 @@ int	ft_export(t_env **env_list, char **input)
 	char	*key;
 	char	*value;
 	int		i;
+	int		exit_status;
 
-	i = 1;
-	if (is_input_null(input))
+	i = 0;
+	exit_status = 0;
+	if (input[1] == NULL)
 		return (print_sorted_env_list(*env_list), 0);
-	while (input[i])
+	while (input[++i])
 	{
 		split_envp(input[i], &key, &value);
 		if (is_key_invalid(key, value, input[i]))
 		{
-			(free(key), free(value));
-			i++;
+			free_and_set(key, value, &exit_status);
 			continue ;
 		}
 		if (ft_strchr(input[i], '=') == NULL)
@@ -93,7 +96,6 @@ int	ft_export(t_env **env_list, char **input)
 		else
 			set_env(env_list, key, value, 0);
 		(free(key), free(value));
-		i++;
 	}
-	return (0);
+	return (exit_status);
 }

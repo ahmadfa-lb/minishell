@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 10:55:56 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/14 15:31:56 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:34:17 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,35 @@ char	**get_delimiters(t_list_tokens *redirectors)
 	}
 	result[i] = NULL;
 	return (result);
+}
+
+void	handle_heredoc_for_cmd(t_data *data, t_cmd *cmd)
+{
+	char			*heredoc_file;
+	int				fd;
+	t_list_tokens	*rd;
+
+	heredoc_file = NULL;
+	if (herdoc_detected(cmd))
+	{
+		rd = cmd->list_redirectors;
+		while (rd)
+		{
+			if (rd->type == TOKEN_HEREDOC)
+			{
+				heredoc_file = handle_heredoc(cmd, data, rd->next->quote_type);
+				if (heredoc_file)
+				{
+					fd = open(heredoc_file, O_RDONLY);
+					if (fd != -1)
+						(dup2(fd, STDIN_FILENO), close(fd));
+					free(heredoc_file);
+				}
+			}
+			rd = rd->next;
+		}
+		handle_redirections_after_heredoc(data, cmd);
+	}
 }
 
 char	*handle_heredoc(t_cmd *cmd, t_data *data, int quote_type)

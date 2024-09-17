@@ -6,7 +6,7 @@
 #    By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/14 10:41:29 by afarachi          #+#    #+#              #
-#    Updated: 2024/09/07 10:22:27 by afarachi         ###   ########.fr        #
+#    Updated: 2024/09/17 10:25:37 by afarachi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,46 +23,45 @@ CFLAGS = -Wall -Wextra -Werror -g -I$(INCLUDE_DIR)
 LDFLAGS = -lreadline
 
 SRCS = $(SRC_DIR)/lexer/input_to_tokens_list.c \
-       $(SRC_DIR)/lexer/lexer_handlers.c \
-       $(SRC_DIR)/lexer/list_tokens_concatenation.c \
-       $(SRC_DIR)/lexer/tokenization_helpers.c \
-       $(SRC_DIR)/parser/cmd_list_manager.c \
-	   $(SRC_DIR)/parser/cmd_parsing.c \
-	   $(SRC_DIR)/parser/dollar_expanssion.c \
-	   $(SRC_DIR)/parser/dollar_expanssion_helpers.c \
-	   $(SRC_DIR)/parser/dollar_handling.c \
-	   $(SRC_DIR)/envp/envp.c \
-	   $(SRC_DIR)/envp/env_utils.c \
-	   $(SRC_DIR)/execute/execution.c \
-	   $(SRC_DIR)/execute/execution_helpers.c \
-	   $(SRC_DIR)/execute/file_checks_utils.c \
-	   $(SRC_DIR)/execute/env_list_to_**array_conversion.c \
-	   $(SRC_DIR)/execute/cmd_args_and_redirection.c \
-	   $(SRC_DIR)/execute/path_and_cmd_validation.c \
-	   $(SRC_DIR)/execute/pipe_management.c \
-	   $(SRC_DIR)/execute/builtins_handling.c \
-	   $(SRC_DIR)/errors_monitoring/printing_errors.c \
-	   $(SRC_DIR)/errors_monitoring/syntax_error.c \
-	   $(SRC_DIR)/builtins/cd.c \
-	   $(SRC_DIR)/builtins/echo.c \
-	   $(SRC_DIR)/builtins/export.c \
-	   $(SRC_DIR)/builtins/unset.c \
-	   $(SRC_DIR)/builtins/env.c \
-	   $(SRC_DIR)/builtins/pwd.c \
-	   $(SRC_DIR)/builtins/exit.c \
-	   $(SRC_DIR)/heredocs/heredoc_handler.c \
-	   $(SRC_DIR)/heredocs/heredoc_handler_helpers.c \
-	   $(SRC_DIR)/memory_management/cleanup_utils.c \
-	   $(SRC_DIR)/memory_management/cleanup_utils1.c \
-	   $(SRC_DIR)/utils/utils.c \
-	   $(SRC_DIR)/utils/buitins_utils.c \
-	   $(SRC_DIR)/utils/ft_string_utils.c \
-	   $(SRC_DIR)/utils/pid_uid_fetcher.c \
-	   ${SRC_DIR}/minishell.c \
-	   ${SRC_DIR}/art.c \
-	   ${SRC_DIR}/signals/signals_helpers.c	\
-	   ${SRC_DIR}/signals/signals.c	\
-	   
+		$(SRC_DIR)/lexer/lexer_handlers.c \
+		$(SRC_DIR)/lexer/list_tokens_concatenation.c \
+		$(SRC_DIR)/lexer/tokenization_helpers.c \
+		$(SRC_DIR)/parser/cmd_list_manager.c \
+		$(SRC_DIR)/parser/cmd_parsing.c \
+		$(SRC_DIR)/parser/dollar_expanssion.c \
+		$(SRC_DIR)/parser/dollar_expanssion_helpers.c \
+		$(SRC_DIR)/parser/dollar_handling.c \
+		$(SRC_DIR)/envp/envp.c \
+		$(SRC_DIR)/envp/env_utils.c \
+		$(SRC_DIR)/execute/execution.c \
+		$(SRC_DIR)/execute/execution_helpers.c \
+		$(SRC_DIR)/execute/file_checks_utils.c \
+		$(SRC_DIR)/execute/env_list_to_**array_conversion.c \
+		$(SRC_DIR)/execute/cmd_args_and_redirection.c \
+		$(SRC_DIR)/execute/path_and_cmd_validation.c \
+		$(SRC_DIR)/execute/pipe_management.c \
+		$(SRC_DIR)/execute/builtins_handling.c \
+		$(SRC_DIR)/errors_monitoring/printing_errors.c \
+		$(SRC_DIR)/errors_monitoring/syntax_error.c \
+		$(SRC_DIR)/builtins/cd.c \
+		$(SRC_DIR)/builtins/echo.c \
+		$(SRC_DIR)/builtins/export.c \
+		$(SRC_DIR)/builtins/unset.c \
+		$(SRC_DIR)/builtins/env.c \
+		$(SRC_DIR)/builtins/pwd.c \
+		$(SRC_DIR)/builtins/exit.c \
+		$(SRC_DIR)/heredocs/heredoc_handler.c \
+		$(SRC_DIR)/heredocs/heredoc_handler_helpers.c \
+		$(SRC_DIR)/memory_management/cleanup_utils.c \
+		$(SRC_DIR)/memory_management/cleanup_utils1.c \
+		$(SRC_DIR)/utils/utils.c \
+		$(SRC_DIR)/utils/buitins_utils.c \
+		$(SRC_DIR)/utils/ft_string_utils.c \
+		$(SRC_DIR)/utils/pid_uid_fetcher.c \
+		${SRC_DIR}/minishell.c \
+		${SRC_DIR}/art.c \
+		${SRC_DIR}/signals/signals_helpers.c	\
+		${SRC_DIR}/signals/signals.c	\
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

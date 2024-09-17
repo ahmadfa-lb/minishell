@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:22:57 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/14 14:29:54 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:40:19 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ bool			ft_check_file_status(char *input, t_data *data);
 int				execute_builtin(char *cmd, char **args, t_data *data);
 int				handle_builtin_command(t_cmd *current_cmd, t_data *data);
 bool			check_if_builtin(t_cmd *cmd_list);
+void			signal_heredoc(t_data *data, t_cmd *current_cmd);
 //path_and_cmd_validation.c
 char			*ft_strjoin_path(const char *dir, const char *cmd);
 char			*find_executable_in_paths(char **paths, t_cmd *cmd);
@@ -258,13 +259,15 @@ char			*generate_heredoc_filename(char **delimiters, t_data *data,
 					t_quote_type quote_type, int i);
 char			**get_delimiters(t_list_tokens *redirectors);
 char			*handle_heredoc(t_cmd *cmd, t_data *data, int quote_type);
+void			handle_heredoc_for_cmd(t_data *data, t_cmd *cmd);
 //heredoc_handler_helpers.c
 t_list_tokens	*parse_input_to_tokens(char *delimiter);
 int				get_delimiters_count(t_list_tokens *redirectors);
 void			update_heredoc_data(t_list_tokens **heredoc_tokens,
 					t_data *data, t_quote_type quote_type);
 int				herdoc_detected(t_cmd *current_cmd);
-void			handle_heredoc_for_cmd(t_data *data, t_cmd *cmd);
+int				handle_redirections_after_heredoc(t_data *data,
+					t_cmd *current_cmd);
 //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 //memory_management
 //cleanup_utils.c
@@ -313,6 +316,5 @@ void			handle_execution_mode(int sig);
 void			handle_ctrl_d(t_data *data);
 void			handle_ctrl_c(int sig);
 void			update_exit_status_on_signal(int *status);
-
 
 #endif

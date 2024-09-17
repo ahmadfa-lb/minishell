@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 22:39:55 by mouhamad_kr       #+#    #+#             */
-/*   Updated: 2024/09/14 14:34:18 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:39:05 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	cd_to_path(char *path, t_env **env_list)
 int	ft_cd(char **args, t_env **env_list)
 {
 	if (!get_env(*env_list, "OLDPWD"))
-		set_env(env_list, "OLDPWD","" , 0);
+		set_env(env_list, "OLDPWD", "", 0);
 	if (args[1] == NULL)
 		return (cd_to_home(env_list));
 	if (args[1][0] == '-' && args[1][1] == '\0')

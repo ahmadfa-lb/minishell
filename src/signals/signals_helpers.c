@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 12:44:16 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/14 15:40:38 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:44:30 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,10 @@ void	handle_execution_mode(int sig)
 		rl_replace_line("", 1);
 		write(1, "\n", 1);
 		rl_on_new_line();
-		//rl_redisplay();
 	}
 }
-
 
 void	handle_heredoc_ctrl_baskslash(int sig)
 {
 	g_signal_number = sig;
-	//rl_replace_line("", 1);
 }

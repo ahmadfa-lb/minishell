@@ -6,7 +6,7 @@
 /*   By: afarachi <afarachi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 04:34:28 by afarachi          #+#    #+#             */
-/*   Updated: 2024/09/14 14:36:33 by afarachi         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:09:42 by afarachi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,11 @@ bool	check_if_builtin(t_cmd *cmd_list)
 		return (true);
 	else
 		return (false);
+}
+
+void	signal_heredoc(t_data *data, t_cmd *current_cmd)
+{
+	reset_signals();
+	if (herdoc_detected(current_cmd))
+		handle_heredoc_for_cmd(data, current_cmd);
 }
