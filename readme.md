@@ -5,7 +5,7 @@ Minishell is a minimalistic Unix shell implementation for the 42 curriculum. It 
 
 ## Screenshots
 ### Running Minishell
-![Minishell Screenshot](./screenshot.png)
+![Minishell Screenshot](./Screenshot .png)
 
 ## Features
 - Command execution with arguments
