@@ -1,6 +1,6 @@
 # Minishell
 
-Minishell is a minimalistic Unix shell implementation for the 42 curriculum. It replicates the behavior of Bash for basic command execution, redirections, pipes, and environment variable handling.
+Minishell is a minimalistic Unix shell implementation for the 42 curriculum. It replicates the behavior of Bash for command execution, redirections, pipes, and environment variable handling.
 
 
 ## Screenshots
